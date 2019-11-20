@@ -1,0 +1,30 @@
+#i am using python
+
+#shortened decriptions and tags i will be using for parameters
+#      meme (minimize for efficiency,maximize for effectiveness)
+#      anti-meme (maximize for efficiency,minimize for effectiveness), should come up rarely
+#      prime (must be a prime number)
+#      note (do not ignore what comes after it)
+#
+
+#useful basic math operators
+# * means multiply % means modulo ** means to the power of +,- the same / division
+# // floor division removes decimal points from answer,by always lowering the value
+# == equality check e.g. a==a+1 is not true and a==a is true,!= inequality check,a!=a+1 is true and a!= is not true similiar to <>
+# > if greater than then true a+1>a is true a>a+! untrue, < if less than true a+1<a untrue a<a+1 tue,>= greater and equals true,<= less than equals true
+# = assigns value on right to the variable on the left e.g. b = a + 1 makes b a + 1
+# += , c += a is the same as c = c + a
+# -= , c -= a is the same as c = c - a, *= , c *= a is the same as c = c * a, /=, %=,**=,//=, you get the idea
+# order of sums: brakets,exponents,multiply divide modular arithmatic floor division,addition subraction,comparison operators e.g. <,equality operators e.g. ==, finally the funky shortened sum things e.g. +=
+
+# simple rng,note can only produce positive random numbers
+def randnm(x,m) #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
+  a = (x * c) + (x * z * m)
+  r = a % m
+  return r
+  #r is the random number produced
+#parameters of rng
+r=51419  #meme ;a initial value for c ,
+z=434867 #prime,meme
+x=       #meme
+m=       #note;m should be the smallest value here
