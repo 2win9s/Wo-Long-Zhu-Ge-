@@ -1,0 +1,13 @@
+#this will be in python
+def mod(p,q)
+  p%q = c
+  return c
+# simple rng,note can only produce positive random numbers
+def randno(x,m) #x is any pseudo random number,dice the time in milliseconds etc. and k is the maximum number you want from rng 
+  (x*c) + (x*z*m) = a
+  mod(a,m)
+  #c is the random number produced
+c=3149255213 #to give a initial value to c
+z=8101991093601046853 #large prime number to spice things up
+x=
+m=
