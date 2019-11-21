@@ -29,7 +29,7 @@ z=434867 #prime,meme; this number adds to the randomness
 x=       #meme; this is like a seed for the rng
 m=       #note;m should be the smallest value here
 
-#reLU, very effcient algorithm for hidden layers
+#reLU, most efficient activation algorithm for hidden layers
 def reLU(x,a)
   if n > 0
     y = x
