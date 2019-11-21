@@ -9,7 +9,7 @@
 
 #useful basic math operators
 # * means multiply % means modulo ** means to the power of +,- the same / division
-# // floor division removes decimal points from answer,by always lowering the value
+# // floor division removes decimal points from answer,by always lowering the value to the next whole number e.g. -4.15->-5 , 3.87->3
 # == equality check e.g. a==a+1 is not true and a==a is true,!= inequality check,a!=a+1 is true and a!= is not true similiar to <>
 # > if greater than then true a+1>a is true a>a+! untrue, < if less than true a+1<a untrue a<a+1 tue,>= greater and equals true,<= less than equals true
 # = assigns value on right to the variable on the left e.g. b = a + 1 makes b a + 1
@@ -25,8 +25,8 @@ def randnm(x,m) #x can be any pseudo random number,dice the time in milliseconds
   #r is the random number produced
 #parameters of rng
 r=51419  #meme ;a initial value for c ,
-z=434867 #prime,meme
-x=       #meme
+z=434867 #prime,meme; this number adds to the randomness
+x=       #meme; this is like a seed for the rng
 m=       #note;m should be the smallest value here
 
 #reLU, very effcient algorithm for hidden layers
