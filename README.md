@@ -1,1 +1,1 @@
-This is just an attempt at creating a tools for a.i.
+This is just a last ditch effort
