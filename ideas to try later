@@ -1,1 +1,3 @@
 give the a.i. an option to create new inputs by storeing pervious inputs that have been prevelant, the last set of inputs and recent inputs to simluate memeory
+combine evolution algorithm and preLU and/or different output activation functions to determine the best one
+come up with less computationally intensive ideas
