@@ -5,7 +5,7 @@
 #      anti-meme (maximize for efficiency,minimize for effectiveness), should come up rarely
 #      prime (must be a prime number)
 #      note (do not ignore what comes after it)
-#
+#      mtm  (more the merrier;less significant figures more efficiency,more significant figures more effectiveness)
 
 #useful basic math operators
 # * means multiply % means modulo ** means to the power of +,- the same / division
@@ -28,3 +28,11 @@ r=51419  #meme ;a initial value for c ,
 z=434867 #prime,meme
 x=       #meme
 m=       #note;m should be the smallest value here
+
+#reLU, very effcient algorithm for hidden layers
+def reLU(x,a)
+  if n > 0
+    y = x
+  else
+    y = x*a #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
+a = 0.01  #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient)
