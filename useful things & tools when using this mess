@@ -1,5 +1,3 @@
-#i am using python
-
 #shortened decriptions and tags i will be using for parameters
 #      meme (minimize for efficiency,maximize for effectiveness)
 #      anti-meme (maximize for efficiency,minimize for effectiveness), should come up rarely
@@ -19,20 +17,30 @@
 
 # simple rng,note can only produce positive random numbers
 def randnm(x,m) #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
-  a = (x * c) + (x * z * m)
-  r = a % m
-  return r
-  #r is the random number produced
-#parameters of rng
-r=51419  #meme ;a initial value for c ,
-z=434867 #prime,meme; this number adds to the randomness
-x=       #meme; this is like a seed for the rng
-m=       #note;m should be the smallest value here
+  #parameters of rng
+  x=       #meme;this is essentially a seed for the rng
+  m=       #note;m should be the smallest value here
+  global rngout
+  a = (x * rngout) + (x  * m)
+  rngout = a % m
+  #rngout is the random number produced(note give an initial value as a global variable to r as a  global variable think of it as a second seed)
 
 #reLU, most efficient activation algorithm for hidden layers
 def reLU(x,a)
-  if n > 0
-    y = x
+  global reLUout
+  if x > 0
+    reLUout = x
   else
-    y = x*a #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
-a = 0.01  #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient)
+    a = 0.01  #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may be the easiest way to implement)
+    reLUout = x*a #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
+
+def eulerno(x) #note:run this function once to give a value to euler's number note:both e and x are meme
+  global eulern #euler's number or e
+  eulern = (1+1/x)**x
+
+def sigmoid(x)#good output function for classsification problems with multiple outputs)
+  global eulern #requires euler's number
+  global sigout 
+  var = 1/30 #anti-meme, can be adjusted with learning or evolution
+  sigout = 1 / ( 1 + eulern ** ( var * x * (-1) ) )
+
