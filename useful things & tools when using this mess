@@ -44,3 +44,6 @@ def sigmoid(x)#good output function for classsification problems with multiple o
   var = 1/30 #anti-meme, can be adjusted with learning or evolution
   sigout = 1 / ( 1 + eulern ** ( var * x * (-1) ) )
 
+def ezcost(x,y)#x is the output,y is target output
+  global cost
+  cost = ( x - y ) ** 2
