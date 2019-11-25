@@ -1,7 +1,6 @@
 give the a.i. an option to create new inputs by storeing pervious inputs that have been prevelant, the last set of inputs and recent inputs to simluate memeory
-combine evolution algorithm and preLU and/or different output activation functions to determine the best one
+combine evolution algorithm and preLU and/or different output activation functions to determine the best one(impossible on school hardware because i doubt it can run one neural network nevermind 50)
 come up with less computationally intensive ideas
-figure out auto matrice and weight generation
 linear for regression (predicting something/glorified calculator, giving a number as output)mean squared error
 softmax for distribution/classification,(only when only one output is desired e.g. image recognition)cost cross entropy
 sigmoid for distribution/classification,(only when multiple outputs are desires e.g. gaming,robotics)cost binary cross entropy
