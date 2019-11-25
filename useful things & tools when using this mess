@@ -47,3 +47,14 @@ def sigmoid(x)#good output function for classsification problems with multiple o
 def ezcost(x,y)#x is the output,y is target output
   global cost
   cost = ( x - y ) ** 2
+
+#creates a input layer
+input = []
+def inputgen(x)#adds elements to the input layer, x is the number of elements in input layer
+  for length in range(x)
+    input.append(elmnt)
+    
+def inputwrite(x,y)#assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
+  global input
+    input[x] = y
+  
