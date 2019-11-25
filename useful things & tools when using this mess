@@ -16,14 +16,14 @@
 # order of sums: brakets,exponents,multiply divide modular arithmatic floor division,addition subraction,comparison operators e.g. <,equality operators e.g. ==, finally the funky shortened sum things e.g. +=
 
 # simple rng,note can only produce positive random numbers
-def randnm(x,m) #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
-  #parameters of rng
-  x=       #meme;this is essentially a seed for the rng
-  m=       #note;m should be the smallest value here
+def randnm(x,m)                                   #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
+#parameters of rng
+  x=                                              #meme;this is essentially a seed for the rng
+  m=                                              #note;m should be the smallest value here
   global rngout
   a = (x * rngout) + (x  * m)
   rngout = a % m
-  #rngout is the random number produced(note give an initial value as a global variable to r as a  global variable think of it as a second seed)
+                                                  #rngout is the random number produced(note give an initial value as a global variable to r as a  global variable think of it as a second seed)
 
 #reLU, most efficient activation algorithm for hidden layers
 def reLU(x,a)
@@ -31,20 +31,20 @@ def reLU(x,a)
   if x > 0
     reLUout = x
   else
-    a = 0.01  #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may be the easiest way to implement)
-    reLUout = x*a #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
+    a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may be the easiest way to implement)
+    reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
 
-def eulerno(x) #note:run this function once to give a value to euler's number note:both e and x are meme
-  global eulern #euler's number or e
+def eulerno(x)                                    #note:run this function once to give a value to euler's number note:both e and x are meme
+  global eulern                                   #euler's number or e
   eulern = (1+1/x)**x
 
-def sigmoid(x)#good output function for classsification problems with multiple outputs)
-  global eulern #requires euler's number
+def sigmoid(x)                                    #good output function for classsification problems with multiple outputs)
+  global eulern                                   #requires euler's number
   global sigout 
-  var = 1/30 #anti-meme, can be adjusted with learning or evolution
+  var = 1/30                                      #anti-meme, can be adjusted with learning or evolution
   sigout = 1 / ( 1 + eulern ** ( var * x * (-1) ) )
 
-def ezcost(x,y)#x is the output,y is target output
+def ezcost(x,y)                                   #x is the output,y is target output
   global cost
   cost = ( x - y ) ** 2
 
@@ -54,13 +54,13 @@ def inputgen(x)#adds elements to the input layer, x is the number of elements in
   for length in range(x)
     input.append(elmnt)
     
-def inputwrite(x,y)#assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
+def inputwrite(x,y)                               #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
   global input
   input[x] = y
 
 #hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
 def hiddenlayergen(x)
-  numofnu = []#create a list of the number of neurons in each layer here
+  numofnu = []                                    #create a list of the number of neurons in each layer here
   for number in range(x)
     global hiddenlayers
     hiddenlayers.append([])
@@ -70,27 +70,26 @@ def hiddenlayergen(x)
   
 #creates an output layer
 output = []
-def outputgen(x)#adds elements to the output layer, x is the number of elements in output layer
+def outputgen(x)                                  #adds elements to the output layer, x is the number of elements in output layer
   for length in range(x)
     output.append(elmnt)
     
 def weightgen  
   global weights
   global hiddenlayers
-  global input         #the number of weights depends on inputs and hidden layers
+  global input                                    #the number of weights depends on inputs and hidden layers
   weights = []
-  k = len(hiddenlayers)+1
+  k = len(hiddenlayers)+1                         #there is one extra layer of weights because of output
   for amount in range(k)
-    weights.append([])
-  for inputweights in range(len(input))
-    weights[0].append([])
-    for inputmulti in range(len(hiddenlayer[0]))
-      weights[0][inputmulti].append([])
-  for x in range(len(hidden layer))
+    weights.append([])                            #creates the number of sets of weights
+  for inputweights in range(len(input))           # the special set of weights from input to first hidden layer
+    weights[0].append([])                         #adds a row of weights for each input
+    for inputmulti in range(len(hiddenlayers[0]))
+      weights[0][inputweights].append(elmnt)      #adds weights to each row based on hidden layer
+  for x in range(len(hiddenlayers))
      y = x + 1
-     weights[y].append([])
-      for z in range(len hiddenlayer[y]))
-        weights[y][z].append([])
+     for z in range(len(hiddenlayers[x])
+        weights[y].append([])
         
   
   
