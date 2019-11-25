@@ -73,3 +73,22 @@ output = []
 def outputgen(x)#adds elements to the output layer, x is the number of elements in output layer
   for length in range(x)
     output.append(elmnt)
+    
+def weightgen  
+  global weights
+  global hiddenlayers
+  global input         #the number of weights depends on inputs and hidden layers
+  weights = []
+  k = len(hiddenlayers)+1
+  for amount in range(k)
+    weights.append([])
+  for inputweights in range(len(input))
+    weights[0].append([])
+    for
+  
+  
+  
+  
+  
+  
+  
