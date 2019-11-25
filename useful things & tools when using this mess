@@ -94,7 +94,7 @@ def ezcost(x,y)                                   #x is the output,y is target o
 input = []
 def inputgen(x)                                   #adds elements to the input layer, x is the number of elements in input layer
   for length in range(x)
-    input.append(elmnt)
+    input.append(0)
     
 
 
@@ -117,7 +117,7 @@ def hiddenlayergen(x)
     global hiddenlayers
     hiddenlayers.append([])
     for neurons in range(numofnu[x])
-      hiddenlayers[x].append(elmnt)
+      hiddenlayers[x].append(0)
       
   
 
@@ -130,14 +130,14 @@ def hiddenlayergen(x)
 output = []
 def outputgen(x)                                  #adds elements to the output layer, x is the number of elements in output layer
   for length in range(x)
-    output.append(elmnt)
+    output.append(0)
     
 
 
 
 
 
-def weightgen  
+def weightgen                                     #creates a list of list of weights aka fustration 
   global weights
   global hiddenlayers
   global input                                    #the number of weights depends on inputs and hidden layers
@@ -148,22 +148,29 @@ def weightgen
   for inputweights in range(len(input))           # the special set of weights from input to first hidden layer
     weights[0].append([])                         #adds a row of weights for each input
     for inputmulti in range(len(hiddenlayers[0]))
-      weights[0][inputweights].append(elmnt)      #adds weights to each row based on hidden layer
+      weights[0][inputweights].append(0)          #adds weights to each row based on hidden layer
   for x in range(len(hiddenlayers))
      y = x + 1
      if y < len(hiddenlayers)
       for z in range(len(hiddenlayers[x]))         
         weights[y].append([])                     #each matrix of weights has a number of rows
         for a in range(len(hiddenlayers[y]))
-           weights[y][z].append(elmnt)            #each row has a number of weights
+           weights[y][z].append(0)                #each row has a number of weights
      else
        for z in range(len(hiddenlayers[-1])) 
         weights[-1].append([])                    #special case for output 
+        global output
         for a in range(len(output))
-           weights[-1][z].append(elmnt)
+           weights[-1][z].append(0)
         
   
-  
+def biasgen                                       #generates the list of biases
+  global bias
+  bias = []
+  global hiddenlayers
+  global output
+  bias = hiddenlayers.copy()
+  bias.append(output)
   
   
   
