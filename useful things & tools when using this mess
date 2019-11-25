@@ -151,10 +151,16 @@ def weightgen
       weights[0][inputweights].append(elmnt)      #adds weights to each row based on hidden layer
   for x in range(len(hiddenlayers))
      y = x + 1
-     for z in range(len(hiddenlayers[x]))         
+     if y < len(hiddenlayers)
+      for z in range(len(hiddenlayers[x]))         
         weights[y].append([])                     #each matrix of weights has a number of rows
-          for a in range(len(hiddenlayers[y]))
-             weights[y][z].append(elmnt)          #each row has a number of weights
+        for a in range(len(hiddenlayers[y]))
+           weights[y][z].append(elmnt)            #each row has a number of weights
+     else
+       for z in range(len(hiddenlayers[-1])) 
+        weights[-1].append([])                    #special case for output 
+        for a in range(len(output))
+           weights[-1][z].append(elmnt)
         
   
   
