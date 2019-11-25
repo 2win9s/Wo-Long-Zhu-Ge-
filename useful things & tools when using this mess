@@ -85,8 +85,13 @@ def weightgen
   for inputweights in range(len(input))
     weights[0].append([])
     for inputmulti in range(len(hiddenlayer[0]))
-      weights[0][inputweights].append([])
-  
+      weights[0][inputmulti].append([])
+  for x in range(len(hidden layer))
+     y = x + 1
+     weights[y].append([])
+      for z in range(len hiddenlayer[y]))
+        weights[y][z].append([])
+        
   
   
   
