@@ -56,5 +56,15 @@ def inputgen(x)#adds elements to the input layer, x is the number of elements in
     
 def inputwrite(x,y)#assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
   global input
-    input[x] = y
+  input[x] = y
+
+#hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
+def hiddenlayers(x)
+  numofnu = []#create a list of the number of neurons in each layer here
+  for number in range(x)
+    global hiddenlayers
+    hiddenlayers.append([])
+    for neurons in range(numofnu[x])
+      hiddenlayers[x].append([])
+      
   
