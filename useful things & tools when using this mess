@@ -59,7 +59,7 @@ def reLU(x,a)
   if x > 0
     reLUout = x
   else
-    a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
+    #a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
 
 
@@ -73,7 +73,7 @@ def eulerno(x)                                    #note:run this function once t
 def sigmoid(x)                                    #good output function for classsification problems with multiple outputs)
   global eulern                                   #requires euler's number
   global sigout 
-  var = 1/30                                      #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
+  var = 1/5                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
 
 
@@ -172,13 +172,35 @@ def biasgen()                                       #generates the list of biase
   bias = hiddenlayers.copy()
   bias.append(output)
 
-def squish()
+def squish()                                        #so this squishes a 2-d matrix of number from multiplying the input to weights to get the next layer
   global placeholder
   global placeholderz
   for x in range(len(placeholder[0]))
     for y in range(len(placeholder))
       placeholderz[x] = placeholder[y][x] + placeholderz[x]
-def fireactivation()
+
+def clear()                                         #resets the placeholder lists
+  placeholder.clear()
+  placeholderz.clear()
+def set()                                           #sets up the placeholders
+  placeholder.append([])
+  placeholderz.append(0)
+
+
+def reLUed()                                        #uses the reLU function on placeholderz
+  for ez in range(len(placeholderz)
+        global reLUout
+        reLU(placeholderz[ez],0.007)
+        placeholderz[ez] = reLUout
+
+def sigs()
+   for ez in range(len(placeholderz)
+        global sigout
+        sigmoid(placeholderz[ez])
+        placeholderz[ez] = sigout
+
+
+def fireactivation()                                #this is the network firing up its neurons
   global input
   global hiddenlayers
   global weights
@@ -187,15 +209,35 @@ def fireactivation()
   global placeholderz
   placeholderz = []
   placeholder = []
-  for x in range(len(input))
-    placeholder.append([])
-    placeholderz.append([])
+  for x in range(len(input))                        #going from input to hidden layers
+    set()
     for weighted in range(len(hiddenlayer[0])
       placeholder[x].append(input[x] * weights[0][x][weighted])
   squish()
   for x in range(len(placeholderz))
     placeholderz[x] = placeholderz[x] + bias[0][x]
-    
+  reLUed()                                          #activation function
+  hiddenlayer[0] = placeholderz.copy()
+  for x in range(len(hiddenlayers))                 #going through the hidden layers
+    clear()
+    y = x + 1
+    if y < len(hiddenlayers)
+      for z in range(len(hiddenlayers[x]))
+        set()
+        for k in range(len(hiddenlayers[y]))
+            placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k]
+      squish()
+      for r in range(len(placeholderz))
+      placeholderz[r] = placeholderz[r] + bias[y][r]
+      reLUed()                                      #activation function
+      hiddenlayer[y] = placeholderz.copy()
+    else                                            #going from final hidden layer to output
+      clear()
+        set()
+      for z in range(len(hiddenlayers[-1]))
+        
+         
+       
       
   
     
