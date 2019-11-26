@@ -37,6 +37,10 @@
 
 
 
+#math functions
+
+
+
 
 # simple rng,note: can only produce positive random numbers
 def randnm(x,m)                                   #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
@@ -47,12 +51,6 @@ def randnm(x,m)                                   #x can be any pseudo random nu
   a = (x * rngout) + (x  * m)
   rngout = a % m
                                                   #rngout is the random number produced(note give an initial value as a global variable to r as a  global variable think of it as a second seed)
-
-
-
-
-
-
 #reLU, most efficient activation algorithm for hidden layers
 def reLU(x,a)
   global reLUout
@@ -61,10 +59,6 @@ def reLU(x,a)
   else
     #a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
-
-
-
-
 
 def eulerno(x)                                    #note:run this function once to give a value to euler's number note:both e and x are meme
   global eulern                                   #euler's number or e
@@ -76,16 +70,16 @@ def sigmoid(x)                                    #good output function for clas
   var = 1/5                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
 
-
-
-
-
-
 def ezcost(x,y)                                   #x is the output,y is target output
   global cost
   cost = ( x - y ) ** 2
 
 
+
+
+
+
+#neural network set up
 
 
 
@@ -97,17 +91,9 @@ def inputgen(x)                                   #adds elements to the input la
     input.append(0)
     
 
-
-
-
-
 def inputwrite(x,y)                               #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
   global input
   input[x] = y
-
-
-
-
 
 
 #hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
@@ -121,21 +107,12 @@ def hiddenlayergen(x)
       
   
 
-
-
-
-
-
 #creates an output layer
 output = []
 def outputgen(x)                                  #adds elements to the output layer, x is the number of elements in output layer
   for length in range(x)
     output.append(0)
     
-
-
-
-
 
 def weightgen()                                     #creates a list of list of weights aka fustration 
   global weights
@@ -163,7 +140,6 @@ def weightgen()                                     #creates a list of list of w
         for a in range(len(output))
            weights[-1][z].append(0)
         
-  
 def biasgen()                                       #generates the list of biases
   global bias
   bias = []
@@ -171,6 +147,13 @@ def biasgen()                                       #generates the list of biase
   global output
   bias = hiddenlayers.copy()
   bias.append(output)
+
+
+
+ 
+#firing section
+
+
 
 def squish()                                        #so this squishes a 2-d matrix of number from multiplying the input to weights to get the next layer
   global placeholder
@@ -188,13 +171,13 @@ def set()                                           #sets up the placeholders
 
 
 def reLUed()                                        #uses the reLU function on placeholderz
-  for ez in range(len(placeholderz)
+  for ez in range(len(placeholderz))
         global reLUout
         reLU(placeholderz[ez],0.007)
         placeholderz[ez] = reLUout
 
 def sigs()
-   for ez in range(len(placeholderz)
+   for ez in range(len(placeholderz))
         global sigout
         sigmoid(placeholderz[ez])
         placeholderz[ez] = sigout
@@ -209,9 +192,10 @@ def fireactivation()                                #this is the network firing 
   global placeholderz
   placeholderz = []
   placeholder = []
+  clear()
   for x in range(len(input))                        #going from input to hidden layers
     set()
-    for weighted in range(len(hiddenlayer[0])
+    for weighted in range(len(hiddenlayer[0]))
       placeholder[x].append(input[x] * weights[0][x][weighted])
   squish()
   for x in range(len(placeholderz))
@@ -228,14 +212,26 @@ def fireactivation()                                #this is the network firing 
             placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k]
       squish()
       for r in range(len(placeholderz))
-      placeholderz[r] = placeholderz[r] + bias[y][r]
+        placeholderz[r] = placeholderz[r] + bias[y][r]
       reLUed()                                      #activation function
       hiddenlayer[y] = placeholderz.copy()
     else                                            #going from final hidden layer to output
       clear()
-        set()
       for z in range(len(hiddenlayers[-1]))
+         set()
+         for weighted in range(len(output))
+            placeholder[z].append(hiddenlayers[-1][z] * weights[-1][z][weighted])
+      squish()
+      for x in range(len(placeholderz))
+        placeholderz[x] = placeholderz[x] + bias[-1][x]
+      sigs()                                          #activation function
+      output = placeholderz.copy()
+      clear()
         
+        
+        
+    
+#backpropagation/learning section (death by calculus,this will take a while to get right)
          
        
       
