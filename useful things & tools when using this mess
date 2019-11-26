@@ -137,7 +137,7 @@ def outputgen(x)                                  #adds elements to the output l
 
 
 
-def weightgen                                     #creates a list of list of weights aka fustration 
+def weightgen()                                     #creates a list of list of weights aka fustration 
   global weights
   global hiddenlayers
   global input                                    #the number of weights depends on inputs and hidden layers
@@ -164,14 +164,39 @@ def weightgen                                     #creates a list of list of wei
            weights[-1][z].append(0)
         
   
-def biasgen                                       #generates the list of biases
+def biasgen()                                       #generates the list of biases
   global bias
   bias = []
   global hiddenlayers
   global output
   bias = hiddenlayers.copy()
   bias.append(output)
+
+def squish()
+  global placeholder
+  global placeholderz
+  for x in range(len(placeholder[0]))
+    for y in range(len(placeholder))
+      placeholderz[x] = placeholder[y][x] + placeholderz[x]
+def fireactivation()
+  global input
+  global hiddenlayers
+  global weights
+  global bias
+  global placeholder
+  global placeholderz
+  placeholderz = []
+  placeholder = []
+  for x in range(len(input))
+    placeholder.append([])
+    placeholderz.append([])
+    for weighted in range(len(hiddenlayer[0])
+      placeholder[x].append(input[x] * weights[0][x][weighted])
+  squish()
+  for x in range(len(placeholderz))
+    placeholderz[x] = placeholderz[x] + bias[0][x]
+    
+      
   
-  
-  
+    
   
