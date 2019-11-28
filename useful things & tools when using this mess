@@ -57,7 +57,7 @@ def reLU(x,a)
   if x > 0
     reLUout = x
   else
-    #a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
+    a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
 
 def eulerno(x)                                    #note:run this function once to give a value to euler's number note:both e and x are meme
@@ -69,11 +69,6 @@ def sigmoid(x)                                    #good output function for clas
   global sigout 
   var = 1/5                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
-
-def ezcost(x,y)                                   #x is the output,y is target output
-  global cost
-  cost = ( x - y ) ** 2
-
 
 
 
@@ -232,6 +227,40 @@ def fireactivation()                                #this is the network firing 
         
     
 #backpropagation/learning section (death by calculus,this will take a while to get right)
+
+
+
+target = []                                          #give a target output              
+for x in range(len(output))
+  target.append(0)
+def target write(x,y)
+  global target
+  target[x]= y
+def msecostgen()
+  global output
+  global target
+  global cost
+  cost = 0
+  costly = []
+  for x in range(len(output))
+    cost.append((output[x] - target) ** 2)
+  for y in range(len(costly))
+    cost = cost + costly[x]
+  k  = len(output)
+  cost  =  cost / k
+  
+  
+
+
+def dereLU(x)                                         #x is the value of the input to the reLU function 
+  global dereLU
+  if x > 0
+    dereLU = 1
+  else
+    a = 0.01                                    
+    dereLU = a
+ 
+ desigmoid = 
          
        
       
