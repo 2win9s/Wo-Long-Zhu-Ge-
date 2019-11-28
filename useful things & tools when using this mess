@@ -260,7 +260,9 @@ def dereLU(x)                                         #x is the value of the inp
     a = 0.01                                    
     dereLU = a
  
- desigmoid = 
+def desigmoid(x)
+  global desigmoid
+  desigmoid = x * ( 1 - x )
          
        
       
