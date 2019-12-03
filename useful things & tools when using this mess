@@ -120,7 +120,8 @@ def weightgen()                                     #creates a list of list of w
   for inputweights in range(len(input))           # the special set of weights from input to first hidden layer
     weights[0].append([])                         #adds a row of weights for each input
     for inputmulti in range(len(hiddenlayers[0]))
-      weights[0][inputweights].append(0)          #adds weights to each row based on hidden layer
+      weights[0][inputweights]
+        .append(0)          #adds weights to each row based on hidden layer
   for x in range(len(hiddenlayers))
      y = x + 1
      if y < len(hiddenlayers)
@@ -158,9 +159,13 @@ def squish()                                        #so this squishes a 2-d matr
       placeholderz[x] = placeholder[y][x] + placeholderz[x]
 
 def clear()                                         #resets the placeholder lists
+  global placeholder
+  global placeholderz
   placeholder.clear()
   placeholderz.clear()
 def set()                                           #sets up the placeholders
+  global placeholder
+  global placeholderz
   placeholder.append([])
   placeholderz.append(0)
 
@@ -190,7 +195,7 @@ def fireactivation()                                #this is the network firing 
   clear()
   for x in range(len(input))                        #going from input to hidden layers
     set()
-    for weighted in range(len(hiddenlayer[0]))
+    for weighted in range(len(hiddenlayers[0]))
       placeholder[x].append(input[x] * weights[0][x][weighted])
   squish()
   for x in range(len(placeholderz))
@@ -263,9 +268,24 @@ def dereLU(x)                                         #x is the value of the inp
 def desigmoid(x)
   global desigmoid
   desigmoid = x * ( 1 - x )
-         
+ 
        
-      
-  
+backpropagation()
+  global weights
+  global output
+  global hiddenlayers
+  global bias
+  clear()
+  global placeholder
+  for z in range(len(weights))
+    placeholder.append([])
+    for x in range(len(weights[z]))
+      placeholder.append([])
+      for y in range(len(weights[z][x]))
+        placeholder.append(0)
+        
+        
+    
+    
     
   
