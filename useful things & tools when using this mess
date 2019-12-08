@@ -277,12 +277,16 @@ backpropagation()
   global bias
   clear()
   global placeholder
-  for z in range(len(weights))
+  set()
+  for x in range(len(hiddenlayers)+1)
     placeholder.append([])
-    for x in range(len(weights[z]))
-      placeholder.append([])
-      for y in range(len(weights[z][x]))
-        placeholder.append(0)
+    y = x + 1
+    for k in range(len(hiddenlayers[x]))
+      placeholder[y].append([0]
+  for x in range(len(input)
+    placeholder[0].append([])
+  for x in range(len(hiddenlayer[-1]))
+    placeholder[-1][x] = hiddenlayer[-1][x] * desig() * (2 * (output[0] - target[0]))* #derivative of mse i dunno what it is
         
         
     
