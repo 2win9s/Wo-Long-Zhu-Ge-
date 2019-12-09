@@ -5,3 +5,4 @@ linear for regression (predicting something/glorified calculator, giving a numbe
 softmax for distribution/classification,(only when only one output is desired e.g. image recognition)cost cross entropy
 sigmoid for distribution/classification,(only when multiple outputs are desires e.g. gaming,robotics)cost binary cross entropy
 mean squared error is a safe way to just do it easily and efficiently but may not have the most desired peerformance
+https://towardsdatascience.com/the-fall-of-rnn-lstm-2d1594c74ce0
