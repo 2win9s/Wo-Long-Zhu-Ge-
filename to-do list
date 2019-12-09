@@ -3,5 +3,5 @@ check for errors in code and test functionality
 get functional snake game in python (Amethyst found 3 that all have different errors in jupiter)
 
 fancy schtuff:
-incorperate memory into neural network
-method to increase the impact on the last experience on next decision
+incorperate memory into neural network rnn or lstm
+good training architechture
