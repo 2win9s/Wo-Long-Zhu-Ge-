@@ -278,6 +278,7 @@ backpropagation()
   global bias
   global ouput
   global target
+  global input
   clear()
   global placeholder
   placeholder = []
@@ -288,15 +289,18 @@ backpropagation()
       for z in range(len(weights[x][y]))
         placeholder[x][y].append(0)
   
-  for y in range(len(placeholder[-1][x]))
-    for x in range(len(hiddenlayer[-1]))
-      placeholder[-1][x][y] = hiddenlayer[-1][x] * desig() * (2 * (output[y] - target[y]))* #derivative of mse using costly[y] i dunno what it is
-  for x in range(len(hiddenlayer[-2]))
-    placeholder[-2][x][0] = placeholder[-1][0][0]*hiddenlayer[-2][x]*dereLU()
+ 
   for x in range(len(hiddenlayer[-1]))
-    placeholder[-3][x][0] = placeholder[-2][0][0]hiddenlayer[-3][x] * desig() * (2 * (output[0] - target[0]))* #derivative of mse i dunno what it is
+      for y in range(len(placeholder[-1][x]))
+        placeholder[-1][x][y] = hiddenlayer[-1][x] * desig() * (2 * (output[y] - target[y]))* #derivative of mse using costly[y] i dunno what it is + placeholder[-1][x][y]
+        for z in range(len(hiddenlayer[-2]))
+          for a in range(len(placeholder[-2][z]))
+            placeholder[-2][z][a] = hiddenlayer[-2][z] * dereLU * placeholder[-1][x][y] + placeholder[-2][z][a]
+            for b in range(len(input))
+              for c in range(len(placeholder[-3][c]))
+                placeholder[-2][b][c] = input[b] * dereLU * placeholder[-2][z][a] + placeholder[-2][b][c]
         
- #copy and paste a few times and change it around or learn to use recursion       
+ #copy and paste a few times for each layer of the hidden layer and  and change it around (change variables in for loops change layer number) or learn to use recursion       
     
     
     
