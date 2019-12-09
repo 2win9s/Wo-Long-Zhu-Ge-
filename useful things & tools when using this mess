@@ -166,6 +166,7 @@ def clear()                                         #resets the placeholder list
 def set()                                           #sets up the placeholders
   global placeholder
   global placeholderz
+  
   placeholder.append([])
   placeholderz.append(0)
 
@@ -275,20 +276,27 @@ backpropagation()
   global output
   global hiddenlayers
   global bias
+  global ouput
+  global target
   clear()
   global placeholder
-  set()
-  for x in range(len(hiddenlayers)+1)
-    placeholder.append([])
-    y = x + 1
-    for k in range(len(hiddenlayers[x]))
-      placeholder[y].append([0]
-  for x in range(len(input)
-    placeholder[0].append([])
+  placeholder = []
+  for x in range(len(weights))
+    placholder.append([])
+    for y in range(len(weights[x]))
+      placeholder[x].append([])
+      for z in range(len(weights[x][y]))
+        placeholder[x][y].append(0)
+  
+  for y in range(len(placeholder[-1][x]))
+    for x in range(len(hiddenlayer[-1]))
+      placeholder[-1][x][y] = hiddenlayer[-1][x] * desig() * (2 * (output[y] - target[y]))* #derivative of mse using costly[y] i dunno what it is
+  for x in range(len(hiddenlayer[-2]))
+    placeholder[-2][x][0] = placeholder[-1][0][0]*hiddenlayer[-2][x]*dereLU()
   for x in range(len(hiddenlayer[-1]))
-    placeholder[-1][x] = hiddenlayer[-1][x] * desig() * (2 * (output[0] - target[0]))* #derivative of mse i dunno what it is
+    placeholder[-3][x][0] = placeholder[-2][0][0]hiddenlayer[-3][x] * desig() * (2 * (output[0] - target[0]))* #derivative of mse i dunno what it is
         
-        
+ #copy and paste a few times and change it around or learn to use recursion       
     
     
     
