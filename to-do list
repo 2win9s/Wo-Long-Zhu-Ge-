@@ -1,6 +1,5 @@
 set up backpropation(a.k.a. lethal dose of multivariable calculus)
 check for errors in code and test functionality
-get functional snake game in python (Amethyst found 3 that all have different errors in jupiter)
 first generation will be a set of networks with different number of hidden layers and neurons trained on human data then tested in an environment for many cycles then
 
 fancy schtuff:
