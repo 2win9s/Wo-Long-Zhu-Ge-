@@ -1,9 +1,0 @@
-set up backpropation(a.k.a. lethal dose of multivariable calculus)
-check for errors in code and test functionality
-first generation will be a set of networks with different number of hidden layers and neurons trained on human data then tested in an environment for many cycles then
-
-fancy schtuff:
-incorperate memory into neural network rnn or lstm
-good training architechture
-learn resnet
-find out as much about alphastar as possible
