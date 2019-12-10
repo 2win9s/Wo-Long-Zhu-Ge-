@@ -1,1 +1,7 @@
+def randnm(x,m)                                  
 
+  x=                                              
+  m=                                              
+  global rngout
+  a = (x * rngout) + (x  * m)
+  rngout = a % m
