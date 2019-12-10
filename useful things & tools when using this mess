@@ -43,28 +43,28 @@
 
 
 # simple rng,note: can only produce positive random numbers
-def randnm(x,m)                                   #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
+def random(x,m):                                   #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
 #parameters of rng
-  x=                                              #meme;this is essentially a seed for the rng
-  m=                                              #note;m should be the smallest value here
+  x = 1                                             #meme;this is essentially a seed for the rng
+  m = 1                                             #note;m should be the smallest value here
   global rngout
   a = (x * rngout) + (x  * m)
   rngout = a % m
                                                   #rngout is the random number produced(note give an initial value as a global variable to r as a  global variable think of it as a second seed)
 #reLU, most efficient activation algorithm for hidden layers
-def reLU(x,a)
+def reLU(x,a):
   global reLUout
-  if x > 0
+  if x > 0:
     reLUout = x
-  else
+  else:
     a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
 
-def eulerno(x)                                    #note:run this function once to give a value to euler's number note:both e and x are meme
+def eulerno(x):                                    #note:run this function once to give a value to euler's number note:both e and x are meme
   global eulern                                   #euler's number or e
   eulern = (1+1/x)**x
 
-def sigmoid(x)                                    #good output function for classsification problems with multiple outputs)
+def sigmoid(x):                                    #good output function for classsification problems with multiple outputs)
   global eulern                                   #requires euler's number
   global sigout 
   var = 1/5                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
@@ -81,62 +81,61 @@ def sigmoid(x)                                    #good output function for clas
 
 #creates an input layer
 input = []
-def inputgen(x)                                   #adds elements to the input layer, x is the number of elements in input layer
-  for length in range(x)
+def inputgen(x):                                   #adds elements to the input layer, x is the number of elements in input layer
+  for length in range(x):
     input.append(0)
     
 
-def inputwrite(x,y)                               #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
+def inputwrite(x,y):                               #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
   global input
   input[x] = y
 
 
 #hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
-def hiddenlayergen(x)
+def hiddenlayergen(x):
   numofnu = []                                    #create a list of the number of neurons in each layer here
-  for number in range(x)
+  for number in range(x):
     global hiddenlayers
     hiddenlayers.append([])
-    for neurons in range(numofnu[x])
+    for neurons in range(numofnu[x]):
       hiddenlayers[x].append(0)
       
   
 
 #creates an output layer
 output = []
-def outputgen(x)                                  #adds elements to the output layer, x is the number of elements in output layer
-  for length in range(x)
+def outputgen(x):                                  #adds elements to the output layer, x is the number of elements in output layer
+  for length in range(x):
     output.append(0)
     
 
-def weightgen()                                     #creates a list of list of weights aka fustration 
+def weightgen():                                     #creates a list of list of weights aka fustration 
   global weights
   global hiddenlayers
   global input                                    #the number of weights depends on inputs and hidden layers
   weights = []
   k = len(hiddenlayers)+1                         #there is one extra layer of weights because of output
-  for amount in range(k)
+  for amount in range(k):
     weights.append([])                            #creates the number of sets of weights
-  for inputweights in range(len(input))           # the special set of weights from input to first hidden layer
+  for inputweights in range(len(input)):           # the special set of weights from input to first hidden layer
     weights[0].append([])                         #adds a row of weights for each input
-    for inputmulti in range(len(hiddenlayers[0]))
-      weights[0][inputweights]
-        .append(0)          #adds weights to each row based on hidden layer
-  for x in range(len(hiddenlayers))
+    for inputmulti in range(len(hiddenlayers[0])):
+      weights[0][inputweights].append(0)          #adds weights to each row based on hidden layer
+  for x in range(len(hiddenlayers)):
      y = x + 1
-     if y < len(hiddenlayers)
-      for z in range(len(hiddenlayers[x]))         
+     if y < len(hiddenlayers):
+      for z in range(len(hiddenlayers[x])):         
         weights[y].append([])                     #each matrix of weights has a number of rows
-        for a in range(len(hiddenlayers[y]))
+        for a in range(len(hiddenlayers[y])):
            weights[y][z].append(0)                #each row has a number of weights
-     else
-       for z in range(len(hiddenlayers[-1])) 
+     else:
+       for z in range(len(hiddenlayers[-1])): 
         weights[-1].append([])                    #special case for output 
         global output
-        for a in range(len(output))
+        for a in range(len(output)):
            weights[-1][z].append(0)
         
-def biasgen()                                       #generates the list of biases
+def biasgen():                                       #generates the list of biases
   global bias
   bias = []
   global hiddenlayers
@@ -147,23 +146,23 @@ def biasgen()                                       #generates the list of biase
 
 
  
-#firing section
+ #firing section
 
 
 
-def squish()                                        #so this squishes a 2-d matrix of number from multiplying the input to weights to get the next layer
+def squish():                                        #so this squishes a 2-d matrix of number from multiplying the input to weights to get the next layer
   global placeholder
   global placeholderz
-  for x in range(len(placeholder[0]))
-    for y in range(len(placeholder))
+  for x in range(len(placeholder[0])):
+    for y in range(len(placeholder)):
       placeholderz[x] = placeholder[y][x] + placeholderz[x]
 
-def clear()                                         #resets the placeholder lists
+def clear():                                         #resets the placeholder lists
   global placeholder
   global placeholderz
   placeholder.clear()
   placeholderz.clear()
-def set()                                           #sets up the placeholders
+def set():                                           #sets up the placeholders
   global placeholder
   global placeholderz
   
@@ -171,20 +170,20 @@ def set()                                           #sets up the placeholders
   placeholderz.append(0)
 
 
-def reLUed()                                        #uses the reLU function on placeholderz
-  for ez in range(len(placeholderz))
+def reLUed():                                        #uses the reLU function on placeholderz
+  for ez in range(len(placeholderz)):
         global reLUout
         reLU(placeholderz[ez],0.01)
         placeholderz[ez] = reLUout
 
-def sigs()
-   for ez in range(len(placeholderz))
+def sigs():
+   for ez in range(len(placeholderz)):
         global sigout
         sigmoid(placeholderz[ez])
         placeholderz[ez] = sigout
 
 
-def fireactivation()                                #this is the network firing up its neurons
+def fireactivation():                                #this is the network firing up its neurons
   global input
   global hiddenlayers
   global weights
@@ -194,36 +193,36 @@ def fireactivation()                                #this is the network firing 
   placeholderz = []
   placeholder = []
   clear()
-  for x in range(len(input))                        #going from input to hidden layers
+  for x in range(len(input)):                        #going from input to hidden layers
     set()
-    for weighted in range(len(hiddenlayers[0]))
+    for weighted in range(len(hiddenlayers[0])):
       placeholder[x].append(input[x] * weights[0][x][weighted])
   squish()
-  for x in range(len(placeholderz))
+  for x in range(len(placeholderz)):
     placeholderz[x] = placeholderz[x] + bias[0][x]
   reLUed()                                          #activation function
   hiddenlayer[0] = placeholderz.copy()
-  for x in range(len(hiddenlayers))                 #going through the hidden layers
+  for x in range(len(hiddenlayers)):                 #going through the hidden layers
     clear()
     y = x + 1
-    if y < len(hiddenlayers)
-      for z in range(len(hiddenlayers[x]))
+    if y < len(hiddenlayers):
+      for z in range(len(hiddenlayers[x])):
         set()
-        for k in range(len(hiddenlayers[y]))
+        for k in range(len(hiddenlayers[y])):
             placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k]
       squish()
-      for r in range(len(placeholderz))
+      for r in range(len(placeholderz)):
         placeholderz[r] = placeholderz[r] + bias[y][r]
       reLUed()                                      #activation function
       hiddenlayer[y] = placeholderz.copy()
-    else                                            #going from final hidden layer to output
+    else:                                            #going from final hidden layer to output
       clear()
-      for z in range(len(hiddenlayers[-1]))
+      for z in range(len(hiddenlayers[-1])):
          set()
-         for weighted in range(len(output))
+         for weighted in range(len(output)):
             placeholder[z].append(hiddenlayers[-1][z] * weights[-1][z][weighted])
       squish()
-      for x in range(len(placeholderz))
+      for x in range(len(placeholderz)):
         placeholderz[x] = placeholderz[x] + bias[-1][x]
       sigs()                                          #activation function
       output = placeholderz.copy()
@@ -308,7 +307,3 @@ backpropagation()
                 placeholder[-2][b][c] = input[b] * dereLU * placeholder[-2][z][a] + placeholder[-2][b][c]
         
  #copy and paste a few times for each layer of the hidden layer and  and change it around (change variables in for loops change layer number) or learn to use recursion       
-    
-    
-    
-  
