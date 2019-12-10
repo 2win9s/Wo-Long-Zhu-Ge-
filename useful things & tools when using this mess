@@ -292,7 +292,7 @@ backpropagation()
  
   for x in range(len(hiddenlayer[-1]))
       for y in range(len(placeholder[-1][x]))
-        placeholder[-1][x][y] = hiddenlayer[-1][x] * desig() * (2 * (output[y] - target[y]))* #derivative of mse using costly[y] i dunno what it is + placeholder[-1][x][y]
+        placeholder[-1][x][y] = hiddenlayer[-1][x] * desig() * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y]
         for z in range(len(hiddenlayer[-2]))
           for a in range(len(placeholder[-2][z]))
             placeholder[-2][z][a] = hiddenlayer[-2][z] * dereLU * placeholder[-1][x][y] + placeholder[-2][z][a]
