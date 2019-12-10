@@ -3,15 +3,15 @@ def random (x,m):
   x = 1
   m = 1
   global rngout
-  a = (x * rngout) + (x  * m)
+  a = (x * rngout) + (x * m)
   rngout = a % m
-
-#reLU, most efficient activation algorithm for hidden layers
-def reLU(x,a)
+    
+    #reLU, most efficient activation algorithm for hidden layers
+def reLU(x,a):
   global reLUout
-  if x > 0
+  if x > 0:
     reLUout = x
-  else
+  else:
     a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
 
