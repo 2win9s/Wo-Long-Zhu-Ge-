@@ -210,23 +210,23 @@ def fireactivation():                                #this is the network firing
         set()
         for k in range(len(hiddenlayers[y])):
             placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k]
-      squish()
-      for r in range(len(placeholderz)):
-        placeholderz[r] = placeholderz[r] + bias[y][r]
-      reLUed()                                      #activation function
-      hiddenlayer[y] = placeholderz.copy()
-    else:                                            #going from final hidden layer to output
-      clear()
-      for z in range(len(hiddenlayers[-1])):
-         set()
-         for weighted in range(len(output)):
-            placeholder[z].append(hiddenlayers[-1][z] * weights[-1][z][weighted])
-      squish()
-      for x in range(len(placeholderz)):
-        placeholderz[x] = placeholderz[x] + bias[-1][x]
-      sigs()                                          #activation function
-      output = placeholderz.copy()
-      clear()
+      #squish()
+      #for r in range(len(placeholderz))
+        #placeholderz[r] = placeholderz[r] + bias[y][r]
+      #reLUed()                                      #activation function
+     #hiddenlayer[y] = placeholderz.copy()
+    #else:                                            #going from final hidden layer to output
+     # clear()
+     # for z in range(len(hiddenlayers[-1])):
+       #  set()
+       #  for weighted in range(len(output)):
+      #      placeholder[z].append(hiddenlayers[-1][z] * weights[-1][z][weighted])
+      #squish()
+      #for x in range(len(placeholderz)):
+     #   placeholderz[x] = placeholderz[x] + bias[-1][x]
+     # sigs()                                          #activation function
+     # output = placeholderz.copy()
+      #clear()
         
         
         
@@ -236,12 +236,12 @@ def fireactivation():                                #this is the network firing
 
 
 target = []                                          #give a target output              
-for x in range(len(output))
+for x in range(len(output)):
   target.append(0)
-def target write(x,y)
+def target write(x,y):
   global target
   target[x]= y
-def msecostgen()
+def msecostgen():
   global output
   global target
   global cost
@@ -257,11 +257,11 @@ def msecostgen()
   
 
 
-def dereLU(x)                                         #x is the value of the input to the reLU function 
+def dereLU(x):                                         #x is the value of the input to the reLU function 
   global dereLU
-  if x > 0
+  if x > 0:
     dereLU = 1
-  else
+  else:
     a = 0.01                                    
     dereLU = a
  
