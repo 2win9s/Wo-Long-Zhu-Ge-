@@ -1,3 +1,4 @@
+#stuff with parameters
 def random (x,m):
 
   x = 1
@@ -5,6 +6,30 @@ def random (x,m):
   global rngout
   a = (x * rngout) + (x * m)
   rngout = a % m
+  
+def eulerno(x):                                   #note:run this function once to give a value to euler's number note:both e and x are meme
+    global eulern                                 #euler's number or e
+    eulern = (1+1/x)**x
+
+input = []
+def inputgen(x):                                   #adds elements to the input layer, x is the number of elements in input layer
+  for length in range(x):
+    input.append(0)  
+
+
+           
+def hiddenlayergen(x):
+  numofnu = []                                    #create a list of the number of neurons in each layer here
+  for number in range(x):
+    global hiddenlayers
+    hiddenlayers.append([])
+    for neurons in range(numofnu[x]):
+      hiddenlayers[x].append(0)
+      
+output = []
+def outputgen(x):                                  #adds elements to the output layer, x is the number of elements in output layer
+  for length in range(x):
+    output.append(0)
     
     #reLU, most efficient activation algorithm for hidden layers
 def reLU(x,a):
@@ -25,28 +50,17 @@ def sigmoid(x):                                   #good output function for clas
   var = 1/5                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
 
-input = []
-def inputgen(x):                                   #adds elements to the input layer, x is the number of elements in input layer
-  for length in range(x):
-    input.append(0)
-    
+
 def inputwrite(x,y):                              #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
   global input
   input[x] = y
   
-def hiddenlayergen(x):
-  numofnu = []                                    #create a list of the number of neurons in each layer here
-  for number in range(x):
-    global hiddenlayers
-    hiddenlayers.append([])
-    for neurons in range(numofnu[x]):
-      hiddenlayers[x].append(0)
-  
-output = []
-def outputgen(x):                                  #adds elements to the output layer, x is the number of elements in output layer
-  for length in range(x):
-    output.append(0)
+
     
+
+   
+#stuff without parameters
+
 def weightgen():                                     #creates a list of list of weights aka fustration 
   global weights
   global hiddenlayers
@@ -72,7 +86,8 @@ def weightgen():                                     #creates a list of list of 
         global output
         for a in range(len(output)):
            weights[-1][z].append(0)
-         
+
+
 def biasgen():                                     #generates the list of biases
   global bias
   bias = []
@@ -80,7 +95,7 @@ def biasgen():                                     #generates the list of biases
   global output
   bias = hiddenlayers.copy()
   bias.append(output)
-  
+
 def squish():                                        #so this squishes a 2-d matrix of number from multiplying the input to weights to get the next layer
   global placeholder
   global placeholderz
