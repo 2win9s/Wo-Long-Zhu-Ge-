@@ -240,7 +240,7 @@ target = []                                          #give a target output
 for x in range(len(output)):
   target.append(0)
 
-def target write(x,y):
+def targetwrite(x,y):
   global target
   target[x]= y
 
@@ -251,9 +251,9 @@ def msecostgen():
   global costly
   cost = 0
   costly = []
-  for x in range(len(output))
+  for x in range(len(output)):
     cost.append((output[x] - target) ** 2)
-  for y in range(len(costly))
+  for y in range(len(costly)):
     cost = cost + costly[x]
   k  = len(output)
   cost  =  cost / k
@@ -284,29 +284,29 @@ def backpropagation():
   clear()
   global placeholder
   placeholder = []
-  for x in range(len(weights))
+  for x in range(len(weights)):
     placholder.append([])
-    for y in range(len(weights[x]))
+    for y in range(len(weights[x])):
       placeholder[x].append([])
-      for z in range(len(weights[x][y]))
+      for z in range(len(weights[x][y])):
         placeholder[x][y].append(0)
   
  
-  for x in range(len(hiddenlayer[-1]))
-      for y in range(len(placeholder[-1][x]))
+  for x in range(len(hiddenlayer[-1])):
+      for y in range(len(placeholder[-1][x])):
         placeholder[-1][x][y] = hiddenlayer[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y]
         
         #bit to be copied & pasted for hidden layers starts here
         
-        for z in range(len(hiddenlayer[-2]))  
-          for a in range(len(placeholder[-2][z]))
+        for z in range(len(hiddenlayer[-2])):  
+          for a in range(len(placeholder[-2][z])):
             dereLU(hiddenlayer[-1][a])
             placeholder[-2][z][a] = hiddenlayer[-2][z] * dereLU * placeholder[-1][x][y] + placeholder[-2][z][a]
             
         #bit to be copied & pasted for hidden layers ends here    
             
-            for b in range(len(input))
-              for c in range(len(placeholder[-3][c]))
+            for b in range(len(input)):
+              for c in range(len(placeholder[-3][c])):
                 dereLU(hiddenlayer[0][c])
                 placeholder[-2][b][c] = input[b] * dereLU * placeholder[-2][z][a] + placeholder[-2][b][c]
         
