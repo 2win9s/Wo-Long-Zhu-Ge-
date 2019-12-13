@@ -209,9 +209,9 @@ def fireactivation():                                #this is the network firing
       for z in range(len(hiddenlayers[x])):
         set()
         for k in range(len(hiddenlayers[y])):
-            placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k]
+            placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k])
         squish()
-        for r in range(len(placeholderz))
+        for r in range(len(placeholderz)):
           placeholderz[r] = placeholderz[r] + bias[y][r]
       reLUed()                                         #activation function
       hiddenlayer[y] = placeholderz.copy()
@@ -310,4 +310,4 @@ def backpropagation():
                 dereLU(hiddenlayer[0][c])
                 placeholder[-2][b][c] = input[b] * dereLU * placeholder[-2][z][a] + placeholder[-2][b][c]
         
- #copy and paste a few times for each layer of the hidden layer and  and change it around (change variables in for loops change layer number) or learn to use recursion       
+ #copy and paste a few times for each layer of the hidden layer and  and change it around (change variables in for loops change layer number) or learn to use recursion
