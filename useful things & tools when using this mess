@@ -43,10 +43,8 @@
 
 
 # simple rng,note: can only produce positive random numbers
-def random(x,m):                                   #x can be any pseudo random number,dice the time in milliseconds etc.,m is maximum value from rng
+def random(x,m):                                   #x is the seed can be any pseudo random number,dice the time in milliseconds etc.(recommend a prime number),m is maximum value from rng(recommend a prime number)
 #parameters of rng
-  x = 1                                             #meme;this is essentially a seed for the rng
-  m = 1                                             #note;m should be the smallest value here
   global rngout
   a = (x * rngout) + (x  * m)
   rngout = a % m
