@@ -42,21 +42,25 @@
 
 
 
-# simple rng,note: can only produce positive random numbers
+# simple rng,note: can only produce positive random numbers 
 def random(x,m):                                   #x is the seed can be any pseudo random number,dice the time in milliseconds etc.(recommend a prime number),m is maximum value from rng(recommend a prime number)
 #parameters of rng
   global rngout
   a = (x * rngout) + (x  * m)
   rngout = a % m
                                                   #rngout is the random number produced(note give an initial value as a global variable to r as a  global variable think of it as a second seed)
-#reLU, most efficient activation algorithm for hidden layers
-def reLU(x,a):
+
+
+#reLU, most efficient activation algorithm for hidden layers 
+def reLU(x):
   global reLUout
   if x > 0:
     reLUout = x
   else:
     a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
+
+
 
 def eulerno(x):                                    #note:run this function once to give a value to euler's number note:both e and x are meme
   global eulern                                   #euler's number or e
@@ -65,11 +69,11 @@ def eulerno(x):                                    #note:run this function once 
 def sigmoid(x):                                    #good output function for classsification problems with multiple outputs)
   global eulern                                   #requires euler's number
   global sigout 
-  var = 1/5                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
+  var = 0.1                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
 
 
-
+#EVERYTHING ABOVE THIS HAS BEEN CHECKED
 
 
 #neural network set up
