@@ -143,8 +143,8 @@ def weightgen():                                     #creates a list of list of 
            weights[-1][z].append(0)
 
 
-#everything above this is checked(functionality checked)        
-bias = []
+       
+
 def biasgen():                                       #generates the list of biases
   global bias
   global hiddenlayers
@@ -152,7 +152,7 @@ def biasgen():                                       #generates the list of bias
   bias = hiddenlayers.copy()
   bias.append(output)
 
-
+#everything above this is checked(functionality checked) 
 
  
  #firing section
