@@ -94,6 +94,7 @@ def inputwrite(x,y):                               #assigns a value y to element
 
 
 #hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
+hiddenlayers = []
 def hiddenlayergen():
   numofnu = []                                    #create a list of the number of neurons in each layer here
   for x in range(len(numofnu)):
@@ -104,6 +105,8 @@ def hiddenlayergen():
       
   
 
+
+
 #creates an output layer
 output = []
 def outputgen(x):                                  #adds elements to the output layer, x is the number of elements in output layer
@@ -111,6 +114,8 @@ def outputgen(x):                                  #adds elements to the output 
     output.append(0)
     
 
+
+weights = []
 def weightgen():                                     #creates a list of list of weights aka fustration 
   global weights
   global hiddenlayers
@@ -136,10 +141,12 @@ def weightgen():                                     #creates a list of list of 
         global output
         for a in range(len(output)):
            weights[-1][z].append(0)
-        
+
+
+#everything above this is checked(functionality checked)        
+bias = []
 def biasgen():                                       #generates the list of biases
   global bias
-  bias = []
   global hiddenlayers
   global output
   bias = hiddenlayers.copy()
