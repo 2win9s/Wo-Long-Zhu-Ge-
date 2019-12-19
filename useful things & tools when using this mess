@@ -73,7 +73,7 @@ def sigmoid(x):                                    #good output function for cla
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
 
 
-#EVERYTHING ABOVE THIS HAS BEEN CHECKED
+
 
 
 #neural network set up
@@ -94,12 +94,12 @@ def inputwrite(x,y):                               #assigns a value y to element
 
 
 #hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
-def hiddenlayergen(x):
+def hiddenlayergen():
   numofnu = []                                    #create a list of the number of neurons in each layer here
-  for number in range(x):
+  for x in range(len(numofnu)):
     global hiddenlayers
     hiddenlayers.append([])
-    for neurons in range(numofnu[x]):
+    for y in range(numofnu[x]):
       hiddenlayers[x].append(0)
       
   
