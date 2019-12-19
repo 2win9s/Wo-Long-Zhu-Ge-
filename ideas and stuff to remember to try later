@@ -1,8 +1,27 @@
 give the a.i. an option to create new inputs by storeing pervious inputs that have been prevelant, the last set of inputs and recent inputs to simluate memeory
 combine evolution algorithm and preLU and/or different output activation functions to determine the best one(impossible on school hardware because i doubt it can run one neural network nevermind 50)
 come up with less computationally intensive ideas
+mean squared error is a safe way to just do it easily and efficiently but may not have the most desired peerformance
+https://towardsdatascience.com/the-fall-of-rnn-lstm-2d1594c74ce0
+DDQN (Double Q-Learning)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+not priority rn
 linear for regression (predicting something/glorified calculator, giving a number as output)mean squared error
 softmax for distribution/classification,(only when only one output is desired e.g. image recognition)cost cross entropy
 sigmoid for distribution/classification,(only when multiple outputs are desires e.g. gaming,robotics)cost binary cross entropy
-mean squared error is a safe way to just do it easily and efficiently but may not have the most desired peerformance
-https://towardsdatascience.com/the-fall-of-rnn-lstm-2d1594c74ce0
