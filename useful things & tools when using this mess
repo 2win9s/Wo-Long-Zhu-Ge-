@@ -183,7 +183,7 @@ def set():                                           #sets up the placeholders
 def reLUed():                                        #uses the reLU function on placeholderz
   for ez in range(len(placeholderz)):
         global reLUout
-        reLU(placeholderz[ez],0.01)
+        reLU(placeholderz[ez])
         placeholderz[ez] = reLUout
 
 def sigs():
