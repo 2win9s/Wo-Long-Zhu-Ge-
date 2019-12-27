@@ -163,6 +163,7 @@ def squish():                                        #so this squishes a 2-d mat
   global placeholder
   global placeholderz
   for x in range(len(placeholder[0])):
+    placeholderz.append(0)
     for y in range(len(placeholder)):
       placeholderz[x] = placeholder[y][x] + placeholderz[x]
 
@@ -176,7 +177,7 @@ def set():                                           #sets up the placeholders
   global placeholderz
   
   placeholder.append([])
-  placeholderz.append(0)
+
 
 
 def reLUed():                                        #uses the reLU function on placeholderz
@@ -199,6 +200,7 @@ def fireactivation():                                #this is the network firing
   global bias
   global placeholder
   global placeholderz
+  global output
   placeholderz = []
   placeholder = []
   clear()
@@ -210,7 +212,7 @@ def fireactivation():                                #this is the network firing
   for x in range(len(placeholderz)):
     placeholderz[x] = placeholderz[x] + bias[0][x]
   reLUed()                                           #activation function
-  hiddenlayer[0] = placeholderz.copy()
+  hiddenlayers[0] = placeholderz.copy()
   for x in range(len(hiddenlayers)):                 #going through the hidden layers
     clear()
     y = x + 1
@@ -223,7 +225,7 @@ def fireactivation():                                #this is the network firing
         for r in range(len(placeholderz)):
           placeholderz[r] = placeholderz[r] + bias[y][r]
       reLUed()                                         #activation function
-      hiddenlayer[y] = placeholderz.copy()
+      hiddenlayers[y] = placeholderz.copy()
     else:                                              #going from final hidden layer to output
       clear()
       for z in range(len(hiddenlayers[-1])):
