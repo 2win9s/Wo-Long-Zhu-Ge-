@@ -263,10 +263,10 @@ def msecostgen():
   cost = 0
   costly = []
   for x in range(len(output)):
-    costly.append((output[x] - target) ** 2)
+    costly.append((output[x] - target[x]) ** 2)
   for y in range(len(costly)):
     cost = cost + costly[x]
-  k  = len(output)
+  k  = len(output)  
   cost  =  cost / k
   
   
@@ -296,29 +296,29 @@ def backpropagation():
   global placeholder
   placeholder = []
   for x in range(len(weights)):
-    placholder.append([])
+    placeholder.append([])
     for y in range(len(weights[x])):
       placeholder[x].append([])
       for z in range(len(weights[x][y])):
         placeholder[x][y].append(0)
   
  
-  for x in range(len(hiddenlayer[-1])):
+  for x in range(len(hiddenlayers[-1])):
       for y in range(len(placeholder[-1][x])):
-        placeholder[-1][x][y] = hiddenlayer[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y]
+        placeholder[-1][x][y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y] 
         
         #bit to be copied & pasted for hidden layers starts here
         
-        for z in range(len(hiddenlayer[-2])):  
+        for z in range(len(hiddenlayers[-2])):  
           for a in range(len(placeholder[-2][z])):
             dereLU(hiddenlayer[-1][a])
-            placeholder[-2][z][a] = hiddenlayer[-2][z] * dereLU * placeholder[-1][x][y] + placeholder[-2][z][a]
+            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * placeholder[-1][x][y] + placeholder[-2][z][a]
             
         #bit to be copied & pasted for hidden layers ends here    
             
             for b in range(len(input)):
               for c in range(len(placeholder[-3][c])):
-                dereLU(hiddenlayer[0][c])
+                dereLU(hiddenlayers[0][c])
                 placeholder[-2][b][c] = input[b] * dereLU * placeholder[-2][z][a] + placeholder[-2][b][c]
         
  #copy and paste a few times for each layer of the hidden layer and  and change it around (change variables in for loops change layer number) or learn to use recursion
