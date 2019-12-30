@@ -241,7 +241,7 @@ def fireactivation():                                #this is the network firing
         
         
         
-#everything above this is checked(functionality checked) serious problem with everything underneath    
+#everything above this is checked(functionality checked) a bit of tweaking and some codee for the bias and maybe figuring out lstm/rnn and we should be good to go)    
 #backpropagation/learning section (death by calculus,this will take a while to get right)
 
 
