@@ -312,13 +312,14 @@ def backpropagation():
         for z in range(len(hiddenlayers[-2])):  
           for a in range(len(placeholder[-2][z])):
             dereLU(hiddenlayer[-1][a])
-            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * placeholder[-1][x][y] + placeholder[-2][z][a]
+            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * (weights[-1][x][y] * placeholder[-1][x][y] / hiddenlayers[-1][x]) + placeholder[-2][z][a]
             
         #bit to be copied & pasted for hidden layers ends here    
             
             for b in range(len(input)):
               for c in range(len(placeholder[-3][c])):
                 dereLU(hiddenlayers[0][c])
-                placeholder[-2][b][c] = input[b] * dereLU * placeholder[-2][z][a] + placeholder[-2][b][c]
+                placeholder[-2][b][c] = input[b] * dereLU * (weights[1][z][a] * placeholder[-2][z][a] / hiddenlayers[1][z]) + placeholder[-2][b][c]
         
  #copy and paste a few times for each layer of the hidden layer and  and change it around (change variables in for loops change layer number) or learn to use recursion
+"The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
