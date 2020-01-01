@@ -279,7 +279,14 @@ def dereLU(x):                                         #x is the value of the in
   else:
     a = 0.01                                    
     dereLU = a
- 
+    
+def dereLUz(x)
+  global dereLUz
+  if x > 0:
+    dereLUz = 1
+  else:
+    a = 0.01                                    
+    dereLUz = a
 
  
        
@@ -294,7 +301,13 @@ def backpropagation():
   global dereLU
   clear()
   global placeholder
+  global placeholderz
   placeholder = []
+  placeholderz  = []
+  for x in range(len(bias)):
+    placeholderz.append([])
+    for y in range(len(bias[x])):
+      placeholderz[x].append(0)
   for x in range(len(weights)):
     placeholder.append([])
     for y in range(len(weights[x])):
@@ -302,24 +315,43 @@ def backpropagation():
       for z in range(len(weights[x][y])):
         placeholder[x][y].append(0)
   
- 
+  for x in range(len(placeholderz[-1])):
+    placeholderz[-1][x] = (output[x]*(1 - output[x])) * (2 * (output[x] - target[x]))* (1 / len(output)) + placeholderz[-1][x]
+    
+    #bit to be copied & pasted for each layer of bias starts here 
+    
+    for y in range(len weights[-1][x])):
+      for z in range(len(placeholderz[-2])):
+        dereLU(hiddenlayer[-1][z])
+        placeholderz[-2][z] = dereLU * (weights[-1][x][y] * (output[x]*(1 - output[x]))) + placeholderz[-2][z]
+    
+    #bit to be copied & pasted for each layer of bias ends here
+        
+        for a in range(len(weights[0][z])):
+          for b in range(len(placeholderz[0])):
+          dereLUz(hiddenlayer[-1][z])
+          dereLU(hiddenlayer[0][b])
+          placeholderz[0][b] = dereLU * (weights[1][z][a] * dereLUz) + placeholderz[0][b]
+  
+  
   for x in range(len(hiddenlayers[-1])):
       for y in range(len(placeholder[-1][x])):
         placeholder[-1][x][y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y] 
         
-        #bit to be copied & pasted for hidden layers starts here
+        #bit to be copied & pasted for each layer of weights starts here
         
         for z in range(len(hiddenlayers[-2])):  
           for a in range(len(placeholder[-2][z])):
-            dereLU(hiddenlayer[-1][a])
-            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * (weights[-1][x][y] * placeholder[-1][x][y] / hiddenlayers[-1][x]) + placeholder[-2][z][a]
+            dereLU(hiddenlayers[-1][a])
+            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * (weights[-1][x][y] * (output[y]*(1 - output[y]))) + placeholder[-2][z][a]
             
-        #bit to be copied & pasted for hidden layers ends here    
+        #bit to be copied & pasted for each layer of weights ends here    
             
             for b in range(len(input)):
               for c in range(len(placeholder[-3][c])):
                 dereLU(hiddenlayers[0][c])
-                placeholder[-2][b][c] = input[b] * dereLU * (weights[1][z][a] * placeholder[-2][z][a] / hiddenlayers[1][z]) + placeholder[-2][b][c]
+                dereLUz(hiddenlayers[-1][a])
+                placeholder[-3][b][c] = input[b] * dereLU * (weights[1][z][a] * dereLUz) + placeholder[-3][b][c]
         
- #copy and paste a few times for each layer of the hidden layer and  and change it around (change variables in for loops change layer number) or learn to use recursion
+ #use as template remember to switch around variables and schtuff like that
 "The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
