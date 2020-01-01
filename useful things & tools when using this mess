@@ -324,7 +324,6 @@ def backpropagation():
       for z in range(len(placeholderz[-2])):
         dereLU(hiddenlayer[-1][z])
         placeholderz[-2][z] = dereLU * (weights[-1][x][y] * (output[x]*(1 - output[x]))) + placeholderz[-2][z]
-    
     #bit to be copied & pasted for each layer of bias ends here
         
         for a in range(len(weights[0][z])):
@@ -336,22 +335,25 @@ def backpropagation():
   
   for x in range(len(hiddenlayers[-1])):
       for y in range(len(placeholder[-1][x])):
+        shit = 0
         placeholder[-1][x][y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y] 
+        shit = weights[-1][x][y] * (output[y]*(1 - output[y]))
         
         #bit to be copied & pasted for each layer of weights starts here
         
         for z in range(len(hiddenlayers[-2])):  
           for a in range(len(placeholder[-2][z])):
+            shiit = 0
             dereLU(hiddenlayers[-1][a])
-            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * (weights[-1][x][y] * (output[y]*(1 - output[y]))) + placeholder[-2][z][a]
+            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * shit + placeholder[-2][z][a]
+            shiit = dereLU * weights[-2][z][a] * shit
             
-        #bit to be copied & pasted for each layer of weights ends here    
-            
-            for b in range(len(input)):
+            for b in range(len(hiddenlayers[-3])):
               for c in range(len(placeholder[-3][c])):
-                dereLU(hiddenlayers[0][c])
-                dereLUz(hiddenlayers[-1][a])
-                placeholder[-3][b][c] = input[b] * dereLU * (weights[1][z][a] * dereLUz) + placeholder[-3][b][c]
+                shiiit = 0
+                dereLU(hiddenlayers[-2][c]
+                placeholder[-3][b][c] = hiddenlayers[-3][z] * dereLU * shiit + placeholder[-3][b][c]
+                shiiit = dereLU * weights[-3][b][c] * shiit
         
- #use as template remember to switch around variables and schtuff like that
+ #use as template copy and paste a feew times for multiple layers of weights and bises remember to switch around variables and schtuff like that
 "The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
