@@ -279,17 +279,8 @@ def dereLU(x):                                         #x is the value of the in
   else:
     a = 0.01                                    
     dereLU = a
-    
-def dereLUz(x)
-  global dereLUz
-  if x > 0:
-    dereLUz = 1
-  else:
-    a = 0.01                                    
-    dereLUz = a
 
- 
-       
+
 def backpropagation():
   global weights
   global output
