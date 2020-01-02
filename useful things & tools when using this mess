@@ -162,11 +162,12 @@ def biasgen():                                       #generates the list of bias
 def squish():                                        #so this squishes a 2-d matrix of number from multiplying the input to weights to get the next layer
   global placeholder
   global placeholderz
+  placeholderz.clear()
   for x in range(len(placeholder[0])):
     placeholderz.append(0)
     for y in range(len(placeholder)):
       placeholderz[x] = placeholder[y][x] + placeholderz[x]
-
+      
 def clear():                                         #resets the placeholder lists
   global placeholder
   global placeholderz
@@ -221,11 +222,12 @@ def fireactivation():                                #this is the network firing
         set()
         for k in range(len(hiddenlayers[y])):
             placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k])
-        squish()
-        for r in range(len(placeholderz)):
+      squish()
+      for r in range(len(placeholderz)):
           placeholderz[r] = placeholderz[r] + bias[y][r]
       reLUed()                                         #activation function
       hiddenlayers[y] = placeholderz.copy()
+      clear()
     else:                                              #going from final hidden layer to output
       clear()
       for z in range(len(hiddenlayers[-1])):
