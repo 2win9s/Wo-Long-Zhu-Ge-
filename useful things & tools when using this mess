@@ -273,7 +273,7 @@ def msecostgen():
   
 
 
-def dereLU(x):                                         #x is the value of the input to the reLU function 
+def derivativereLU(x):                                         #x is the value of the input to the reLU function 
   global dereLU
   if x > 0:
     dereLU = 1
@@ -317,16 +317,23 @@ def backpropagation():
       crap = weights[-1][x][y] * (2 * (output[x] - target[x]))
       for z in range(len(placeholderz[-2])):
         craap = 0
-        dereLU(hiddenlayers[-1][z])
+        derivativereLU(hiddenlayers[-1][z])
         placeholderz[-2][z] = dereLU * crap + placeholderz[-2][z]
     #bit to be copied & pasted for each layer of bias ends here
         
         for a in range(len(weights[-2][z])):
           craap = weights[-2][z][a] * dereLU * crap
-          for b in range(len(placeholderz[0])):
+          for b in range(len(placeholderz[-3])):
             craaap = 0
-            dereLU(hiddenlayers[-2][b])
+            derivativereLU(hiddenlayers[-2][b])
             placeholderz[-3][b] = dereLU * craap + placeholderz[-3][b]
+                
+            for c in range(len(weights[-3][b])):
+                craaap = weights[-3][b][c] * dereLU * craap
+                for d in range(len(placeholderz[0])):
+                    craaaap = 0
+                    derivativereLU(hiddenlayers[-3][d])
+                    placeholderz[-4][d] = dereLU * craaap + placeholderz[-4][d]
   
   
   for x in range(len(hiddenlayers[-1])):
@@ -340,16 +347,23 @@ def backpropagation():
         for z in range(len(hiddenlayers[-2])):  
           for a in range(len(placeholder[-2][z])):
             shiit = 0
-            dereLU(hiddenlayers[-1][a])
+            derivativereLU(hiddenlayers[-1][a])
             placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * shit + placeholder[-2][z][a]
             shiit = dereLU * weights[-2][z][a] * shit
             
             for b in range(len(hiddenlayers[-3])):
-              for c in range(len(placeholder[-3][c])):
+              for c in range(len(placeholder[-3][b])):
                 shiiit = 0
-                dereLU(hiddenlayers[-2][c])
-                placeholder[-3][b][c] = hiddenlayers[-3][z] * dereLU * shiit + placeholder[-3][b][c]
-                shiiit = dereLU * weights[-3][b][c] * shiit
+                derivativereLU(hiddenlayers[-2][c])
+                placeholder[-3][b][c] = hiddenlayers[-3][b] * dereLU * shiit + placeholder[-3][b][c]
+                shiiit = dereLU * weights[-3][b][c]  * shiit
+                
+                for d in range(len(input)):
+                    for e in range(len(placeholder[-4][d])):
+                        shiiiit = 0
+                        derivativereLU(hiddenlayers[-3][e])
+                        placeholder[-4][d][e] = input[d] * dereLU * shiiit + placeholder[-4][d][e]
+                        shiiiit = dereLU * weights[-4][d][e]  * shiiit
         
  #use as template copy and paste a feew times for multiple layers of weights and bises remember to switch around variables and schtuff like that
 "The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
