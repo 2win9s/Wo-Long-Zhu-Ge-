@@ -242,8 +242,7 @@ def fireactivation():                                #this is the network firing
       clear()
         
         
-#everything above this is checked(functionality checked) a bit of tweaking and some codee for the bias and maybe figuring out lstm/rnn and we should be good to go)    
-#backpropagation/learning section (death by calculus,this will take a while to get right)
+
 
 
 
@@ -366,4 +365,5 @@ def backpropagation():
                         shiiiit = dereLU * weights[-4][d][e]  * shiiit
         
  #use as template copy and paste a feew times for multiple layers of weights and bises remember to switch around variables and schtuff like that
-"The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
+#"The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
+#every thing in useful things & tools works !!!!!!!
