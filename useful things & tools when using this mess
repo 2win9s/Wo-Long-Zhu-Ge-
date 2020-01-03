@@ -314,7 +314,7 @@ def backpropagation():
     #bit to be copied & pasted for each layer of bias starts here 
     
     for y in range(len (weights[-1][x])):
-      crap = weights[-1][x][y] * (2 * (output[x] - target[x]))
+      crap = weights[-1][x][y] * (2 * (output[x] - target[x])) * (2 * (output[x] - target[x]))* (1 / len(output))
       for z in range(len(placeholderz[-2])):
         craap = 0
         derivativereLU(hiddenlayers[-1][z])
@@ -340,7 +340,7 @@ def backpropagation():
       for y in range(len(placeholder[-1][x])):
         shit = 0
         placeholder[-1][x][y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y] 
-        shit = weights[-1][x][y] * (output[y]*(1 - output[y]))
+        shit = weights[-1][x][y] * (output[y]*(1 - output[y])) * (2 * (output[x] - target[x]))* (1 / len(output))
         
         #bit to be copied & pasted for each layer of weights starts here
         
