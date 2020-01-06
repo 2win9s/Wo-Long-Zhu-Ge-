@@ -82,8 +82,9 @@ def sigmoid(x):                                    #good output function for cla
 
 
 #creates an input layer
-input = []
-def inputgen(x):                                   #adds elements to the input layer, x is the number of elements in input layer
+def inputgen(x):
+  global input
+  input = []
   for length in range(x):
     input.append(0)
     
@@ -94,9 +95,13 @@ def inputwrite(x,y):                               #assigns a value y to element
 
 
 #hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
-hiddenlayers = []
+def numofnugen(list_that_numofnu_should_be)
+  numofnu = list_that_numofnu_should_be
+
 def hiddenlayergen():
-  numofnu = []                                    #create a list of the number of neurons in each layer here
+  global numofnu
+  global hiddenlayers
+  hiddenlayers = []                                           #create a list of the number of neurons in each layer here
   for x in range(len(numofnu)):
     global hiddenlayers
     hiddenlayers.append([])
@@ -108,14 +113,16 @@ def hiddenlayergen():
 
 
 #creates an output layer
-output = []
-def outputgen(x):                                  #adds elements to the output layer, x is the number of elements in output layer
+
+def outputgen(x):
+  global output
+  output = []                                                        #adds elements to the output layer, x is the number of elements in output layer
   for length in range(x):
     output.append(0)
     
 
 
-weights = []
+
 def weightgen():                                     #creates a list of list of weights aka fustration 
   global weights
   global hiddenlayers
@@ -246,9 +253,11 @@ def fireactivation():                                #this is the network firing
 
 
 
-target = []                                          #give a target output              
+                                       #give a target output              
 
 for x in range(len(output)):
+  global target
+  target = []
   target.append(0)
 
 def targetwrite(x,y):
