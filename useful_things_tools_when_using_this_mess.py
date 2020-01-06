@@ -1,3 +1,4 @@
+import numpy as np
 #shortened decriptions and tags i will be using for parameters
 
 #      meme (minimize for efficiency,maximize for effectiveness)
