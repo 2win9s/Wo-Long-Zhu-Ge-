@@ -116,10 +116,9 @@ def hiddenlayergen():
 
 def outputgen(x):
   global output
-  output = []                                                        #adds elements to the output layer, x is the number of elements in output layer
+  output = numpy.array([])                                                        #adds elements to the output layer, x is the number of elements in output layer
   for length in range(x):
-    output.append(0)
-    
+    output = numpy.append(output,0)
 
 
 
@@ -127,14 +126,14 @@ def weightgen():                                     #creates a list of list of 
   global weights
   global hiddenlayers
   global input                                    #the number of weights depends on inputs and hidden layers
-  weights = []
+  weights = numpy.array([])
   k = len(hiddenlayers)+1                         #there is one extra layer of weights because of output
   for amount in range(k):
-    weights.append([])                            #creates the number of sets of weights
-  for inputweights in range(len(input)):           # the special set of weights from input to first hidden layer
-    weights[0].append([])                         #adds a row of weights for each input
-    for inputmulti in range(len(hiddenlayers[0])):
-      weights[0][inputweights].append(0)          #adds weights to each row based on hidden layer
+    weights = numpy.append(weights,[],axis = 1)                            #creates the number of sets of weights
+  for x in range(len(input)):           # the special set of weights from input to first hidden layer
+    weights[0] = numpy.append(weights[0],0,axis=2)                         #adds a row of weights for each input
+    for y in range(hiddenlayers[0].size):
+      weights[0][x] = numpy.append(weights[0][x],0,axis=3)       #adds weights to each row based on hidden layer
   for x in range(len(hiddenlayers)):
      y = x + 1
      if y < len(hiddenlayers):
