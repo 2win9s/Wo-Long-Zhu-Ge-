@@ -85,9 +85,9 @@ def sigmoid(x):                                    #good output function for cla
 #creates an input layer
 def inputgen(x):
   global input
-  input = []
+  input = numpy.array([])
   for length in range(x):
-    input.append(0)
+    input = numpy.append(input,0)
     
 
 def inputwrite(x,y):                               #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
@@ -102,12 +102,11 @@ def numofnugen(list_that_numofnu_should_be)
 def hiddenlayergen():
   global numofnu
   global hiddenlayers
-  hiddenlayers = []                                           #create a list of the number of neurons in each layer here
+  hiddenlayers = numpy.array([])                                           #create a list of the number of neurons in each layer here
   for x in range(len(numofnu)):
-    global hiddenlayers
-    hiddenlayers.append([])
+    hiddenlayers = numpy.append(hiddenlayers,[],axis = 1)
     for y in range(numofnu[x]):
-      hiddenlayers[x].append(0)
+      hiddenlayers[x] = numpy.append(hiddenlayers[x],0,axis = 2)
       
   
 
