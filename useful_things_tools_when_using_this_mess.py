@@ -120,7 +120,7 @@ def outputgen(x):
   global outputz
   outputz = []
   output = np.zeros(shape = x)
-  for z in range(x):
+  for y in range(x):
     outputz.append(0)
     
 
@@ -138,7 +138,7 @@ def weightgen():                                     #creates a list of list of 
   for x in range(len(input)):           # the special set of weights from input to first hidden layer
     weightsz[0].append([])                         #adds a row of weights for each input
     for y in range(hiddenlayers[0].size):
-      weightsz[0][x].append([])       #adds weights to each row based on hidden layer
+      weightsz[0][x].append([0])       #adds weights to each row based on hidden layer
   for x in range(len(hiddenlayers)):
      y = x + 1
      if y < len(hiddenlayers):
@@ -164,6 +164,7 @@ def biasgen():                                       #generates the list of bias
   biasz = hiddenlayersz
   biasz.append(outputz)
   bias  = np.asarray(biasz)
+
 
 
 
@@ -220,13 +221,13 @@ def fireactivation():                                #this is the network firing
   clear()
   for x in range(len(input)):                        #going from input to hidden layers
     set()
-    for weighted in range(len(hiddenlayers[0])):
-      placeholder[x].append(input[x] * weights[0][x][weighted])
+    for y in range(len(hiddenlayers[0])):
+      placeholder[x].append(input[x] * weights[0,x,y])
   squish()
   for x in range(len(placeholderz)):
-    placeholderz[x] = placeholderz[x] + bias[0][x]
+    placeholderz[x] = placeholderz[x] + bias[0,x]
   reLUed()                                           #activation function
-  hiddenlayers[0] = placeholderz.copy()
+  hiddenlayers[0] = np.asarray(placeholderz)
   for x in range(len(hiddenlayers)):                 #going through the hidden layers
     clear()
     y = x + 1
@@ -234,22 +235,22 @@ def fireactivation():                                #this is the network firing
       for z in range(len(hiddenlayers[x])):
         set()
         for k in range(len(hiddenlayers[y])):
-            placeholder[z].append(hiddenlayers[x][z] * weights[y][z][k])
+            placeholder[z].append(hiddenlayers[x,z] * weights[y,z,k])
       squish()
       for r in range(len(placeholderz)):
-          placeholderz[r] = placeholderz[r] + bias[y][r]
+          placeholderz[r] = placeholderz[r] + bias[y,r]
       reLUed()                                         #activation function
-      hiddenlayers[y] = placeholderz.copy()
+      hiddenlayers[y] = np.asarray(placeholderz)
       clear()
     else:                                              #going from final hidden layer to output
       clear()
       for z in range(len(hiddenlayers[-1])):
          set()
-         for weighted in range(len(output)):
-            placeholder[z].append(hiddenlayers[-1][z] * weights[-1][z][weighted])
+         for p in range(len(output)):
+            placeholder[z].append(hiddenlayers[-1,z] * weights[-1,z,p])
       squish()
       for x in range(len(placeholderz)):
-        placeholderz[x] = placeholderz[x] + bias[-1][x]
+        placeholderz[x] = placeholderz[x] + bias[-1,x]
       sigs()                                            #activation function
       output = np.asarray(placeholderz)
       clear()
