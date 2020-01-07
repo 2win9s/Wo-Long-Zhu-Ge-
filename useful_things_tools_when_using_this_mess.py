@@ -124,27 +124,28 @@ def weightgen():                                     #creates a list of list of 
   global weights
   global hiddenlayers
   global input                                    #the number of weights depends on inputs and hidden layers
-  weights = numpy.array([])
+  weightsz = []
   k = len(hiddenlayers)+1                         #there is one extra layer of weights because of output
   for amount in range(k):
-    weights = numpy.append(weights,[],axis = 1)                            #creates the number of sets of weights
+    weightsz.append([])                            #creates the number of sets of weights
   for x in range(len(input)):           # the special set of weights from input to first hidden layer
-    weights[0] = numpy.append(weights[0],0,axis=2)                         #adds a row of weights for each input
+    weightsz[0].append([])                         #adds a row of weights for each input
     for y in range(hiddenlayers[0].size):
-      weights[0][x] = numpy.append(weights[0][x],0,axis=3)       #adds weights to each row based on hidden layer
+      weightsz[0][x].append([])       #adds weights to each row based on hidden layer
   for x in range(len(hiddenlayers)):
      y = x + 1
      if y < len(hiddenlayers):
       for z in range(len(hiddenlayers[x])):         
-        weights[y].append([])                     #each matrix of weights has a number of rows
+        weightsz[y].append([])                     #each matrix of weights has a number of rows
         for a in range(len(hiddenlayers[y])):
-           weights[y][z].append(0)                #each row has a number of weights
+           weightsz[y][z].append(0)                #each row has a number of weights
      else:
        for z in range(len(hiddenlayers[-1])): 
-        weights[-1].append([])                    #special case for output 
+        weightsz[-1].append([])                    #special case for output 
         global output
         for a in range(len(output)):
-           weights[-1][z].append(0)
+           weightsz[-1][z].append(0)
+  weights =  np.asarray(weightsz)
 
 
        
