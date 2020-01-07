@@ -2,7 +2,7 @@
 #Insert Name Here = I.N.H.
 import numpy as np
 import useful_things_tools_when_using_this_mess
-eulerno(100000000000000)
+eulerno(100000000000)
 inputgen( )
 listttt = [ ]
 numofnugen(listttt)
