@@ -100,11 +100,13 @@ def numofnugen(list_that_numofnu_should_be)
 def hiddenlayergen():
   global numofnu
   global hiddenlayers
-  hiddenlayers = numpy.array([])                                           #create a list of the number of neurons in each layer here
+  hiddenlayersz = []                                          #create a list of the number of neurons in each layer here
   for x in range(len(numofnu)):
-    hiddenlayers = numpy.append(hiddenlayers,[],axis = 1)
+    hiddenlayersz.append([])
     for y in range(numofnu[x]):
-      hiddenlayers[x] = numpy.append(hiddenlayers[x],0,axis = 2)
+      hiddenlayersz[x].append(0)
+  hiddenlayers = np.asarray(hiddenlayersz)
+  
       
   
 
