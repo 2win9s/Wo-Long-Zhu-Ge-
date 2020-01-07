@@ -2,8 +2,8 @@ from collections import deque
 from random import randint
 from tkinter import Tk, Canvas, Frame, BOTH
 
-X, Y = (40, 40)
-BLOCK_SIZE = 10
+X, Y = (30, 20)
+BLOCK_SIZE = 1
 
 KEY_LEFT = 'Left'
 KEY_RIGHT = 'Right'
