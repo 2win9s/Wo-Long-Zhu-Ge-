@@ -49,7 +49,7 @@ def random(x,m):                                   #x is the seed can be any pse
   global rngout
   a = (x * rngout) + (x  * m)
   rngout = a % m
-                                                  #rngout is the random number produced(note give an initial value as a global variable to r as a  global variable think of it as a second seed)
+                                                  #rngout is the random number produced(note  r is a second seed)
 
 
 #reLU, most efficient activation algorithm for hidden layers 
