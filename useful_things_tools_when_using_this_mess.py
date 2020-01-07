@@ -100,6 +100,7 @@ def numofnugen(list)
 def hiddenlayergen():
   global numofnu
   global hiddenlayers
+  global hiddenlayersz
   hiddenlayersz = []                                          #create a list of the number of neurons in each layer here
   for x in range(len(numofnu)):
     hiddenlayersz.append([])
@@ -119,7 +120,7 @@ def outputgen(x):
   global outputz
   outputz = []
   output = np.zeros(shape = x)
-  for x in range(len(x)):
+  for z in range(x):
     outputz.append(0)
     
 
