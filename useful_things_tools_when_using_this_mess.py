@@ -85,9 +85,7 @@ def sigmoid(x):                                    #good output function for cla
 #creates an input layer
 def inputgen(x):
   global input
-  input = numpy.array([])
-  for length in range(x):
-    input = numpy.append(input,0)
+  input = np.zeros(shape = x)
     
 
 def inputwrite(x,y):                               #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
@@ -116,9 +114,7 @@ def hiddenlayergen():
 
 def outputgen(x):
   global output
-  output = numpy.array([])                                                        #adds elements to the output layer, x is the number of elements in output layer
-  for length in range(x):
-    output = numpy.append(output,0)
+  output = numpy.zeros(shape = x)
 
 
 
