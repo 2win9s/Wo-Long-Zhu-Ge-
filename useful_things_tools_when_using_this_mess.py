@@ -94,8 +94,8 @@ def inputwrite(x,y):                               #assigns a value y to element
 
 
 #hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
-def numofnugen(list_that_numofnu_should_be)
-  numofnu = list_that_numofnu_should_be
+def numofnugen(list)
+  numofnu = list
 
 def hiddenlayergen():
   global numofnu
@@ -116,13 +116,19 @@ def hiddenlayergen():
 
 def outputgen(x):
   global output
-  output = numpy.zeros(shape = x)
+  global outputz
+  outputz = []
+  output = np.zeros(shape = x)
+  for x in range(len(x)):
+    outputz.append(0)
+    
 
 
 
 def weightgen():                                     #creates a list of list of weights aka fustration 
   global weights
   global hiddenlayers
+  global hiddenlayersz
   global input                                    #the number of weights depends on inputs and hidden layers
   weightsz = []
   k = len(hiddenlayers)+1                         #there is one extra layer of weights because of output
@@ -152,10 +158,11 @@ def weightgen():                                     #creates a list of list of 
 
 def biasgen():                                       #generates the list of biases
   global bias
-  global hiddenlayers
-  global output
-  bias = hiddenlayers.copy()
-  bias.append(output)
+  global biasz
+  global hiddenlayersz
+  biasz = hiddenlayersz
+  biasz.append(outputz)
+  bias  = np.asarray(biasz)
 
 
 
@@ -243,7 +250,7 @@ def fireactivation():                                #this is the network firing
       for x in range(len(placeholderz)):
         placeholderz[x] = placeholderz[x] + bias[-1][x]
       sigs()                                            #activation function
-      output = placeholderz.copy()
+      output = np.asarray(placeholderz)
       clear()
         
         
