@@ -382,4 +382,4 @@ def backpropagation():
         
  #use as template copy and paste a feew times for multiple layers of weights and bises remember to switch around variables and schtuff like that
 #"The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
-#every thing in useful things & tools works !!!!!!!
+#nothing  works !!!!!!!
