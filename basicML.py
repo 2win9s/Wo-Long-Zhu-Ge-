@@ -36,15 +36,13 @@ def inputwrite(x,y):
   input[x] = y
 
 
-#creates a list of 1d numpy arrays which acts as the hiddenlayer note:this function requires a list called nmofhl
+#creates a list of 1d numpy arrays which acts as the hiddenlayers note:this function requires a list called nmofhl
 def hiddenlayersgen():#if you want 3 hiddenlayers then nmofhl should contain three elements
   global nmofhl       #each element should be the number of neurons you want in that layer
   global hiddenlayers #note:hiddenlayers[x] gets the particular layer and hiddenlayers[x][y] gets the particular neuron
   hiddenlayers = []  
   for x in range(len(nmofhl)):
-      hiddenlayers.append(np.array([]))
-      for y in range(nmofhl[x]):
-        hiddenlayers[x] = np.append(hiddenlayers[x],0)
+      hiddenlayers.append(np.zeros(shape = nmofhl[x]))
           
       
   
@@ -69,19 +67,17 @@ def weightsgen():
      if y < len(hiddenlayers):                                      #adds weights to each row based on hidden layer 
         weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
-        weights[-1] = np.zeros(shape = [len(hiddenlayers[-1],len(output))]) #the set of weights from hiddenlayer to output
+        weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
   k = None
+  
 
-
-       
-
-def biasgen():                                       #generates the list of biases
-  global bias
-  global biasz
-  global hiddenlayersz
-  biasz = hiddenlayersz
-  biasz.append(outputz)
-  bias  = np.asarray(biasz)
+#creates a list of 1d numpy arrays which acts as the bias
+def biasgen():
+    global hiddenlayers
+    global output
+    global bias
+    bias = hiddenlayers.copy()
+    bias.append(np.zeros(shape = len(output)))
 
 
 
