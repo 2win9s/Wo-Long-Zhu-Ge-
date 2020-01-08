@@ -68,7 +68,7 @@ def weightsgen():
         weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
         weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
-  k = None
+  
   
 
 #creates a list of 1d numpy arrays which acts as the bias
@@ -120,9 +120,7 @@ def fireactivation():
                 for d in range(len(placeholder)):
                     placeholderz[c]  = placeholderz[c] + placeholder[d,c]
             output = np.copy(placeholderz)
-            y = None
-    placeholder = None
-    placeholderz = None
+            
         
         
 
