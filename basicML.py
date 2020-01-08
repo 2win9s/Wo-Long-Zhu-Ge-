@@ -1,58 +1,10 @@
 import numpy as np
-#shortened decriptions and tags i will be using for parameters
-
-#      meme (minimize for efficiency,maximize for effectiveness)
-
-#      anti-meme (maximize for efficiency,minimize for effectiveness), should come up rarely
-
-#      prime (must be a prime number)
-
-#      note (do not ignore what comes after it)
-
-#      mtm  (more the merrier;less significant figures more efficiency,more significant figures more effectiveness)
+#this python module is for the bare bones basic neural networks, like cutting edge technology 30 years ago no advanced stuff here sorry
+#notes for myself when you remove a neuron or a layer from hiddenlayers,input,or output update by running weightgen() biasgen() and/or targetgen()
+#disclaimer i am a noob when it comes to ML and i am new to python and numpy
 
 
-
-
-
-
-#useful basic math operators
-
-# * means multiply % means modulo ** means to the power of +,- the same / division
-
-# // floor division removes decimal points from answer,by always lowering the value to the next whole number e.g. -4.15->-5 , 3.87->3
-
-# == equality check e.g. a==a+1 is not true and a==a is true,!= inequality check,a!=a+1 is true and a!= is not true similiar to <>
-
-# > if greater than then true a+1>a is true a>a+! untrue, < if less than true a+1<a untrue a<a+1 tue,>= greater and equals true,<= less than equals true
-
-# = assigns value on right to the variable on the left e.g. b = a + 1 makes b a + 1
-
-# += , c += a is the same as c = c + a
-
-# -= , c -= a is the same as c = c - a, *= , c *= a is the same as c = c * a, /=, %=,**=,//=, you get the idea
-
-# order of sums: brakets,exponents,multiply divide modular arithmatic floor division,addition subraction,comparison operators e.g. <,equality operators e.g. ==, finally the funky shortened sum things e.g. +=
-
-
-
-
-
-#math functions
-
-
-
-
-# simple rng,note: can only produce positive random numbers 
-def random(x,m):                                   #x is the seed can be any pseudo random number,dice the time in milliseconds etc.(recommend a prime number),m is maximum value from rng(recommend a prime number)
-#parameters of rng
-  global rngout
-  a = (x * rngout) + (x  * m)
-  rngout = a % m
-                                                  #rngout is the random number produced(note  r is a second seed)
-
-
-#reLU, most efficient activation algorithm for hidden layers 
+#reLU,efficient activation algorithm for hidden layers 
 def reLU(x):
   global reLUout
   if x > 0:
@@ -61,98 +13,64 @@ def reLU(x):
     a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
 
-
-
-def eulerno(x):                                    #note:run this function once to give a value to euler's number note:both e and x are meme
+def eulerno(x):                                   #note:run this function once to give a value to euler's number note:the larger x is the more accurate e will be
   global eulern                                   #euler's number or e
   eulern = (1+1/x)**x
 
-def sigmoid(x):                                    #good output function for classsification problems with multiple outputs)
+def sigmoid(x):                                   #good output function for classsification problems with multiple outputs)
   global eulern                                   #requires euler's number
   global sigout 
-  var = 0.1                                       #anti-meme, can be adjusted with learning or evolution,note: var > 1 is risky and possibly very ineffective,can ruin your entire network
+  var = 0.1                                       
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
 
-
-
-
-
-#neural network set up
-
-
-
-
-#creates an input layer
+#neural network set up---------------------------------------------------------------------------------------
+#creates a 1d numpy array of length x called input
 def inputgen(x):
   global input
   input = np.zeros(shape = x)
     
 
-def inputwrite(x,y):                               #assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
+#assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
+def inputwrite(x,y): 
   global input
   input[x] = y
 
 
-#hidden layers,i will store these as a list of lists, i know that it is not efficient but if translated to arrays in c there will be no problem    
-def numofnugen(list)
-  numofnu = list
-
-def hiddenlayergen():
-  global numofnu
-  global hiddenlayers
-  global hiddenlayersz
-  hiddenlayersz = []                                          #create a list of the number of neurons in each layer here
-  for x in range(len(numofnu)):
-    hiddenlayersz.append([])
-    for y in range(numofnu[x]):
-      hiddenlayersz[x].append(0)
-  hiddenlayers = np.asarray(hiddenlayersz)
-  
+#creates a list of 1d numpy arrays which acts as the hiddenlayer note:this function requires a list called nmofhl
+def hiddenlayersgen():#if you want 3 hiddenlayers then nmofhl should contain three elements
+  global nmofhl       #each element should be the number of neurons you want in that layer
+  global hiddenlayers #note:hiddenlayers[x] gets the particular layer and hiddenlayers[x][y] gets the particular neuron
+  hiddenlayers = []  
+  for x in range(len(nmofhl)):
+      hiddenlayers.append(np.array([]))
+      for y in range(nmofhl[x]):
+        hiddenlayers[x] = np.append(hiddenlayers[x],0)
+          
       
   
-
-
-
-#creates an output layer
-
+#creates a 1d numpy array of length x called output
 def outputgen(x):
   global output
-  global outputz
-  outputz = []
   output = np.zeros(shape = x)
-  for y in range(x):
-    outputz.append(0)
-    
-
-
-
-def weightgen():                                     #creates a list of list of weights aka fustration 
+  
+#creates a list of 2d numpy arrays which act as weights in a neural network
+def weightsgen():
   global weights
   global hiddenlayers
-  global hiddenlayersz
-  global input                                    #the number of weights depends on inputs and hidden layers
-  weightsz = []
-  k = len(hiddenlayers)+1                         #there is one extra layer of weights because of output
-  for amount in range(k):
-    weightsz.append([])                            #creates the number of sets of weights
-  for x in range(len(input)):           # the special set of weights from input to first hidden layer
-    weightsz[0].append([])                         #adds a row of weights for each input
-    for y in range(hiddenlayers[0].size):
-      weightsz[0][x].append([0])       #adds weights to each row based on hidden layer
+  global input
+  global output                                    
+  weights = []
+  k = len(hiddenlayers)+1                          #there is one extra layer of weights because of output
+  for x in range(k):                               
+    weights.append(0)                              
+  weights[0] = np.zeros(shape = [len(input),len(hiddenlayers[0])])  #the set of weights from input to first hidden layer               
   for x in range(len(hiddenlayers)):
      y = x + 1
-     if y < len(hiddenlayers):
-      for z in range(len(hiddenlayers[x])):         
-        weightsz[y].append([])                     #each matrix of weights has a number of rows
-        for a in range(len(hiddenlayers[y])):
-           weightsz[y][z].append(0)                #each row has a number of weights
+     if y < len(hiddenlayers):                                      #adds weights to each row based on hidden layer 
+        weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
-       for z in range(len(hiddenlayers[-1])): 
-        weightsz[-1].append([])                    #special case for output 
-        global output
-        for a in range(len(output)):
-           weightsz[-1][z].append(0)
-  weights =  np.asarray(weightsz)
+        weights[-1] = np.zeros(shape = [len(hiddenlayers[-1],len(output))]) #the set of weights from hiddenlayer to output
+  k = None
 
 
        
