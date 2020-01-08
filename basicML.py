@@ -1,7 +1,7 @@
 import numpy as np
-#this python module is for the bare bones basic neural networks, like cutting edge technology 30 years ago no advanced stuff here sorry
+#this python module is for the bare bones basic neural networks,no advanced stuff here
 #notes for myself when you remove a neuron or a layer from hiddenlayers,input,or output update by running weightgen() biasgen() and/or targetgen()
-#disclaimer i am a noob when it comes to ML and i am new to python and numpy and code in general
+
 
 
 #reLU,efficient activation algorithm for hidden layers 
@@ -252,3 +252,4 @@ def backpropagation():
  #use as template copy and paste a feew times for multiple layers of weights and bises remember to switch around variables and schtuff like that
 #"The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
 #nothing  works !!!!!!!
+#Sorry for being rubbish at coding
