@@ -97,6 +97,10 @@ def fireactivation():
     for x in range(len(placeholderz)):
         for y in range(len(placeholder)):
             placeholderz[x]  = placeholderz[x] + placeholder[y,x]
+    for x in range(len(bias[0])):
+        placeholderz[x]  = placeholderz[x] + bias[0][x]
+        reLU(placeholderz[x])
+        placeholderz[x] = reLUout
     hiddenlayers[0] = np.copy(placeholderz)
     for x in range(len(hiddenlayers)):
         y = x + 1
@@ -109,6 +113,10 @@ def fireactivation():
             for c in range(len(placeholderz)):
                 for d in range(len(placeholder)):
                     placeholderz[c]  = placeholderz[c] + placeholder[d,c]
+            for r in range(len(bias[y])):
+                placeholderz[r]  = placeholderz[r] + bias[y][r]
+                reLU(placeholderz[r])
+                placeholderz[r] = reLUout
             hiddenlayers[y] = np.copy(placeholderz)
         else:
             placeholder = np.copy(weights[y])
@@ -119,7 +127,11 @@ def fireactivation():
             for c in range(len(placeholderz)):
                 for d in range(len(placeholder)):
                     placeholderz[c]  = placeholderz[c] + placeholder[d,c]
-            output = np.copy(placeholderz)
+            for s in range(len(bias[-1])):
+                placeholderz[s]  = placeholderz[s] + bias[-1][s]
+                sigmoid(placeholderz[s])
+                placeholderz[s] = sigout
+        output = np.copy(placeholderz)
             
         
         
