@@ -1,7 +1,7 @@
 import numpy as np
 #this python module is for the bare bones basic neural networks, like cutting edge technology 30 years ago no advanced stuff here sorry
 #notes for myself when you remove a neuron or a layer from hiddenlayers,input,or output update by running weightgen() biasgen() and/or targetgen()
-#disclaimer i am a noob when it comes to ML and i am new to python and numpy
+#disclaimer i am a noob when it comes to ML and i am new to python and numpy and code in general
 
 
 #reLU,efficient activation algorithm for hidden layers 
@@ -81,93 +81,48 @@ def biasgen():
 
 
 
-
- 
- #firing section
-
-
-
-def squish():                                        #so this squishes a 2-d matrix of number from multiplying the input to weights to get the next layer
-  global placeholder
-  global placeholderz
-  placeholderz.clear()
-  for x in range(len(placeholder[0])):
-    placeholderz.append(0)
-    for y in range(len(placeholder)):
-      placeholderz[x] = placeholder[y][x] + placeholderz[x]
-      
-def clear():                                         #resets the placeholder lists
-  global placeholder
-  global placeholderz
-  placeholder.clear()
-  placeholderz.clear()
-def set():                                           #sets up the placeholders
-  global placeholder
-  global placeholderz
-  
-  placeholder.append([])
-
-
-
-def reLUed():                                        #uses the reLU function on placeholderz
-  for ez in range(len(placeholderz)):
-        global reLUout
-        reLU(placeholderz[ez])
-        placeholderz[ez] = reLUout
-
-def sigs():
-   for ez in range(len(placeholderz)):
-        global sigout
-        sigmoid(placeholderz[ez])
-        placeholderz[ez] = sigout
-
-
-def fireactivation():                                #this is the network firing up its neurons
-  global input
-  global hiddenlayers
-  global weights
-  global bias
-  global placeholder
-  global placeholderz
-  global output
-  placeholderz = []
-  placeholder = []
-  clear()
-  for x in range(len(input)):                        #going from input to hidden layers
-    set()
-    for y in range(len(hiddenlayers[0])):
-      placeholder[x].append(input[x] * weights[0,x,y])
-  squish()
-  for x in range(len(placeholderz)):
-    placeholderz[x] = placeholderz[x] + bias[0,x]
-  reLUed()                                           #activation function
-  hiddenlayers[0] = np.asarray(placeholderz)
-  for x in range(len(hiddenlayers)):                 #going through the hidden layers
-    clear()
-    y = x + 1
-    if y < len(hiddenlayers):
-      for z in range(len(hiddenlayers[x])):
-        set()
-        for k in range(len(hiddenlayers[y])):
-            placeholder[z].append(hiddenlayers[x,z] * weights[y,z,k])
-      squish()
-      for r in range(len(placeholderz)):
-          placeholderz[r] = placeholderz[r] + bias[y,r]
-      reLUed()                                         #activation function
-      hiddenlayers[y] = np.asarray(placeholderz)
-      clear()
-    else:                                              #going from final hidden layer to output
-      clear()
-      for z in range(len(hiddenlayers[-1])):
-         set()
-         for p in range(len(output)):
-            placeholder[z].append(hiddenlayers[-1,z] * weights[-1,z,p])
-      squish()
-      for x in range(len(placeholderz)):
-        placeholderz[x] = placeholderz[x] + bias[-1,x]
-      sigs()                                            #activation function
-      output = np.asarray(placeholderz)
-      clear()
+ #firing neurons/ forward pass--------------------------------------------------------------------------   
+    
+def fireactivation():
+    global input
+    global hiddenlayers
+    global output
+    global weights
+    global bias
+    placeholder = np.copy(weights[0])
+    placeholderz = np.zeros(shape = len(weights[0][0]))
+    for x in range(len(input)):
+        for y in range(weights[0][x].size):
+            placeholder[x,y] = input[x] * weights[0][x,y]
+    for x in range(len(placeholderz)):
+        for y in range(len(placeholder)):
+            placeholderz[x]  = placeholderz[x] + placeholder[y,x]
+    hiddenlayers[0] = np.copy(placeholderz)
+    for x in range(len(hiddenlayers)):
+        y = x + 1
+        if y < len(hiddenlayers):
+            placeholder = np.copy(weights[y])
+            placeholderz = np.zeros(shape = len(weights[y][0]))
+            for a in range(len(hiddenlayers[x])):
+                for b in range(len(hiddenlayers[y])):
+                    placeholder[a,b] = hiddenlayers[x][a] * weights[y][a,b]
+            for c in range(len(placeholderz)):
+                for d in range(len(placeholder)):
+                    placeholderz[c]  = placeholderz[c] + placeholder[d,c]
+            hiddenlayers[y] = np.copy(placeholderz)
+        else:
+            placeholder = np.copy(weights[y])
+            placeholderz = np.zeros(shape = len(output))
+            for a in range(len(hiddenlayers[-1])):
+                for b in range(len(hiddenlayers[y])):
+                    placeholder[a,b] = hiddenlayers[-1][a] * weights[y][a,b]
+            for c in range(len(placeholderz)):
+                for d in range(len(placeholder)):
+                    placeholderz[c]  = placeholderz[c] + placeholder[d,c]
+            output = np.copy(placeholderz)
+            y = None
+    placeholder = None
+    placeholderz = None
         
         
 
