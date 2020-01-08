@@ -129,7 +129,7 @@ def fireactivation():
 
 
 
-                                       #give a target output              
+#get backpropagation going and we are done                                                   
 
 for x in range(len(output)):
   global target
