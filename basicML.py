@@ -134,132 +134,139 @@ def fireactivation():
         output = np.copy(placeholderz)
             
         
+# learning/gradient descent/ backwards pass---------------------------------------------------------------
         
 
-
-
-
-#get backpropagation going and we are done                                                   
-
-for x in range(len(output)):
-  global target
-  target = []
-  target.append(0)
-
+def targetgen(x):
+    global target
+    target = np.zeros(shape = len(output))    
+    
+    
 def targetwrite(x,y):
   global target
   target[x]= y
+  
 
-def msecostgen():
+def msecostgen():   #not the most important formula
   global output
   global target
   global cost
   global costly
   cost = 0
-  costly = []
-  for x in range(len(output)):
-    costly.append((output[x] - target[x]) ** 2)
+  costly = np.zeros(shape = len(target))
+  for x in range(len(target)):
+    costly = ((output[x] - target[x]) ** 2)
   for y in range(len(costly)):
     cost = cost + costly[x]
   k  = len(output)  
   cost  =  cost / k
   
   
-
-
-def derivativereLU(x):                                         #x is the value of the input to the reLU function 
+def derivativereLU(x):                                     #x is the value of the input to the reLU function 
   global dereLU
   if x > 0:
     dereLU = 1
   else:
     a = 0.01                                    
     dereLU = a
-
-
-def backpropagation():
-  global weights
-  global output
-  global hiddenlayers
-  global bias
-  global ouput
-  global target
-  global input
-  global dereLU
-  clear()
-  global placeholder
-  global placeholderz
-  placeholder = []
-  placeholderz  = []
-  for x in range(len(bias)):
-    placeholderz.append([])
-    for y in range(len(bias[x])):
-      placeholderz[x].append(0)
-  for x in range(len(weights)):
-    placeholder.append([])
-    for y in range(len(weights[x])):
-      placeholder[x].append([])
-      for z in range(len(weights[x][y])):
-        placeholder[x][y].append(0)
-  
-  for x in range(len(output)):
-    crap = 0
-    placeholderz[-1][x] = (output[x]*(1 - output[x])) * (2 * (output[x] - target[x]))* (1 / len(output)) + placeholderz[-1][x]
     
-    #bit to be copied & pasted for each layer of bias starts here 
+
+def backpropagationpt1():                                  #this is the important bit   
+    global weights
+    global output
+    global hiddenlayers
+    global bias
+    global ouput
+    global target
+    global input
+    global dereLU
+    global placeholder
+    global placeholderz
+    placeholder = weights.copy()
+    placeholderz = bias.copy()
+    for x in range(placeholder):
+        for y in range(placeholder[x]):
+            for z in range(placeholder[x][y]):
+                placeholder[x] = np.zeros(shape = [len(placeholder[x][y]),len(placeholder[x][y,z])])
+    for x in range(placeholderz):
+        for y in range(placeholderz[x]):
+            placeholderz[x] = np.zeros(shape = len(placeholderz[x][y]))
+    global crap
+    crap = np.zeros(shape = len(weights))
+    global stuff
+    stuff = np.zeros(shape = len(bias))
+    thing = len(weights)
+    yoke = len(bias)
+    for y in range(len(output)):
+        placeholderz[-1][y] = (output[y] * (1 - output[y])) * (2 * (output[y] - target[y])) * (1 / len(output)) + placeholderz[-1][y]
+        fish = yoke - 1
+        stuff[fish] = (2 * (output[y] - target[y]))* (1 / len(output))* (output[y]*(1 - output[y]))
+        backpropagationpt2(fish,y)
+        for x in range(len(weights[-1])):
+            placeholder[-1][x,y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x,y] 
+            notfish = thing - 1
+            crap[notfish] = weights[-1][x,y] * (2 * (output[y] - target[y])) * (1 / len(output)) * (output[y] * (1 - output[y]))
+            backpropagationpt3(notfish)
+
+def backpropagationpt2(fish,y):
+    global weights
+    global output
+    global hiddenlayers
+    global bias
+    global ouput
+    global target
+    global input
+    global dereLU
+    global stuff
+    global placeholderz
+    if fish == 1:
+        for x in range(len(weights[fish])): 
+            stuff[fish] = stuff[fish] * weights[fish][x,y]
+            for z in range(len(placeholderz[fish-1][x])):
+                derivativereLU(output[fish-1][z])
+                placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
+                stuff = None
+    else:
+        for x in range(len(weights[fish])): 
+            stuff[fish] = stuff[fish] * weights[fish][x,y]
+            for z in range(len(placeholderz[fish-1][x])):
+                derivativereLU(hiddenlayers[fish-1][z])
+                placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
+                stuff[fish-1] = stuff[fish] * dereLU
+                fish = fish - 1
+                backpropagationpt2(fish,z)
+                 
+        
     
-    for y in range(len (weights[-1][x])):
-      crap = weights[-1][x][y] * (2 * (output[x] - target[x])) * (2 * (output[x] - target[x]))* (1 / len(output))
-      for z in range(len(placeholderz[-2])):
-        craap = 0
-        derivativereLU(hiddenlayers[-1][z])
-        placeholderz[-2][z] = dereLU * crap + placeholderz[-2][z]
-    #bit to be copied & pasted for each layer of bias ends here
+def backpropagationpt3(notfish):
+    global weights
+    global output
+    global hiddenlayers
+    global bias
+    global ouput
+    global target
+    global input
+    global dereLU
+    global placeholder
+    global crap
+    if notfish == 1:
+        for x in range(len(input)): 
+            for y in range(len(hiddenlayers[notfish-1])):
+               derivativereLU(hiddenlayers[notfish-1][y])
+               placeholder[notfish-1][x,y] = input[x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
+    else:
+        for x in range(len(hiddenlayers[notfish-2])): 
+            for y in range(len(hiddenlayers[notfish-1])):
+               derivativereLU(hiddenlayers[notfish-1][y])
+               placeholder[notfish-1][x,y] = hiddenlayers[notfish-2][x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
+               crap[notfish-1] = crap[notfish] * dereLU * weights[notfish-1][x,y]
+               notfish = notfish - 1
+               backpropagationpt3(notfish)
+
+def backpropagationef():                                    #this one should be way more efficient but u need to cofigure the function in this module                                   
+    print("i will eventually get around to writing backpropagationef")#use as template copy and paste a feew times for multiple layers of weights and bises remember to switch around variables and schtuff like that
         
-        for a in range(len(weights[-2][z])):
-          craap = weights[-2][z][a] * dereLU * crap
-          for b in range(len(placeholderz[-3])):
-            craaap = 0
-            derivativereLU(hiddenlayers[-2][b])
-            placeholderz[-3][b] = dereLU * craap + placeholderz[-3][b]
-                
-            for c in range(len(weights[-3][b])):
-                craaap = weights[-3][b][c] * dereLU * craap
-                for d in range(len(placeholderz[0])):
-                    craaaap = 0
-                    derivativereLU(hiddenlayers[-3][d])
-                    placeholderz[-4][d] = dereLU * craaap + placeholderz[-4][d]
-  
-  
-  for x in range(len(hiddenlayers[-1])):
-      for y in range(len(placeholder[-1][x])):
-        shit = 0
-        placeholder[-1][x][y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x][y] 
-        shit = weights[-1][x][y] * (output[y]*(1 - output[y])) * (2 * (output[x] - target[x]))* (1 / len(output))
-        
-        #bit to be copied & pasted for each layer of weights starts here
-        
-        for z in range(len(hiddenlayers[-2])):  
-          for a in range(len(placeholder[-2][z])):
-            shiit = 0
-            derivativereLU(hiddenlayers[-1][a])
-            placeholder[-2][z][a] = hiddenlayers[-2][z] * dereLU * shit + placeholder[-2][z][a]
-            shiit = dereLU * weights[-2][z][a] * shit
-            
-            for b in range(len(hiddenlayers[-3])):
-              for c in range(len(placeholder[-3][b])):
-                shiiit = 0
-                derivativereLU(hiddenlayers[-2][c])
-                placeholder[-3][b][c] = hiddenlayers[-3][b] * dereLU * shiit + placeholder[-3][b][c]
-                shiiit = dereLU * weights[-3][b][c]  * shiit
-                
-                for d in range(len(input)):
-                    for e in range(len(placeholder[-4][d])):
-                        shiiiit = 0
-                        derivativereLU(hiddenlayers[-3][e])
-                        placeholder[-4][d][e] = input[d] * dereLU * shiiit + placeholder[-4][d][e]
-                        shiiiit = dereLU * weights[-4][d][e]  * shiiit
-        
- #use as template copy and paste a feew times for multiple layers of weights and bises remember to switch around variables and schtuff like that
+
 #"The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
-#nothing  works !!!!!!!
+#nothing  works in backwardspass!!!!!!!
 #Sorry for being rubbish at coding
