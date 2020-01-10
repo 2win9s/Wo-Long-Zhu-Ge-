@@ -260,6 +260,20 @@ def backpropagationpt3(notfish):
 def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
     print("i will eventually get around to writing backpropagationef")
     
-
-#nothing  works in backwardspass!!!!!!!
-#Sorry for being rubbish at coding
+def updateweights(l):
+    global weights                                          #the arguement l is the learning rate, here we update the weights to minimize the cost
+    global placeholder
+    for x in range(len(weights)):
+        for y in range(len(weights[x])):
+            for z in range(weights[x][y].size):
+                weights[x][y,z] = weights[x][y,z] - (placeholder[x][y,z] * l)
+    placeholder = None
+                
+def updatebias(l):
+    global bias
+    global placeholderz
+    for x in range(len(bias)):
+        for y in range(len(bias[x])):
+            bias[x][y] = bias[x][y] - (placeholderz[x][y] * l)
+#it now works finally
+#Sorry for being rubbish at coding and wasting your time
