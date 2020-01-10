@@ -131,7 +131,7 @@ def fireactivation():
                 placeholderz[s]  = placeholderz[s] + bias[-1][s]
                 sigmoid(placeholderz[s])
                 placeholderz[s] = sigout
-        output = np.copy(placeholderz)
+            output = np.copy(placeholderz)
         
 def targetgen(x):
     global target
@@ -222,13 +222,13 @@ def backpropagationpt2(fish,y):
             derivativereLU(hiddenlayers[fish-1][x])
             placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
     else:
-        for x in range(len(weights[fish])): 
+        for x in range(len(weights[fish])):
             stuff[fish] = stuff[fish] * weights[fish][x,y]
-            derivativereLU(hiddenlayers[fish-1][z])
+            derivativereLU(hiddenlayers[fish-1][x])
             placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
             stuff[fish-1] = stuff[fish] * dereLU
-            fish = fish - 1
-            backpropagationpt2(fish,z)
+            k = fish - 1
+            backpropagationpt2(k,x)
                  
         
     
@@ -254,12 +254,12 @@ def backpropagationpt3(notfish):
                derivativereLU(hiddenlayers[notfish-1][y])
                placeholder[notfish-1][x,y] = hiddenlayers[notfish-2][x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
                crap[notfish-1] = crap[notfish] * dereLU * weights[notfish-1][x,y]
-               notfish = notfish - 1
-               backpropagationpt3(notfish)
+               trustmeitsnotfish = notfish - 1
+               backpropagationpt3(trustmeitsnotfish)
 
-def backpropagationef():                                    #this one should be way more efficient but u need to cofigure the function in this module                                   
+def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
     print("i will eventually get around to writing backpropagationef")
+    
 
-#"The best that most of us can hope to achieve in physics is simply to misunderstand at a deeper level." -- Wolfgang Pauli
 #nothing  works in backwardspass!!!!!!!
 #Sorry for being rubbish at coding
