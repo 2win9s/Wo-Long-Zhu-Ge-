@@ -1,3 +1,5 @@
+#this is not my code, this is code from Sentdex's tutorial on python plays GTA V
+
 import cv2
 import numpy as np
 import win32gui, win32ui, win32con, win32api
