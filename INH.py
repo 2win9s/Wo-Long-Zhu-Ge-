@@ -3,3 +3,4 @@
 import numpy as np
 import basicML.py as nn
 import usefulfunctions.py
+nmofhl = [ , , , , ]
