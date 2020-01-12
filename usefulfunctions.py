@@ -1,8 +1,20 @@
-rng = 5202642720986189087034837832337828472969800910926501361967872059486045713145450116712488685004691423
-def random(x,m,z):                           #x and m should be rediculously big prime numbers,z is the larget number you want out of it
+
+rng = 5915587277
+def random(x,m,r,z):                           #x,rand m should be rediculously big prime numbers,z is the larget number you want out of it
   global rngout
   global rng
   a = (x * rng) + (x  * m)
-  rng = a % m
+  rng = a % r
   rngout = rng % z
                                                   #rngout is the random number produced(note  r is a second seed)
+
+def decing(x,m,r,z,k):                                 #z is the number of zeros you want after the decimal place of the samll number,x,r and m should be rediculously big prime numbers,k is significant digits
+  global deciout
+  global rngout
+  deciout = "0."
+  for x in range(z):
+    deciout = deciout + str(0)
+  for y in range(k - z):
+    random(x,m,r,10)
+    deciout = deciout + str(rngout)
+  deciout = float(deciout)
