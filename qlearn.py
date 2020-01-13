@@ -3,7 +3,7 @@ import notrandom.py as nr
 
 def statesinit():
   global states
-  states = numpy.array(shape = 0,0)
+  states = np.array(shape = [0,0]  )
   
   
 def actions(x,y):                             #y is a list of actions e.g. y = ["up","down","left","right","1","2","3","4","5","6","7","8","9"]
@@ -32,4 +32,23 @@ def qtableaddstate(x):
     rh[x] = nr.decing(7369130657357778596659,400000010149,195327895579,1,6)
   qtable = np.append(qtable,rh,axis = 1)
 
+def onstatesinit():
+  global onstates
+  global cc
+  cc = 0
+  onstates  = np.array(shape = [2,0])
+
+def statemap(xy):
+  global onstates
+  global cc
+  if cc == 0:
+    onstates[0] = xy
+  else:
+    onstates[0] = np.append(onstates,xy,axis = 1)
+    onstates[1] = np.append(onstates,xy,axis = 1)
+  cc = cc + 1
+    
+  
+  
+  
 
