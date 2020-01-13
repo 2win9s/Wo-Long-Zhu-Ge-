@@ -32,20 +32,36 @@ def qtableaddstate(x):
     rh[x] = nr.decing(7369130657357778596659,400000010149,195327895579,1,6)
   qtable = np.append(qtable,rh,axis = 1)
 
-def onstatesinit():
-  global onstates
-  global cc
-  cc = 0
-  onstates  = np.array(shape = [2,0])
+def pfstates():
+  global p
+  global f
+  global past
+  global future
+  past = np.asarray(p)
+  future = np.asarray(f)
+
+  
+def resetpf():
+    global cc
+    global p
+    global f
+    cc = 0
+    p = []
+    f = []
+    
 
 def statemap(xy):
-  global onstates
+  global p
+  global f
   global cc
   if cc == 0:
-    onstates[0] = xy
-  else:
-    onstates[0] = np.append(onstates,xy,axis = 1)
-    onstates[1] = np.append(onstates,xy,axis = 1)
+    p.append(xy)
+  if cc == 1:
+    p.append(xy)
+    f.append(xy)
+  if cc == 2:
+    p.append(xy)
+    f.append(xy)
   cc = cc + 1
     
   
