@@ -18,3 +18,4 @@ def decing(x,m,r,z,k):                                 #z is the number of zeros
     random(x,m,r,10)
     deciout = deciout + str(rngout)
   deciout = float(deciout)
+  return deciout
