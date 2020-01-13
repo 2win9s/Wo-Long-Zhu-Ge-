@@ -93,6 +93,7 @@ def fireactivation():
     placeholderz = np.zeros(shape = len(weights[0][0]))
     for x in range(len(input)):
         for y in range(weights[0][x].size):
+          if weights[0][x,y] != None:
             placeholder[x,y] = input[x] * weights[0][x,y]
     for x in range(len(placeholderz)):
         for y in range(len(placeholder)):
@@ -109,6 +110,7 @@ def fireactivation():
             placeholderz = np.zeros(shape = len(weights[y][0]))
             for a in range(len(hiddenlayers[x])):
                 for b in range(len(hiddenlayers[y])):
+                  if weights[y][a,b] != None:
                     placeholder[a,b] = hiddenlayers[x][a] * weights[y][a,b]
             for c in range(len(placeholderz)):
                 for d in range(len(placeholder)):
@@ -123,6 +125,7 @@ def fireactivation():
             placeholderz = np.zeros(shape = len(output))
             for a in range(len(hiddenlayers[-1])):
                 for b in range(len(output)):
+                  if weights[y][a,b] != None:
                     placeholder[a,b] = hiddenlayers[-1][a] * weights[y][a,b]
             for c in range(len(placeholderz)):
                 for d in range(len(placeholder)):
@@ -218,17 +221,19 @@ def backpropagationpt2(fish,y):
     global placeholderz
     if fish == 1:
         for x in range(len(weights[fish])):
+          if weights[fish][x,y] != None:
             stuff[fish] = stuff[fish] * weights[fish][x,y]
             derivativereLU(hiddenlayers[fish-1][x])
             placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
     else:
         for x in range(len(weights[fish])):
+          if weights[fish][x,y] != None:
             stuff[fish] = stuff[fish] * weights[fish][x,y]
             derivativereLU(hiddenlayers[fish-1][x])
             placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
             stuff[fish-1] = stuff[fish] * dereLU
             k = fish - 1
-            backpropagationpt2(k,x)
+            backpropagationpt2(k,x) 
                  
         
     
@@ -266,6 +271,7 @@ def updateweights(l):
     for x in range(len(weights)):
         for y in range(len(weights[x])):
             for z in range(weights[x][y].size):
+              if weights[x][y,z] != None:
                 weights[x][y,z] = weights[x][y,z] - (placeholder[x][y,z] * l)
     placeholder = None
                 
