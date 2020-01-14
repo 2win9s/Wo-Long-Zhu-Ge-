@@ -61,15 +61,23 @@ def weightsgen():
   k = len(hiddenlayers)+1                          #there is one extra layer of weights because of output
   for x in range(k):                               
     weights.append(0)                              
-  weights[0] = np.ones(shape = [len(input),len(hiddenlayers[0])])  #the set of weights from input to first hidden layer               
+  weights[0] = np.zeros(shape = [len(input),len(hiddenlayers[0])])  #the set of weights from input to first hidden layer               
   for x in range(len(hiddenlayers)):
      y = x + 1
      if y < len(hiddenlayers):                                      #adds weights to each row based on hidden layer 
-        weights[y] = np.ones(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
+        weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
-        weights[-1] = np.ones(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
-  
-  
+        weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
+  '''for x in range(len(weights):
+    for y in range(len(weights[x])):
+      for z in range(weights[x][y].size):
+       #rrr = np.random.randn()
+       #rrr = rrr * ((2/len(weights[x])) ** 0.5)
+       #weights[x][y,z] = rrr
+       #sss = np.random.random_sample()
+       #if sss < 0.5:
+         #sss = sss - 1
+       #weights[x][y,z] = sss'''
 
 #creates a list of 1d numpy arrays which acts as the bias
 def biasgen():
