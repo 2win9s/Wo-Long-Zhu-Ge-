@@ -63,7 +63,6 @@ def statemap(xy,tt,action):
     actionlog = np.array(action)
     cc = cc + 1
   if cc == 1:
-    if xy != 
       p.append(xy)
       f.append(xy)
       past = np.asarray(p)
@@ -102,21 +101,24 @@ def qupdate(learn,discount):
       break
   
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
-'''def qlearnepsilon():
+''' stuff to put in the main thing
+epsilon = 0.667
+def qlearnepsilon():
   global past
+  global future
   global target
   global qtable
   global actions
   global input
-  epsilon = 0.75
+  global epsilon
   r = np.random.random
-  for x in range(len(past)):
+  for x in range(len(past)-1):
     for y in range(len(states)):
       if past[x] == states[y]:
         if epsilon < r:
           target = np.zeros(shape = len(actions))
           target[np.argmax(qtable[y])] = 1
-          input = np.copy(past[x])
+          input = np.append(past[x],future[x])
           nn.fireacrtivation()
           nn.backpropagationpt1()
           nn.updateweights(l)
