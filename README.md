@@ -4,4 +4,6 @@ numpy
 pandas
 opencv
 pywin32 
-matplotlib
+matplotlib (maybe)
+pyautogui
+pywin32
