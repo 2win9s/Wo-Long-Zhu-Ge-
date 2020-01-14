@@ -1,17 +1,11 @@
 import numpy as np
-import notrandom.py as nr
 
 def statesinit():
   global states
-  states = np.array(shape = [0,0]  )
-  #k = np.array([])
-  #states = np.array([k])
-  
-def actions(x,y):                             #y is a list of actions e.g. y = ["up","down","left","right","1","2","3","4","5","6","7","8","9"]
+  states = np.array([])
+def actions(x):                             #y is a list of actions e.g. y = ["up","down","left","right","1","2","3","4","5","6","7","8","9"]
   global actions
   actions = np.zeros(shape = x)
-  for r in range(y):
-    actions[r] = y[r]
  
 def qtableaddstate(x):
   global states
@@ -19,19 +13,27 @@ def qtableaddstate(x):
   global qtable
   r = 0
   for k in range(len(states)):
-    if x == states[k]:
+    if np.array_equal(x,states[k]):
       r = r + 1
     else:
       r = r + 0
   if r == 0:
-    ii = np.array([x])
-    states = np.append(states,ii,axis = 0)
-  rh = np.zeros(shape = len(actions))
-  for x in range(len(rh)):
-    rh[x] = nr.decing(7369130657357778596659,400000010149,195327895579,1,6)
-  qtable = np.append(qtable,rh,axis = 0)
+      if len(states) == 0:
+          states = np.array([x])
+          rh = np.zeros(shape = len(actions))
+          rhn = np.array([rh])
+          for x in range(len(rh)):
+            rhn[0][x] = np.random.random_sample()
+          qtable = rhn
+      else:  
+          ii = np.array([x])
+          states = np.append(states,ii,axis = 0)
+          rh = np.zeros(shape = len(actions))
+          rhn = np.array([rh])
+          for x in range(len(rh)):
+            rhn[0][x] = np.random.random_sample()
+          qtable = np.append(qtable,rhn,axis = 0)
 
-  
 def resetpf():
     global cc
     global p
@@ -48,8 +50,7 @@ def resetpf():
     rewardlist = None
     actionlog = None
     
-    
-def statemap(xy,tt,action):
+def statemap(xy,rw,action):
   global p
   global f
   global cc
@@ -57,32 +58,35 @@ def statemap(xy,tt,action):
   global future
   global rewardlist
   global actionlog
-  if cc == 0:
-    p.append(xy)
-    rewardlist = np.array(tt)
-    actionlog = np.array(action)
+  if cc > 2:
+    jj = np.array([xy]) 
+    past = np.append(past,jj,axis = 0)
+    future = np.append(future,jj,axis = 0)
+    rewardlist = np.append(rewardlist,rw)
+    actionlog = np.append(actionlog,action)
     cc = cc + 1
+  if cc == 2:
+    jj = np.array([xy])  
+    past = np.append(past,jj,axis = 0)
+    f.append(xy)
+    future = np.asarray(f)
+    f = None
+    rewardlist = np.append(rewardlist,rw)
+    actionlog = np.append(actionlog,action)
+    cc = cc + 1	
   if cc == 1:
       p.append(xy)
       f.append(xy)
       past = np.asarray(p)
-      rewardlist = np.append(rewardlist,tt)
+      rewardlist = np.append(rewardlist,rw)
       actionlog = np.append(actionlog,action)
       p = None
-  if cc == 2:
-    past = np.append(past,xy,axis = 0)
-    f.append(xy)
-    future = np.asarray(f)
-    f = None
-    rewardlist = np.append(rewardlist,tt)
-    actionlog = np.append(actionlog,action)
-  if cc > 2:
-    past = np.append(past,xy,axis = 0)
-    future = np.append(future,xy,axis = 0)
-    rewardlist = np.append(rewardlist,tt)
-    actionlog = np.append(actionlog,action)
-  
-  
+      cc = cc + 1
+  if cc == 0:
+    p.append(xy)
+    rewardlist = np.array(rw)
+    actionlog = np.array(action)
+    cc = cc + 1
   
 def qupdate(learn,discount):
   global past
@@ -93,12 +97,13 @@ def qupdate(learn,discount):
   global actionlog
   for x in range(len(past)-1):
     for y in range(len(states)):
-      if past[x] == states[y]:
+      if np.array_equal(past[x],states[y]):
           for p in range(len(states)):
-            if future[x] == states[p]:
-                qtable[y,actionlog[x]] = qtable[y,actionlog[x]] + (learn * (reward[x] + (discount * qtable[p,np.argmax(qtable[p])])) - qtable[y,actionlog[x]])
+            if np.array_equal(future[x],states[p]):
+                qtable[y,actionlog[x]] = qtable[y,actionlog[x]] + (learn * (rewardlist[x] + (discount * qtable[p,np.argmax(qtable[p])])) - qtable[y,actionlog[x]])
+                print(qtable[y,actionlog[x]])
                 break
-      break
+          break
   
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------
 ''' stuff to put in the main thing
