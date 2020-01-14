@@ -61,13 +61,15 @@ def statemap(xy,tt,action):
     p.append(xy)
     rewardlist = np.array(tt)
     actionlog = np.array(action)
+    cc = cc + 1
   if cc == 1:
-    p.append(xy)
-    f.append(xy)
-    past = np.asarray(p)
-    rewardlist = np.append(rewardlist,tt)
-    actionlog = np.append(actionlog,action)
-    p = None
+    if xy != 
+      p.append(xy)
+      f.append(xy)
+      past = np.asarray(p)
+      rewardlist = np.append(rewardlist,tt)
+      actionlog = np.append(actionlog,action)
+      p = None
   if cc == 2:
     past = np.append(past,xy,axis = 0)
     f.append(xy)
@@ -80,7 +82,7 @@ def statemap(xy,tt,action):
     future = np.append(future,xy,axis = 0)
     rewardlist = np.append(rewardlist,tt)
     actionlog = np.append(actionlog,action)
-  cc = cc + 1
+  
   
   
 def qupdate(learn,discount):
