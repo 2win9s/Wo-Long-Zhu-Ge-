@@ -7,3 +7,6 @@ pywin32
 matplotlib (maybe)
 pyautogui
 pywin32
+
+
+Remember to notify others of changes before you make them in order to confirm whether they're needed or not
