@@ -73,6 +73,14 @@ def weightsgen():
        #if sss < 0.5:
          #sss = sss - 1
        #weights[x][y,z] = sss'''
+  
+  
+def memories():
+  global memories
+  global inputs
+  global hiddenlayers
+  global output
+
 
 #creates a list of 1d numpy arrays which acts as the bias
 def biasgen():
@@ -295,7 +303,6 @@ def diet(wltarget):
               if weights[x][y,z] != None:
                 if weights[x][y,z] < wltarget:
                   weights[x][y,z] = None
-            
             
  
  
