@@ -1,5 +1,5 @@
 import numpy as np
-
+#THIS IS A TEST RUN FOR A WEIRD IDEA/ BACK UP PLAN
 def reLU(x):
   global reLUout
   if x > 0:
@@ -7,7 +7,7 @@ def reLU(x):
   else:
     a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a                                 #you can change this formula if you want something different where x is negative, you can study how different functions here affect things
-
+#RUN THIS FUNCTION ONCE!!!
 def eulerno(x):                                   #note:run this function once to give a value to euler's number note:the larger x is the more accurate e will be
   global eulern                                   #euler's number or e
   eulern = (1+1/x)**x
@@ -19,6 +19,7 @@ def sigmoid(x):                                   #good output function for clas
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
 
 #neural network set up---------------------------------------------------------------------------------------
+#run these functions once and ONLY ONCE!!!!
 #creates a 1d numpy array of length x called input
 def inputgen(x):
   global input
@@ -73,15 +74,7 @@ def weightsgen():
        #if sss < 0.5:
          #sss = sss - 1
        #weights[x][y,z] = sss'''
-  
-  
-def memories():
-  global memories
-  global inputs
-  global hiddenlayers
-  global output
-
-
+ 
 #creates a list of 1d numpy arrays which acts as the bias
 def biasgen():
     global hiddenlayers
@@ -89,6 +82,39 @@ def biasgen():
     global bias
     bias = hiddenlayers.copy()
     bias.append(np.zeros(shape = len(output)))
+  
+def memoriesweights():
+  global memoriesweights
+  global input
+  global hiddenlayers
+  global output
+  memories = []
+  for x in range(len(hiddenlayers)+1):
+    memories.append([])
+    if x == 0:
+      for z in range(len(hiddenlayers)):
+        memories[0].append([])
+        memories[0][z].append(np.zeros(shape = [hiddenlayers[z].size,len(input)]))
+    else:
+      for b in range(len(hiddenlayers)):
+        memories[x].append([])
+        if b == 0:
+          memories[x][0] = np.zeros(shape = [len(input),hiddenlayers[x - 1].size])
+        else:
+          for c in range(x - 1):
+            memories[x][b] = np.zeros(shape = [hiddenlayers[c].size,hiddenlayers[x - 1].size])
+          for d in range(x,len(hiddenlayers)):
+            memories[x][b] = np.zeros(shape = [hiddenlayers[d].size,hiddenlayers[x - 1].size])
+
+#creates a list of 1d numpy arrays which acts as the bias
+def memoriesbias():
+    global memoriesbias
+    global bias
+    global input
+    memoriesbias = []
+    memoriesbias.append(input)
+    for x in range(len(bias) - 1):
+      memoriesbias.append(bias[x])
 
  #firing neurons/ forward pass--------------------------------------------------------------------------   
     
