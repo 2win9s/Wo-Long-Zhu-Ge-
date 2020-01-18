@@ -48,7 +48,7 @@ def outputgen(x):
   output = np.zeros(shape = x)
   
 #creates a list of 2d numpy arrays which act as weights in a neural network
-def weightsgen():
+'''def weightsgen():
   global weights
   global hiddenlayers
   global input
@@ -63,7 +63,7 @@ def weightsgen():
      if y < len(hiddenlayers):                                      #adds weights to each row based on hidden layer 
         weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
-        weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
+        weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output'''
   '''for x in range(len(weights):
     for y in range(len(weights[x])):
       for z in range(weights[x][y].size):
@@ -76,12 +76,12 @@ def weightsgen():
        #weights[x][y,z] = sss'''
  
 #creates a list of 1d numpy arrays which acts as the bias
-def biasgen():
+'''def biasgen():
     global hiddenlayers
     global output
     global bias
     bias = hiddenlayers.copy()
-    bias.append(np.zeros(shape = len(output)))
+    bias.append(np.zeros(shape = len(output)))'''
   
 def memoriesweights():
   global memoriesweights
@@ -118,59 +118,23 @@ def memoriesbias():
 
  #firing neurons/ forward pass--------------------------------------------------------------------------   
     
-def fireactivation():
-    global input
-    global hiddenlayers
-    global output
-    global weights
-    global bias
-    placeholder = np.copy(weights[0])
-    placeholderz = np.zeros(shape = len(weights[0][0]))
-    for x in range(len(input)):
-        for y in range(weights[0][x].size):
-          if weights[0][x,y] != None:
-            placeholder[x,y] = input[x] * weights[0][x,y]
-    for x in range(len(placeholderz)):
-        for y in range(len(placeholder)):
-            placeholderz[x]  = placeholderz[x] + placeholder[y,x]
-    for x in range(len(bias[0])):
-        placeholderz[x]  = placeholderz[x] + bias[0][x]
-        reLU(placeholderz[x])
-        placeholderz[x] = reLUout
-    hiddenlayers[0] = np.copy(placeholderz)
-    for x in range(len(hiddenlayers)):
-        y = x + 1
-        if y < len(hiddenlayers):
-            placeholder = np.copy(weights[y])
-            placeholderz = np.zeros(shape = len(weights[y][0]))
-            for a in range(len(hiddenlayers[x])):
-                for b in range(len(hiddenlayers[y])):
-                  if weights[y][a,b] != None:
-                    placeholder[a,b] = hiddenlayers[x][a] * weights[y][a,b]
-            for c in range(len(placeholderz)):
-                for d in range(len(placeholder)):
-                    placeholderz[c]  = placeholderz[c] + placeholder[d,c]
-            for r in range(len(bias[y])):
-                placeholderz[r]  = placeholderz[r] + bias[y][r]
-                reLU(placeholderz[r])
-                placeholderz[r] = reLUout
-            hiddenlayers[y] = np.copy(placeholderz)
-        else:
-            placeholder = np.copy(weights[y])
-            placeholderz = np.zeros(shape = len(output))
-            for a in range(len(hiddenlayers[-1])):
-                for b in range(len(output)):
-                  if weights[y][a,b] != None:
-                    placeholder[a,b] = hiddenlayers[-1][a] * weights[y][a,b]
-            for c in range(len(placeholderz)):
-                for d in range(len(placeholder)):
-                    placeholderz[c]  = placeholderz[c] + placeholder[d,c]
-            for s in range(len(bias[-1])):
-                placeholderz[s]  = placeholderz[s] + bias[-1][s]
-                sigmoid(placeholderz[s])
-                placeholderz[s] = sigout
-            output = np.copy(placeholderz)
+
+def memoryactivation():
+  global input
+  global hiddenlayers
+  global output
+  global memoriesweights
+  global memoriesbias 
+    for x in range(len(memoriesweights)):
+      if x == 0:
+        for y in range(len(hiddenlayers)):
+            placeholder = np.copy(memories[x][y])
+            placeholderz = np.zeros(shape = len(input)):
+            for z in range(len(memories[x][y])):
+                for a in range(len(memories[x][y][z])):
+                    placeholder[z,a] = hiddenlayers[y][z] * memories[x][y][z,a]
         
+      
 def targetgen(x):
     global target
     target = np.zeros(shape = len(output))    
