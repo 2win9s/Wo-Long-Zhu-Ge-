@@ -84,27 +84,32 @@ def outputgen(x):
     bias.append(np.zeros(shape = len(output)))'''
   
 def memoriesweights():
-  global memoriesweights
+  global memories
   global input
   global hiddenlayers
   global output
   memories = []
-  for x in range(len(hiddenlayers)+1):
+  for x in range(len(hiddenlayers)+2):
     memories.append([])
     if x == 0:
       for z in range(len(hiddenlayers)):
         memories[0].append([])
         memories[0][z].append(np.zeros(shape = [hiddenlayers[z].size,len(input)]))
-    else:
+    elif x < (len(hiddenlayers):
       for b in range(len(hiddenlayers)):
         memories[x].append([])
-        if b == 0:
-          memories[x][0] = np.zeros(shape = [len(input),hiddenlayers[x - 1].size])
-        else:
-          for c in range(x - 1):
-            memories[x][b] = np.zeros(shape = [hiddenlayers[c].size,hiddenlayers[x - 1].size])
-          for d in range(x,len(hiddenlayers)):
-            memories[x][b] = np.zeros(shape = [hiddenlayers[d].size,hiddenlayers[x - 1].size])
+      memories[x][0] = np.zeros(shape = [len(input),hiddenlayers[x - 1].size])
+      rf = 1
+      for c in range(x - 1):
+        memories[x][rf] = np.zeros(shape = [hiddenlayers[c].size,hiddenlayers[x - 1].size])
+        rf = rf + 1
+      for d in range(x,len(hiddenlayers)):
+        memories[x][rf] = np.zeros(shape = [hiddenlayers[d].size,hiddenlayers[x - 1].size])
+        rf = rf + 1
+    else:
+        for k in range(len(hiddenlayers)):
+            memories[x].append([])
+            memories[x][k] = np.zeros(shape = [hiddenlayers[r].size,len(output)])
 
 #creates a list of 1d numpy arrays which acts as the bias
 def memoriesbias():
@@ -120,19 +125,69 @@ def memoriesbias():
     
 
 def memoryactivation():
-  global input
-  global hiddenlayers
-  global output
-  global memoriesweights
-  global memoriesbias 
-    for x in range(len(memoriesweights)):
-      if x == 0:
-        for y in range(len(hiddenlayers)):
-            placeholder = np.copy(memories[x][y])
-            placeholderz = np.zeros(shape = len(input)):
-            for z in range(len(memories[x][y])):
-                for a in range(len(memories[x][y][z])):
-                    placeholder[z,a] = hiddenlayers[y][z] * memories[x][y][z,a]
+    global input
+    global hiddenlayers
+    global output
+    global memories
+    global memoriesbias
+    global hiddenlayersbackup
+    hiddenlayersbackup = hiddenlayers.copy()
+    for x in range(len(memories)):
+        if x == 0:
+            for y in range(len(hiddenlayers)):
+                placeholder = np.copy(memories[x][y]):
+                placeholderz = np.zeros(shape = len(input)):
+                for z in range(len(memories[x][y])):
+                    for a in range(len(memories[x][y][z])):
+                        placeholder[z,a] = hiddenlayers[y][z] * memories[x][y][z,a] + memoriesbias[x][y][z,a]
+                for p in range(placeholderz):
+                    for pl in range(placeholder):
+                        placeholderz[p] = placeholder[p] + placeholder[pl,p]
+                for bi in range(input.size):
+                    input[bi] = input[bi] + reLU(placeholderz[bi])
+        elif x != (len(memories) - 1) and x != 0:
+            for z in range(len(hiddenlayers)):
+                placeholder = np.copy(memories[x][z]):
+                placeholderz = np.zeros(shape = hiddenlayers[x - 1])
+                if z == 0:
+                    for k in range(len(memories[x][z])):
+                        for kk in range(len(memories[x][z][k])):
+                            placeholder[k,kk] = input[k] * memories[x][z][k,kk] + memoriesbias[x][z][k,kk]
+                    for p in range(placeholderz):
+                    for pl in range(placeholder):
+                        placeholderz[p] = placeholder[p] + placeholder[pl,p]
+                    for bi in range(hiddenlayers[x - 1].size):
+                        hiddenlayers[x - 1][bi] = hiddenlayers[x - 1][bi] + reLU(placeholderz[bi]
+                for dee in range(x - 1)
+                    for r in range(len(memories[x][z])):
+                        for rr in range(len(memories[x][z][k])):
+                            placeholder[r,rr] = hiddenlayers[dee][r] * memories[x][z][r,rr] + memoriesbias[x][z][r,rr]
+                    for p in range(placeholderz):
+                    for pl in range(placeholder):
+                        placeholderz[p] = placeholder[p] + placeholder[pl,p]
+                    for bi in range(hiddenlayers[x - 1].size):
+                        hiddenlayers[x - 1][bi] = hiddenlayers[x - 1][bi] + reLU(placeholderz[bi]
+                for thing in range(x,len(hiddenlayers)):
+                    for r in range(len(memories[x][z])):
+                        for rr in range(len(memories[x][z][k])):
+                            placeholder[r,rr] = hiddenlayers[thing][r] * memories[x][z][r,rr] + memoriesbias[x][z][r,rr]
+                    for p in range(placeholderz):
+                    for pl in range(placeholder):
+                        placeholderz[p] = placeholder[p] + placeholder[pl,p]
+                    for bi in range(hiddenlayers[x - 1].size):
+                        hiddenlayers[x - 1][bi] = hiddenlayers[x - 1][bi] + reLU(placeholderz[bi]
+        elif x == (len(memories) - 1):
+            for y in range(len(hiddenlayers)):
+                placeholder = np.copy(memories[x][y]):
+                placeholderz = np.zeros(shape = len(output)):
+                for z in range(len(memories[x][y])):
+                    for a in range(len(memories[x][y][z])):
+                        placeholder[z,a] = hiddenlayers[y][z] * memories[x][y][z,a] + memoriesbias[x][y][z,a]
+            for p in range(placeholderz):
+                for pl in range(placeholder):
+                    placeholderz[p] = placeholder[p] + placeholder[pl,p]
+            for bi in range(output.size):
+                output[bi] = output[bi] + reLU(placeholderz[bi])
         
       
 def targetgen(x):
