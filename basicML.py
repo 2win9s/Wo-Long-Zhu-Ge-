@@ -74,6 +74,7 @@ def weightsgen():
        #rrr = np.random.randn()
        #rrr = rrr * ((2/len(weights[x])) ** 0.5)          
        #weights[x][y,z] = rrr
+       only choose rrr or sss not both to initiallize weights
        #sss = np.random.random_sample()
        #if sss < 0.5:
          #sss = sss - 1
@@ -271,7 +272,7 @@ def backpropagationpt3(notfish):
                backpropagationpt3(trustmeitsnotfish)
 
 def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
-    print("i will eventually get around to writing backpropagationef")
+    print("i will eventually get around to writing backpropagationef, it is not necessary just more efficient as python is better at dealing with for loops (iterative) than repeatedly calling functions(recursive)")
     
 def updateweights(l):
     global weights                                          #the arguement l is the learning rate, here we update the weights to minimize the cost
