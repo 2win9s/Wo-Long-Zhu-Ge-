@@ -222,32 +222,32 @@ def derivativereLU(x):                                     #x is the value of th
     
 
 def backpropagationpt1():                                  #this is the important bit   
-    global weights
-    global output
-    global hiddenlayers
-    global bias
-    global ouput
-    global target
+    global memories
+    global memoriesbias
+    global hiddenlayersbackup
     global input
-    global dereLU
+    global hiddenlayers
+    global output
     global placeholder
     global placeholderz
-    placeholder = []
-    placeholderz = []
-    for x in range(len(weights)):
-        placeholder.append(0)
-        for y in range(len(weights[x])):
-            placeholder[x] = np.zeros(shape = [len(weights[x]),len(weights[x][y])])
-    for x in range(len(bias)):
-        placeholderz.append(0)
-        for y in range(len(bias[x])):
-            placeholderz[x] = np.zeros(shape = bias[x].size)
+    placeholder = memories.copy()
+    placeholderz = memoriesbias.copy()
+    for x in range(len(placeholder)):
+      for y in range(len(placeholder[x])):
+        for z in range(placeholder[x][y].size):
+          for a in range(placeholder[x][y][z].size):
+            placeholder[x][y][z,a] = 0
+    for x in range(len(placeholderz)):
+      for y in range(len(placeholderz[x])):
+        for z in range(placeholderz[x][y].size):
+          for a in range(placeholderz[x][y][z].size):
+            placeholderz[x][y][z,a] = 0
     global crap
-    crap = np.zeros(shape = len(weights))
+    crap = np.zeros(shape = len(memories))
     global stuff
-    stuff = np.zeros(shape = len(bias))
-    thing = len(weights)
-    yoke = len(bias)
+    stuff = np.zeros(shape = len(memoriesbias))
+    thing = len(memories)
+    yoke = len(memoriesbias)
     for y in range(len(output)):
         placeholderz[-1][y] = (output[y] * (1 - output[y])) * (2 * (output[y] - target[y])) * (1 / len(output)) + placeholderz[-1][y]
         fish = yoke - 1
