@@ -1,4 +1,4 @@
-#this is to randomly select training and test data, YOU WILL HAVE TO MODIFY THIS FUNCTION IF YOU CARE ABOUT WHAT NAME THE PICKLE FILES HAVE TO BE
+#this is to randomly split training and test data from a large selection of data, YOU WILL HAVE TO MODIFY THIS FUNCTION IF YOU CARE ABOUT WHAT NAME THE PICKLE FILES HAVE TO BE
 import numpy as np
 import pickle
 subject_list = ["Phy","Acc","Che","Iri","Bus","Pre","Art","Hom","ConSt","Bio","Mus","Geo","Eco","His","Des","AgSci","Fre","Eng"] 
