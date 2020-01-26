@@ -31,11 +31,19 @@ def testdataseparate(k,y,z): #k is number of sets of  data,y is list of  input,z
             mr = np.append(mr,z[t])
     y = np.delete(y,listindice)  
     z = np.delete(z,listindice)
-    pickle.dump(y, open("traininput.p","wb")
-    #traininput = pickle.load(open("traininput.p","rb"))    #this makes traininput equal to the stuff in the picklefile
-    pickle.dump(z, open("trainoutput.p","wb")
-    #trainoutput = pickle.load(open("trainoutput.p","rb"))
-    pickle.dump(ur, open("testinput.p","wb")
-    #testinput = pickle.load(open("testinput.p","rb"))
-    pickle.dump(mr, open("testoutput.p","wb")
-    #testoutput = pickle.load(open("testoutput.p","rb"))
+    with open("traininput.p","wb") as aa:
+        pickle.dump(y,aa)
+    #with open("traininput.p","rb") as ab:
+        #traininput = pickle.load(ab)    #this makes traininput equal to the stuff in the picklefile
+    with open("trainoutput.p","wb") as ba:
+        pickle.dump(z,ba)
+    #with open("trainoutput.p","rb") as bb:
+        #trainoutput = pickle.load(bb)
+    with open("testinput.p","wb") as ca:
+        pickle.dump(ur,ca)
+    #with open("testinput.p","rb") as cb:
+        #testinput = pickle.load(cb)
+    with open("testoutput.p","wb") as da:
+        pickle.dump(mr,da)
+    #with open("testoutput.p","rb") as db:
+        #testoutput = pickle.load(db)
