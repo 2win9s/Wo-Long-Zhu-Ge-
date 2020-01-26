@@ -6,7 +6,7 @@ trainsetin = np.array([[None,None,77,56,None,None,None,None,None,100,None,77,Non
 trainsetout = np.array([77,66,12,77,46,66,46,100,46,56,0,0,12,0,12,0,28,28,0,37,37,46,12,37,20,12,0,46,0,37,56,0,37,0,37,0,46,0,12,37,37,46,46,0,46,12,0,20,0,0,12,88,46,46,0,12,0,0,46,46,46,56,66,56,0,0,12,56,46,0,12,46,37,0,46,37,0,28,0,12,46,56,20,0,0,37,0,0,0,12,12,0,0,77,0,0,20,0,56,28,12,12,56,12,46,46,0,0,0,0,0,0,66,12,56,28,88,20,12,20,20,77,66,12,28,28,56,28,37,46,12,28,37,20,28,37,46,0,46,77,28,28,12,12,46,56,46,28,28,46,56,20,12,12,12,20,66,28,56,28,0,46,56,56,12,56,12,46,28,12,37,37,12,0,37,0,37,88,0,77,20,0,12,12,46,77,20,20,12,28,0,88,66,20,20,56,20,0,0,0,12,0,20,28,12,12,20,0,66,0,20,12,28,28,0,66,20,37,12,20,0,56,12,56,77,28,0,56,12,12,88,20,28,20,20,12,66,46,20,46,46,37,0,37,12,0,12,46,28]) 
 trainsetoutz = np.array([102,91,12,102,71,91,71,125,71,81,0,0,12,0,12,0,28,28,25,62,62,71,12,62,20,12,0,71,0,62,81,0,62,0,62,0,71,0,12,62,62,71,71,0,71,12,0,20,0,0,12,113,71,71,0,12,0,0,71,71,71,81,91,81,0,0,12,81,71,0,12,71,62,0,71,62,0,28,0,12,71,81,20,0,0,62,0,0,0,12,12,0,0,102,0,0,20,25,81,28,12,12,81,12,71,71,0,0,0,0,0,0,91,12,81,28,113,20,12,20,20,102,91,12,28,28,81,28,37,46,12,28,37,20,28,62,46,0,71,102,28,28,12,12,71,81,71,28,28,71,81,20,12,12,12,20,91,28,81,28,0,71,81,81,12,81,12,71,28,12,62,37,12,0,62,25,62,113,0,102,20,0,12,12,46,102,20,20,12,28,0,113,91,20,20,81,20,0,0,0,12,0,20,28,12,12,20,0,91,0,20,12,28,28,0,91,20,62,12,20,0,81,12,81,102,28,25,81,12,12,113,20,28,20,20,12,91,71,20,71,46,37,0,37,12,0,12,71,28]) 
 trainsetinz = np.copy(trainsetin)
-def testdataseparate(k,y,z): #k is number of sets of  data,y is list of  input,z is list of  outputs
+def testdataseparate(k,y,z): #k is number of sets of  data,y is list of  input,z is list of  outputs, REMEMBER k CANNOT BE LARGER THEN len(y)
     listindice = []
     while len(listindice) <= (k - 1):
         fish = np.random.randint(0,len(y))
@@ -31,11 +31,11 @@ def testdataseparate(k,y,z): #k is number of sets of  data,y is list of  input,z
             mr = np.append(mr,z[t])
     y = np.delete(y,listindice)  
     z = np.delete(z,listindice)
-    print("traininput = ")
-    print(y)
-    print("trainoutput = ")
-    print(z)
-    print("testinput = ")
-    print(ur)
-    print("testoutput = ")
-    print(mr)
+    pickle.dump(y, open("traininput.p","wb")
+    #traininput = pickle.load(open("traininput.p","rb"))    #this makes traininput equal to the stuff in the picklefile
+    pickle.dump(z, open("trainoutput.p","wb")
+    #trainoutput = pickle.load(open("trainoutput.p","rb"))
+    pickle.dump(ur, open("testinput.p","wb")
+    #testinput = pickle.load(open("testinput.p","rb"))
+    pickle.dump(mr, open("testoutput.p","wb")
+    #testoutput = pickle.load(open("testoutput.p","rb"))
