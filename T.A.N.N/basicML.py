@@ -68,13 +68,13 @@ def weightsgen():
         weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
         weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
-  '''for x in range(len(weights):                      2 separate ways to initialise weights
+  for x in range(len(weights):                      2 separate ways to initialise weights
     for y in range(len(weights[x])):
       for z in range(weights[x][y].size):
-       #rrr = np.random.randn()
-       #rrr = rrr * ((2/len(weights[x])) ** 0.5)          
-       #weights[x][y,z] = rrr
-       only choose rrr or sss not both to initiallize weights
+        rrr = np.random.randn()
+        rrr = rrr * ((2/len(weights[x])) ** 0.5)          
+        weights[x][y,z] = rrr
+       #only choose rrr or sss not both to initiallize weights
        #sss = np.random.random_sample()
        #if sss < 0.5:
          #sss = sss - 1
