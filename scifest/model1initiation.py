@@ -68,7 +68,7 @@ def weightsgen():
         weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
         weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
-  for x in range(len(weights):                      2 separate ways to initialise weights
+  for x in range(len(weights)):                      
     for y in range(len(weights[x])):
       for z in range(weights[x][y].size):
         rrr = np.random.randn()
@@ -307,12 +307,13 @@ def diet(k):
 
 import pickle
 #input list of 18 subjects output 11 different points you cn get as a result pf your grade,[0,12,20,28,37,46,56,66,77,88,100], here we exclude the higher level + 25 points
-numofhl = [16,14]
+nmofhl = [16,14]
 inputgen(18)
 hiddenlayersgen()
 outputgen(11)
 weightsgen()
 biasgen()
+eulerno(100000000000)
 with open("traininput1.p","rb") as ab:
         traininput = pickle.load(ab)
 with open("trainoutput1.p","rb") as bb:
@@ -321,42 +322,43 @@ with open("testinput1.p","rb") as cb:
         testinput = pickle.load(cb)
 with open("testoutput1.p","rb") as db:
         testoutput = pickle.load(db)
+print(testinput)
 
 for fff in range(300):
-  rrf = np.random.randint(0,len(traininput)):
-  input = traininput(rrf)
+  rrf = np.random.randint(0,len(trainoutput))
+  input = traininput[rrf]
   targetgen(11)
   fireactivation()
   llm = trainoutput[rrf]
-  if llm = 0:
+  if llm == 0:
     target[0] = 1
-  if llm = 12:
+  if llm == 12:
     target[1] = 1
-  if llm = 20:
+  if llm == 20:
     target[2] = 1
-  if llm = 28:
+  if llm == 28:
     target[3] = 1
-  if llm = 37:
+  if llm == 37:
     target[4] = 1
-  if llm = 46:
+  if llm == 46:
     target[5] = 1
-  if llm = 56:
+  if llm == 56:
     target[6] = 1
-  if llm = 66:
-    target[7] = 1
-  if llm = 77:
-    target[8] = 1
-  if llm = 88:
-    target[9] = 1
-  if llm = 100:
-    target[10] = 1
+  if llm == 66:
+    target[7] == 1
+  if llm == 77:
+    target[8] == 1
+  if llm == 88:
+    target[9] == 1
+  if llm == 100:
+    target[10] == 1
   backpropagationpt1()
   updateweights(0.001)
   updatebias(0.005)
 diet(0.05)
 correct = 0
 almost_right = 0
-for mmm in range(len(testinput):
+for mmm in range(len(testinput)):
     input = testinput(mmm)
     fireactivation()
     fish = np.argmax(output)
