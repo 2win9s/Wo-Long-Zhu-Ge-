@@ -322,7 +322,7 @@ with open("testinput1.p","rb") as cb:
 with open("testoutput1.p","rb") as db:
         testoutput = pickle.load(db)
 
-for fff in range(75):
+for fff in range(300):
   rrf = np.random.randint(0,len(traininput)):
   input = traininput(rrf)
   targetgen(11)
@@ -388,6 +388,9 @@ for mmm in range(len(testinput):
         almost_right = almost_right + 1
 print(correct)
 print(almost_right)
-      
+with open("bias1.p","wb") as ea:
+    pickle.dump(bias,ea)
+with open("weights1.p","wb") as fa:
+    pickle.dump(weights,fa)
                  
                  
