@@ -27,10 +27,10 @@ def testdataseparate(k,y,z): #k is number of sets of  data,y is list of  input,z
             mr = np.copy(z[umm])
         else:
             t = listindice[ssr]
-            ur = np.append(ur,y[t])
+            ur = np.append(ur,y[t],axis = 0)
             mr = np.append(mr,z[t])
-    y = np.delete(y,listindice)  
-    z = np.delete(z,listindice)
+    y = np.delete(y,listindice,axis = 0)  
+    z = np.delete(z,listindice,axis = 0)
     with open("traininput.p","wb") as aa:
         pickle.dump(y,aa)
     #with open("traininput.p","rb") as ab:
