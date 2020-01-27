@@ -30,7 +30,7 @@ def inputgen(x):
   input = np.zeros(shape = x)
     
 
-#assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc.
+#assigns a value y to element x of the input,note:lists start at 0 so first element is 0 2nd 1 one etc. basically useless
 def inputwrite(x,y): 
   global input
   input[x] = y
@@ -103,7 +103,8 @@ def fireactivation():
     for x in range(len(input)):
         for y in range(weights[0][x].size):
           if weights[0][x,y] != None:
-            placeholder[x,y] = input[x] * weights[0][x,y]
+            if input[x] != None:
+              placeholder[x,y] = input[x] * weights[0][x,y]
     for x in range(len(placeholderz)):
         for y in range(len(placeholder)):
             placeholderz[x]  = placeholderz[x] + placeholder[y,x]
