@@ -276,7 +276,7 @@ def backpropagationpt3(notfish):
                   backpropagationpt3(trustmeitsnotfish)
 
 def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
-    print("i will eventually get around to writing backpropagationef, it is not necessary just more efficient as python is better at dealing with for loops (iterative) than repeatedly calling functions(recursive)")
+    print("i will eventually get around to writing backpropagationef, it is not necessary possibly more efficient as python is better at dealing with for loops (iterative) than repeatedly calling functions(recursive)")
     
 def updateweights(l):
     global weights                                          #the arguement l is the learning rate, here we update the weights to minimize the cost
