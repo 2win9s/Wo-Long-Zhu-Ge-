@@ -213,6 +213,7 @@ def backpropagationpt1():                                  #this is the importan
         stuff[fish] = (2 * (output[y] - target[y]))* (1 / len(output))* (output[y]*(1 - output[y]))
         backpropagationpt2(fish,y)
         for x in range(len(weights[-1])):
+          if weights[-1][x,y] != None:
             placeholder[-1][x,y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x,y] 
             notfish = thing - 1
             crap[notfish] = weights[-1][x,y] * (2 * (output[y] - target[y])) * (1 / len(output)) * (output[y] * (1 - output[y]))
@@ -261,16 +262,18 @@ def backpropagationpt3(notfish):
     if notfish == 1:
         for x in range(len(input)): 
             for y in range(len(hiddenlayers[notfish-1])):
-               derivativereLU(hiddenlayers[notfish-1][y])
-               placeholder[notfish-1][x,y] = input[x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
+              if input[x] != None:
+                derivativereLU(hiddenlayers[notfish-1][y])
+                placeholder[notfish-1][x,y] = input[x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
     else:
         for x in range(len(hiddenlayers[notfish-2])): 
             for y in range(len(hiddenlayers[notfish-1])):
-               derivativereLU(hiddenlayers[notfish-1][y])
-               placeholder[notfish-1][x,y] = hiddenlayers[notfish-2][x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
-               crap[notfish-1] = crap[notfish] * dereLU * weights[notfish-1][x,y]
-               trustmeitsnotfish = notfish - 1
-               backpropagationpt3(trustmeitsnotfish)
+              if weights[notfish - 1][x,y] != None:
+                derivativereLU(hiddenlayers[notfish-1][y])
+                placeholder[notfish-1][x,y] = hiddenlayers[notfish-2][x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
+                crap[notfish-1] = crap[notfish] * dereLU * weights[notfish-1][x,y]
+                trustmeitsnotfish = notfish - 1
+                backpropagationpt3(trustmeitsnotfish)
 
 def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
     print("i will eventually get around to writing backpropagationef, it is not necessary just more efficient as python is better at dealing with for loops (iterative) than repeatedly calling functions(recursive)")
@@ -291,5 +294,6 @@ def updatebias(l):
     for x in range(len(bias)):
         for y in range(len(bias[x])):
             bias[x][y] = bias[x][y] - (placeholderz[x][y] * l)
+    placeholderz = None
 #it now works finally
 #Sorry for being rubbish at coding and wasting your time
