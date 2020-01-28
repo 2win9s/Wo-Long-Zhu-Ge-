@@ -309,9 +309,9 @@ inputgen(18)
 hiddenlayersgen()
 outputgen(13)
 with open("bias2.p","rb") as eb:
-    pickle.load(ea)
+   bias =  pickle.load(eb)
 with open("weights2.p","rb") as fb:
-    pickle.load(fa)
+   weights  =  pickle.load(fb)
 eulerno(100000000000)
 with open("traininput2.p","rb") as ab:
         traininput = pickle.load(ab)
