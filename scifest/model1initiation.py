@@ -1,4 +1,4 @@
-
+import numpy as np
 #reLU,efficient activation algorithm for hidden layers 
 def reLU(x):
   global reLUout
