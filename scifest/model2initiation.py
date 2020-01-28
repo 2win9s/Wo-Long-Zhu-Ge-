@@ -358,8 +358,8 @@ for fff in range(1120):
   if llm == 125:
     target[12] = 1
   backpropagationpt1()
-  updateweights(learnr)
-  updatebias(learnr * 3)
+  updateweights(learnr * 2)
+  updatebias(learnr * 8)
   learnr = learnr * 0.9001
 correct = 0
 almost_right = 0
