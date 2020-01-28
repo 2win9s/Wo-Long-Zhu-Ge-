@@ -119,6 +119,18 @@ def memoriesbias():
     memoriesbias = memories.copy()
 
  #firing neurons/ forward pass--------------------------------------------------------------------------   
+inputbackup = []
+hiddenlayersbackup = []
+count = 0
+
+
+def input_record():
+  global input
+  global inputbackup
+  global count
+  if count!= 0 :
+    inputbackup.append(np.copy(input))
+
 def memoryactivation():
     global count
     global input
@@ -223,9 +235,39 @@ def derivativereLU(x):                                     #x is the value of th
     dereLU = a
   return dereLU
     
-
-def backpropagationpt1():
-  
-            
- 
- 
+not finished yet
+def backpropagationpt1(realfish):
+  global output
+  global input
+  global target
+  global hiddenlayers
+  global inputbackup
+  global hiddenlayersbackup
+  global memories
+  global memoriesbias
+  placeholder = []
+  placeholderz = []
+  for x in range(len(memories)):
+    placeholder.append([])
+    for y in range(memories[x].size):
+      placeholder[x].append(0)
+      for z in range(memories[x][y].size):
+        placeholder[x][y] = np.zeros(shape = [(memories[x][y].size),(memoriesbias[x][y][z].size)])
+  for x in range(len(memoriesbias)):
+    placeholderz.append([])
+    for y in range(memoriesbias[x].size):
+      placeholderz[x].append(0)
+      for z in range(memoriesbias[x][y].size):
+        placeholderz[x][y] = np.zeros(shape = [(memories[x][y].size),(memoriesbias[x][y][z].size)]) 
+  for x in range(realfish):
+    if x == 0:
+     for shadow in range(len(placeholder)):
+      shadows = (shadow + 1) * -1
+      for kkr in range(placeholder[shadows].size):
+        for fire in range(placeholder[shadows][kkr].size):
+          for rmb in range(placeholder[shadows][kkr][fire].size):
+            if shadows == -1:
+              if memories[shadows][kkr][fire][rmb] != None:
+                placeholder[shadows][kkr][fire][rmb] = hiddenlayers[kkr][fire] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholder[shadows][kkr][fire][rmb]
+                placeholderz[shadows][kkr][fire][rmb] = (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholderz[shadows][kkr][fire][rmb]
+                #2d numpy array of crap
