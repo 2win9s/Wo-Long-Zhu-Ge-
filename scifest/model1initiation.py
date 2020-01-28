@@ -1,4 +1,4 @@
-
+import numpy as np
 #reLU,efficient activation algorithm for hidden layers 
 def reLU(x):
   global reLUout
@@ -310,13 +310,13 @@ weightsgen()
 biasgen()
 eulerno(100000000000)
 with open("traininput1.p","rb") as ab:
-        traininput = pickle.load(ab)
+        traininput = pickle.load
 with open("trainoutput1.p","rb") as bb:
-        trainoutput = pickle.load(bb) 
+        trainoutput = pickle.load
 with open("testinput1.p","rb") as cb:
-        testinput = pickle.load(cb)
+        testinput = pickle.load
 with open("testoutput1.p","rb") as db:
-        testoutput = pickle.load(db)
+        testoutput = pickle.load
 
 sp = 0
 heavyfat = 0
@@ -396,5 +396,3 @@ with open("bias1.p","wb") as ea:
     pickle.dump(bias,ea)
 with open("weights1.p","wb") as fa:
     pickle.dump(weights,fa)
-
-                 
