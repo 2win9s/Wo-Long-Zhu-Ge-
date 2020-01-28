@@ -359,8 +359,8 @@ for fff in range(1120):
   if llm == 100:
     target[10] == 1
   backpropagationpt1()
-  updateweights(learnr * 2 *2)
-  updatebias(learnr * 8 * 2)
+  updateweights(learnr * 2 *2 *2 *2)
+  updatebias(learnr * 8)
   learnr = learnr * 0.9001
 
 with open("bias1I.p","wb") as ea:
