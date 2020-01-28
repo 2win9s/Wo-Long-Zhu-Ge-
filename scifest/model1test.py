@@ -145,6 +145,7 @@ import pickle
 nmofhl = [16,14]
 inputgen(18)
 outputgen(11)
+hiddenlayersgen()
 eulerno(100000000000)
 with open("testinput1.p","rb") as cb:
         testinput = pickle.load(cb)
