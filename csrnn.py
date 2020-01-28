@@ -120,13 +120,16 @@ def memoriesbias():
 
  #firing neurons/ forward pass--------------------------------------------------------------------------   
 def memoryactivation():
+    global count
     global input
     global hiddenlayers
     global output
     global memories
     global memoriesbias
     global hiddenlayersbackup
-    hiddenlayersbackup = hiddenlayers.copy()
+    count = count + 1
+    if count != 0:
+      hiddenlayersbackup.append(hiddenlayers.copy())
     for x in range(len(memories)):
         if x == 0:
             for y in range(len(hiddenlayers)):
@@ -221,130 +224,8 @@ def derivativereLU(x):                                     #x is the value of th
   return dereLU
     
 
-def backpropagationpt1():                                  #this is the important bit   
-    global memories
-    global memoriesbias
-    global hiddenlayersbackup
-    global input
-    global hiddenlayers
-    global output
-    global placeholder
-    global placeholderz
-    placeholder = memories.copy()
-    placeholderz = memoriesbias.copy()
-    for x in range(len(placeholder)):
-      for y in range(len(placeholder[x])):
-        for z in range(placeholder[x][y].size):
-          for a in range(placeholder[x][y][z].size):
-            placeholder[x][y][z,a] = 0
-    for x in range(len(placeholderz)):
-      for y in range(len(placeholderz[x])):
-        for z in range(placeholderz[x][y].size):
-          for a in range(placeholderz[x][y][z].size):
-            placeholderz[x][y][z,a] = 0
-    global crap
-    crap = np.zeros(shape = len(memories))
-    global stuff
-    stuff = np.zeros(shape = len(memoriesbias))
-    thing = len(memories)
-    yoke = len(memoriesbias)
-    for y in range(len(output)):
-        placeholderz[-1][y] = (output[y] * (1 - output[y])) * (2 * (output[y] - target[y])) * (1 / len(output)) + placeholderz[-1][y]
-        fish = yoke - 1
-        stuff[fish] = (2 * (output[y] - target[y]))* (1 / len(output))* (output[y]*(1 - output[y]))
-        backpropagationpt2(fish,y)
-        for x in range(len(weights[-1])):
-            placeholder[-1][x,y] = hiddenlayers[-1][x] * (output[y]*(1 - output[y])) * (2 * (output[y] - target[y]))* (1 / len(output)) + placeholder[-1][x,y] 
-            notfish = thing - 1
-            crap[notfish] = weights[-1][x,y] * (2 * (output[y] - target[y])) * (1 / len(output)) * (output[y] * (1 - output[y]))
-            backpropagationpt3(notfish)
-
-def backpropagationpt2(fish,y):
-    global weights
-    global output
-    global hiddenlayers
-    global bias
-    global ouput
-    global target
-    global input
-    global dereLU
-    global stuff
-    global placeholderz
-    if fish == 1:
-        for x in range(len(weights[fish])):
-          if weights[fish][x,y] != None:
-            stuff[fish] = stuff[fish] * weights[fish][x,y]
-            derivativereLU(hiddenlayers[fish-1][x])
-            placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
-    else:
-        for x in range(len(weights[fish])):
-          if weights[fish][x,y] != None:
-            stuff[fish] = stuff[fish] * weights[fish][x,y]
-            derivativereLU(hiddenlayers[fish-1][x])
-            placeholderz[fish-1][x] = dereLU * stuff[fish] + placeholderz[fish-1][x]
-            stuff[fish-1] = stuff[fish] * dereLU
-            k = fish - 1
-            backpropagationpt2(k,x) 
-                 
-        
-    
-def backpropagationpt3(notfish):
-    global weights
-    global output
-    global hiddenlayers
-    global bias
-    global ouput
-    global target
-    global input
-    global dereLU
-    global placeholder
-    global crap
-    if notfish == 1:
-        for x in range(len(input)): 
-            for y in range(len(hiddenlayers[notfish-1])):
-               derivativereLU(hiddenlayers[notfish-1][y])
-               placeholder[notfish-1][x,y] = input[x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
-    else:
-        for x in range(len(hiddenlayers[notfish-2])): 
-            for y in range(len(hiddenlayers[notfish-1])):
-               derivativereLU(hiddenlayers[notfish-1][y])
-               placeholder[notfish-1][x,y] = hiddenlayers[notfish-2][x] * dereLU * crap[notfish] + placeholder[notfish-1][x,y]
-               crap[notfish-1] = crap[notfish] * dereLU * weights[notfish-1][x,y]
-               trustmeitsnotfish = notfish - 1
-               backpropagationpt3(trustmeitsnotfish)
-
-def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
-    print("i will eventually get around to writing backpropagationef")
-    
-def updateweights(l):
-    global weights                                          #the arguement l is the learning rate, here we update the weights to minimize the cost
-    global placeholder
-    for x in range(len(weights)):
-        for y in range(len(weights[x])):
-            for z in range(weights[x][y].size):
-              if weights[x][y,z] != None:
-                weights[x][y,z] = weights[x][y,z] - (placeholder[x][y,z] * l)
-    placeholder = None
-                
-def updatebias(l):
-    global bias
-    global placeholderz
-    for x in range(len(bias)):
-        for y in range(len(bias[x])):
-            bias[x][y] = bias[x][y] - (placeholderz[x][y] * l)
-            
-            
-            
-            
-            
-            
-def diet(wltarget):
-  for x in range(len(weights)):
-        for y in range(len(weights[x])):
-            for z in range(weights[x][y].size):
-              if weights[x][y,z] != None:
-                if weights[x][y,z] < wltarget:
-                  weights[x][y,z] = None
+def backpropagationpt1():
+  
             
  
  
