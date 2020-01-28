@@ -318,7 +318,15 @@ with open("testinput1.p","rb") as cb:
 with open("testoutput1.p","rb") as db:
         testoutput = pickle.load(db)
 
+sp = 0
+heavyfat = 0
 for fff in range(1120):
+  heavyfat = heavyfat + 1
+  if heavyfat % 250 == 0 and heavyfat!= 0:
+    diet(0.05)
+  if sp % 100 == 0:
+    learnr = 0.01218
+  sp = sp + 1
   rrf = np.random.randint(0,len(trainoutput))
   input = traininput[rrf]
   targetgen(11)
@@ -347,9 +355,9 @@ for fff in range(1120):
   if llm == 100:
     target[10] == 1
   backpropagationpt1()
-  updateweights(0.001)
-  updatebias(0.005)
-diet(0.05)
+  updateweights(learnr)
+  updatebias(learnr * 3)
+  learnr = learnr * 0.9889
 correct = 0
 almost_right = 0
 for mmm in range(len(testinput)):
