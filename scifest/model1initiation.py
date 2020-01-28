@@ -327,7 +327,7 @@ for fff in range(1120):
   if sp % 100 == 0:
     learnr = 0.01218
   sp = sp + 1
-  rrf = np.random.randint(0,len(trainoutput))
+  rrf = np.random.randint(0,len(trainoutput)) #after doing some digging it looks like the issue with this line may be compiler related or to do with the array. when i made a new array called qwerty and put numbers 1~4 in it it worked.
   input = traininput[rrf]
   targetgen(11)
   fireactivation()
