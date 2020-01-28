@@ -328,7 +328,7 @@ for fff in range(1120):
     learnr = 0.01218
   sp = sp + 1
   rrf = np.random.randint(0,len(trainoutput)) #after doing some digging it looks like the issue with this line may be compiler related or to do with the array. when i made a new array called qwerty and put numbers 1~4 in it it worked.
-  input = traininput[rrf]
+  input = traininput[rrf] #and from here onward there is an endless list of issues. something about this line gives out an error that says its not "subscriptable"
   targetgen(11)
   fireactivation()
   llm = trainoutput[rrf]
