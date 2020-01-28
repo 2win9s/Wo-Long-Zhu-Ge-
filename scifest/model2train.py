@@ -295,7 +295,9 @@ def diet(k):
    for x in range(len(weights)):
         for y in range(len(weights[x])):
             for z in range(weights[x][y].size):
-              if weights[x][y,z] < k:
+              if weights[x][y,z] < k and weights[x][y,z] > 0:
+                weights[x][y,z] = None
+              elif weights[x][y,z] > (k * -1) and weights[x][y,z] < 0:
                 weights[x][y,z] = None
 
 # download pickles
@@ -361,7 +363,7 @@ for fff in range(1120):
   if llm == 125:
     target[12] = 1
   backpropagationpt1()
-  updateweights(learnr * 2)
+  updateweights(learnr * 2 *2)
   updatebias(learnr * 8)
   learnr = learnr * 0.9001
 
