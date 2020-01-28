@@ -23,11 +23,11 @@ def testdataseparate(k,y,z): #k is number of sets of  data,y is list of  input,z
     for ssr in range(len(listindice)):
         if ssr == 0:
             umm = listindice[ssr]
-            ur = np.copy(y[umm])
+            ur = np.copy([y[umm]])
             mr = np.copy(z[umm])
         else:
             t = listindice[ssr]
-            ur = np.append(ur,y[t],axis = 0)
+            ur = np.append(ur,[y[t]],axis = 0)
             mr = np.append(mr,z[t])
     y = np.delete(y,listindice,axis = 0)  
     z = np.delete(z,listindice,axis = 0)
