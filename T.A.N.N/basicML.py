@@ -68,7 +68,7 @@ def weightsgen():
         weights[y] = np.zeros(shape = [len(hiddenlayers[x]),len(hiddenlayers[y])])                     
      else:
         weights[-1] = np.zeros(shape = [len(hiddenlayers[-1]),len(output)]) #the set of weights from hiddenlayer to output
-  for x in range(len(weights):                      2 separate ways to initialise weights
+  for x in range(len(weights)):                      #2 separate ways to initialise weights
     for y in range(len(weights[x])):
       for z in range(weights[x][y].size):
         rrr = np.random.randn()
