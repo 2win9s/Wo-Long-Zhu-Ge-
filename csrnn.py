@@ -258,16 +258,19 @@ def backpropagationpt1(realfish):
     for y in range(memoriesbias[x].size):
       placeholderz[x].append(0)
       for z in range(memoriesbias[x][y].size):
-        placeholderz[x][y] = np.zeros(shape = [(memories[x][y].size),(memoriesbias[x][y][z].size)]) 
+        placeholderz[x][y] = np.zeros(shape = [(memories[x][y].size),(memoriesbias[x][y][z].size)])
+  crap = []
   for x in range(realfish):
+    crap.append([])
     if x == 0:
      for shadow in range(len(placeholder)):
       shadows = (shadow + 1) * -1
       for kkr in range(placeholder[shadows].size):
         for fire in range(placeholder[shadows][kkr].size):
           for rmb in range(placeholder[shadows][kkr][fire].size):
+            crap[x].append(None)
             if shadows == -1:
               if memories[shadows][kkr][fire][rmb] != None:
                 placeholder[shadows][kkr][fire][rmb] = hiddenlayers[kkr][fire] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholder[shadows][kkr][fire][rmb]
                 placeholderz[shadows][kkr][fire][rmb] = (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholderz[shadows][kkr][fire][rmb]
-                #2d numpy array of crap
+                crap[x][rmb] = (memories[shadows][kkr][fire][rmb] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output))
