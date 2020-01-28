@@ -392,7 +392,7 @@ for mmm in range(len(testinput)):
       dee = 102
     if fish == 11:
       dee = 113
-    if fish == 12;
+    if fish == 12:
        dee = 125
     if dee == testoutput[mmm]:
        correct = correct + 1
