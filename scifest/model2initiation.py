@@ -396,7 +396,7 @@ for mmm in range(len(testinput)):
        dee = 125
     if dee == testoutput[mmm]:
        correct = correct + 1
-    elif dee < (testoutput[mmm] + 15) or dee > (testoutput[mmm] - 15):
+    elif (dee <= (testoutput[mmm] + 15) and dee >= testoutput[mmm])or(dee >= (testoutput[mmm] - 15) and dee <= testoutput[mmm]):
         almost_right = almost_right + 1
 print(correct)
 print(almost_right)
