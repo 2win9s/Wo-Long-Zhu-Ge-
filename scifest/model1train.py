@@ -1,5 +1,5 @@
 #download Wo-Long-Zhu-Ge-, then extract model1.p, open spyder and put all the P files in model1.p into the spyder directory where it can access them
-#run this code and tweak the 
+#run this code and tweak the for loop at line 325 to decide the number of cycles, when finished you will find 2 new files called bias1I.p and weights1I.p, drag them onto the desktop and rename them to bias1.p and weights1.p, then on github go into model1.p and upload the 2 files this will update the weights and bias, now delete all the garbage left on your pc, each time you train you must download the new files off github
 def reLU(x):
   global reLUout
   if x > 0:
@@ -360,40 +360,7 @@ for fff in range(1120):
   updateweights(learnr * 2)
   updatebias(learnr * 8)
   learnr = learnr * 0.9001
-correct = 0
-almost_right = 0
-for mmm in range(len(testinput)):
-    input = testinput[mmm]
-    fireactivation()
-    fish = np.argmax(output)
-    if fish == 0:
-      dee = 0
-    if fish == 1:
-      dee = 12
-    if fish == 2:
-      dee = 20
-    if fish == 3:
-      dee = 28
-    if fish == 4:
-      dee = 37
-    if fish == 5:
-      dee = 46
-    if fish == 6:
-      dee = 56
-    if fish == 7:
-      dee = 66
-    if fish == 8:
-      dee = 77
-    if fish == 9:
-      dee = 88
-    if fish == 10:
-      dee = 100
-    if dee == testoutput[mmm]:
-       correct = correct + 1
-    elif dee < (testoutput[mmm] + 15) or dee > (testoutput[mmm] - 15):
-        almost_right = almost_right + 1
-print(correct)
-print(almost_right)
+
 with open("bias1I.p","wb") as ea:
     pickle.dump(bias,ea)
 with open("weights1I.p","wb") as fa:
