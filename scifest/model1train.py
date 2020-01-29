@@ -301,7 +301,27 @@ def diet(k):
               elif weights[x][y,z] > (k * -1) and weights[x][y,z] < 0:
                 weights[x][y,z] = None
 # download pickles
-
+def randomconnect(forfsake):
+  listindice = []
+  global weights
+  while len(listindice) <= forfsake:
+    fire = np.random.randint(0,len(weights))
+    fish = np.random.randint(0,weights[fire].size)
+    flight = np.random.randint(0,weights[fire][fish].size
+    if weights[fire][fish][flight] == None:
+      if len(listindice) == 0:
+       listindice.append([fire,fish,flight])
+      rrr = 0
+      for x in range(len(listindice)):
+        if listindice[x] == [fire,fish,flight]:
+            rrr = 1
+      if rrr != 1:
+        listindice.append([fire,fish,flight])
+  for ssr in range(len(listindice)):
+    raid = listindice[ssr][0]
+    shadow = listindice[ssr][1]
+    legends = listindice[ssr][2]
+    weights[raid][shadow][legends] = np.random.random_sample()
 import pickle
 #input list of 18 subjects output 11 different points you cn get as a result pf your grade,[0,12,20,28,37,46,56,66,77,88,100], here we exclude the higher level + 25 points
 nmofhl = [16,14]
@@ -328,6 +348,7 @@ for fff in range(1120):
   heavyfat = heavyfat + 1
   if heavyfat % 250 == 0 and heavyfat!= 0:
     diet(0.007)
+    randomconnect(21)
   if sp % 100 == 0:
     learnr = 0.020111812
   sp = sp + 1
