@@ -308,7 +308,7 @@ def randomconnect(forfsake):
   while len(listindice) <= forfsake:
     Leap= Leap + 1
     fire = np.random.randint(0,len(weights)) - 1
-    fish = np.random.randint(0,weights[fire].size) - 1
+    fish = np.random.randint(0,len(weights[fire])) - 1
     flight = np.random.randint(0,weights[fire][fish].size) - 1
     if weights[fire][fish][flight] == None:
       if len(listindice) == 0:
@@ -326,6 +326,7 @@ def randomconnect(forfsake):
     shadow = listindice[ssr][1] - 1
     legends = listindice[ssr][2] - 1
     weights[raid][shadow][legends] = np.random.random_sample()
+# download pickles
 import pickle
 #input list of 18 subjects output 11 different points you cn get as a result pf your grade,[0,12,20,28,37,46,56,66,77,88,100], here we exclude the higher level + 25 points
 nmofhl = [16,14]
