@@ -5,8 +5,9 @@ from datetime import datetime
 import time
 
 global NoOfRuns
-NoOfRuns = 1
+NoOfRuns = 10
 
+print (NoOfRuns,"cycles will be completed")
 def time_convert(sec):
   mins = sec // 60
   minsb = round(mins)
@@ -338,7 +339,6 @@ outputgen(11)
 with open("weights1.p","rb") as kke:
   weights = pickle.load(kke)
   print ("Starting...")
-  print (NoOfRuns,"cycles will be completed")
 with open("bias1.p","rb") as rrp:
   bias = pickle.load(rrp)
 eulerno(100000000000)
