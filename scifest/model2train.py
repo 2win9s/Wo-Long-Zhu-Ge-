@@ -306,9 +306,9 @@ def randomconnect(forfsake):
   Leap = 0
   while len(listindice) <= forfsake:
     Leap= Leap + 1
-    fire = np.random.randint(0,len(weights)) - 1
-    fish = np.random.randint(0,len(weights[fire])) - 1
-    flight = np.random.randint(0,weights[fire][fish].size) - 1
+    fire = np.random.randint(0,len(weights))
+    fish = np.random.randint(0,len(weights[fire])) 
+    flight = np.random.randint(0,weights[fire][fish].size) 
     if weights[fire][fish][flight] == None:
       if len(listindice) == 0:
        listindice.append([fire,fish,flight])
@@ -321,9 +321,9 @@ def randomconnect(forfsake):
     if Leap == 77777:
         break 
   for ssr in range(len(listindice)):
-    raid = listindice[ssr][0] - 1
-    shadow = listindice[ssr][1] - 1
-    legends = listindice[ssr][2] - 1
+    raid = listindice[ssr][0] 
+    shadow = listindice[ssr][1] 
+    legends = listindice[ssr][2] 
     weights[raid][shadow][legends] = np.random.random_sample()
 # download pickles
 # download pickles
