@@ -304,12 +304,12 @@ def diet(k):
 def randomconnect(forfsake):
   listindice = []
   global weights
-  Leap == 0
+  Leap = 0
   while len(listindice) <= forfsake:
     Leap= Leap + 1
     fire = np.random.randint(0,len(weights))
     fish = np.random.randint(0,weights[fire].size)
-    flight = np.random.randint(0,weights[fire][fish].size
+    flight = np.random.randint(0,weights[fire][fish].size)
     if weights[fire][fish][flight] == None:
       if len(listindice) == 0:
        listindice.append([fire,fish,flight])
@@ -384,7 +384,7 @@ for fff in range(1120):
   if llm == 100:
     target[10] == 1
   backpropagationpt1()
-  updateweights(learnr * 2 *2 *2 *2)
+  updateweights(learnr * 2 *2)
   updatebias(learnr * 8)
   learnr = learnr * 0.9001
 
