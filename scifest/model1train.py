@@ -319,7 +319,7 @@ def randomconnect(forfsake):
             rrr = 1
       if rrr != 1:
         listindice.append([fire,fish,flight])
-      if Leap == 9001:
+    if Leap == 77777:
         break 
   for ssr in range(len(listindice)):
     raid = listindice[ssr][0]
@@ -352,7 +352,7 @@ for fff in range(1120):
   heavyfat = heavyfat + 1
   if heavyfat % 250 == 0 and heavyfat!= 0:
     diet(0.007)
-    randomconnect(38)
+    randomconnect(132)
   if sp % 100 == 0:
     learnr = 0.020111812
   sp = sp + 1
