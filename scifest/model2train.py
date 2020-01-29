@@ -299,7 +299,28 @@ def diet(k):
                 weights[x][y,z] = None
               elif weights[x][y,z] > (k * -1) and weights[x][y,z] < 0:
                 weights[x][y,z] = None
-
+                
+def randomconnect(forfsake):
+  listindice = []
+  global weights
+  while len(listindice) <= forfsake:
+    fire = np.random.randint(0,len(weights))
+    fish = np.random.randint(0,weights[fire].size)
+    flight = np.random.randint(0,weights[fire][fish].size
+    if weights[fire][fish][flight] == None:
+      if len(listindice) == 0:
+       listindice.append([fire,fish,flight])
+      rrr = 0
+      for x in range(len(listindice)):
+        if listindice[x] == [fire,fish,flight]:
+            rrr = 1
+      if rrr != 1:
+        listindice.append([fire,fish,flight])
+  for ssr in range(len(listindice)):
+    raid = listindice[ssr][0]
+    shadow = listindice[ssr][1]
+    legends = listindice[ssr][2]
+    weights[raid][shadow][legends] = np.random.random_sample()
 # download pickles
 
 import pickle
