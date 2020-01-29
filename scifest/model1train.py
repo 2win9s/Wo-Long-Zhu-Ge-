@@ -351,7 +351,7 @@ heavyfat = 0
 for fff in range(1120):
   heavyfat = heavyfat + 1
   if heavyfat % 250 == 0 and heavyfat!= 0:
-    diet(0.007)
+    diet(0.0013)
     randomconnect(132)
   if sp % 100 == 0:
     learnr = 0.020111812
