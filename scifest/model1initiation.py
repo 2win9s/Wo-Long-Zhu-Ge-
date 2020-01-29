@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 global NoOfRuns
-NoOfRuns = 10
+NoOfRuns = 15
 
 print (NoOfRuns,"cycles will be completed")
 def time_convert(sec):
@@ -301,7 +301,29 @@ def backpropagationpt3(notfish):
 
 def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
     print("i will eventually get around to writing backpropagationef, it is not necessary just more efficient as python is better at dealing with for loops (iterative) than repeatedly calling functions(recursive)")
-    
+
+'''def randomconnect(forfsake):
+  listindice = []
+  global weights
+  while len(listindice) <= forfsake:
+    fire = np.random.randint(0,len(weights))
+    fish = np.random.randint(0,weights[fire].size)
+    flight = np.random.randint(0,weights[fire][fish].size
+    if weights[fire][fish][flight] == None
+      if len(listindice) == 0:
+       listindice.append([fire,fish,flight])
+      rrr=0
+      for x in range(len(listindice)):
+        if listindice[x] == [fire,fish,flight]:
+            rrr = 1
+      if rrr != 1:
+        listindice.append([fire,fish,flight])
+  for ssr in range(len(listindice)):
+    raid = listindice[ssr][0]
+    shadow = listindice[ssr][1]
+    legends = listindice[ssr][2]
+    weights[raid][shadow][legends] = np.random.random_sample()'''
+
 def updateweights(l):
     global weights                                          #the arguement l is the learning rate, here we update the weights to minimize the cost
     global placeholder
@@ -356,7 +378,8 @@ heavyfat = 0
 for fff in range(NoOfRuns):
   heavyfat = heavyfat + 1
   if heavyfat % 250 == 0 and heavyfat!= 0:
-    diet(0.05)
+    diet(0.007)
+    #randomconnect(21)
   if sp % 100 == 0:
     learnr = 0.020111812
   sp = sp + 1
