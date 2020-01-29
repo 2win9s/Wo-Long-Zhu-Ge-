@@ -1,12 +1,32 @@
 #download Wo-Long-Zhu-Ge-, then extract model1.p, open spyder and put all the P files in model1.p into the spyder directory where it can access them
 #run this code and tweak the NoOfRuns varible at line 6 to decide the number of cycles, when finished you will find 2 new files called bias1I.p and weights1I.p,first delete bias1.p and weights1.p (the old files), rename bias1I.p and weigts1I.p to bias1.p and weights1.p, then on github go into model1.p and upload the 2 files this will update the weights and bias, now delete all the garbage left on your pc, each time you train you download the new files off github.   note: do not change or tamper traininput1.p,testinput1.p ... , they will always stay the same
 import numpy as np
+from datetime import datetime
+import time
+
+def time_convert(sec):
+  mins = sec // 60
+  minsb = round(mins)
+  sec = sec % 60
+  secb = round(sec,2)
+  hours = mins // 60
+  hoursb = round(hours)
+  mins = mins % 60
+  print("Completed in",hoursb,"hours",minsb, "mins and", secb, "seconds")
 
 global NoOfRuns
-NoOfRuns = 3
+NoOfRuns = 1
 
 global CompRuns
 CompRuns = 1
+
+#global aabb
+
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+start_time = time.time()
+print("Start time", current_time)
+#current_time == aabb
 
 def reLU(x):
   global reLUout
@@ -371,7 +391,9 @@ for fff in range(NoOfRuns):
   updateweights(learnr * 2 *2 *2 *2)
   updatebias(learnr * 8)
   learnr = learnr * 0.9001
-  print ("Completed cycle", CompRuns , "of", NoOfRuns)
+  now = datetime.now()
+  current_time = now.strftime("%H:%M:%S")
+  print ("Completed cycle", CompRuns , "of", NoOfRuns, "(",current_time,")")
   CompRuns += 1
 
 with open("bias1I.p","wb") as ea:
@@ -379,4 +401,10 @@ with open("bias1I.p","wb") as ea:
 with open("weights1I.p","wb") as fa:
     pickle.dump(weights,fa)
 
-print ("Finished", NoOfRuns, "cycles")
+
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+end_time = time.time()
+time_lapsed = end_time - start_time
+time_convert(time_lapsed)
+print ("Finished", NoOfRuns, "cycles at", current_time)
