@@ -1,8 +1,13 @@
 #download Wo-Long-Zhu-Ge-, then extract model1.p, open spyder and put all the P files in model1.p into the spyder directory where it can access them
-#run this code and tweak the NoOfRuns varible at line 4 to decide the number of cycles, when finished you will find 2 new files called bias1I.p and weights1I.p,first delete bias1.p and weights1.p (the old files), rename bias1I.p and weigts1I.p to bias1.p and weights1.p, then on github go into model1.p and upload the 2 files this will update the weights and bias, now delete all the garbage left on your pc, each time you train you download the new files off github.   note: do not change or tamper traininput1.p,testinput1.p ... , they will always stay the same
+#run this code and tweak the NoOfRuns varible at line 6 to decide the number of cycles, when finished you will find 2 new files called bias1I.p and weights1I.p,first delete bias1.p and weights1.p (the old files), rename bias1I.p and weigts1I.p to bias1.p and weights1.p, then on github go into model1.p and upload the 2 files this will update the weights and bias, now delete all the garbage left on your pc, each time you train you download the new files off github.   note: do not change or tamper traininput1.p,testinput1.p ... , they will always stay the same
 import numpy as np
+
 global NoOfRuns
-NoOfRuns = 100
+NoOfRuns = 3
+
+global CompRuns
+CompRuns = 1
+
 def reLU(x):
   global reLUout
   if x > 0:
@@ -312,6 +317,8 @@ hiddenlayersgen()
 outputgen(11)
 with open("weights1.p","rb") as kke:
   weights = pickle.load(kke)
+  print ("Starting...")
+  print (NoOfRuns,"cycles will be completed")
 with open("bias1.p","rb") as rrp:
   bias = pickle.load(rrp)
 eulerno(100000000000)
@@ -364,10 +371,12 @@ for fff in range(NoOfRuns):
   updateweights(learnr * 2 *2 *2 *2)
   updatebias(learnr * 8)
   learnr = learnr * 0.9001
+  print ("Completed cycle", CompRuns , "of", NoOfRuns)
+  CompRuns += 1
 
 with open("bias1I.p","wb") as ea:
     pickle.dump(bias,ea)
 with open("weights1I.p","wb") as fa:
     pickle.dump(weights,fa)
 
-print ("completed", NoOfRuns, "runs")
+print ("Finished", NoOfRuns, "cycles")
