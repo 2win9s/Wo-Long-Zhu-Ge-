@@ -1,5 +1,8 @@
+#download Wo-Long-Zhu-Ge-, then extract model1.p, open spyder and put all the P files in model1.p into the spyder directory where it can access them
+#run this code and tweak the NoOfRuns varible at line 4 to decide the number of cycles, when finished you will find 2 new files called bias1I.p and weights1I.p,first delete bias1.p and weights1.p (the old files), rename bias1I.p and weigts1I.p to bias1.p and weights1.p, then on github go into model1.p and upload the 2 files this will update the weights and bias, now delete all the garbage left on your pc, each time you train you download the new files off github.   note: do not change or tamper traininput1.p,testinput1.p ... , they will always stay the same
 import numpy as np
-#reLU,efficient activation algorithm for hidden layers 
+global NoOfRuns
+NoOfRuns = 100
 def reLU(x):
   global reLUout
   if x > 0:
@@ -295,9 +298,10 @@ def diet(k):
    for x in range(len(weights)):
         for y in range(len(weights[x])):
             for z in range(weights[x][y].size):
-              if weights[x][y,z] < k:
+              if weights[x][y,z] < k and weights[x][y,z] > 0:
                 weights[x][y,z] = None
-
+              elif weights[x][y,z] > (k * -1) and weights[x][y,z] < 0:
+                weights[x][y,z] = None
 # download pickles
 
 import pickle
@@ -306,29 +310,31 @@ nmofhl = [16,14]
 inputgen(18)
 hiddenlayersgen()
 outputgen(11)
-weightsgen()
-biasgen()
+with open("weights1.p","rb") as kke:
+  weights = pickle.load(kke)
+with open("bias1.p","rb") as rrp:
+  bias = pickle.load(rrp)
 eulerno(100000000000)
 with open("traininput1.p","rb") as ab:
-        traininput = pickle.load
+        traininput = pickle.load(ab)
 with open("trainoutput1.p","rb") as bb:
-        trainoutput = pickle.load
+        trainoutput = pickle.load(bb) 
 with open("testinput1.p","rb") as cb:
-        testinput = pickle.load
+        testinput = pickle.load(cb)
 with open("testoutput1.p","rb") as db:
-        testoutput = pickle.load
+        testoutput = pickle.load(db)
 
 sp = 0
 heavyfat = 0
-for fff in range(1120):
+for fff in range(NoOfRuns):
   heavyfat = heavyfat + 1
   if heavyfat % 250 == 0 and heavyfat!= 0:
     diet(0.05)
   if sp % 100 == 0:
-    learnr = 0.01218
+    learnr = 0.020111812
   sp = sp + 1
-  rrf = np.random.randint(0,len(trainoutput)) #after doing some digging it looks like the issue with this line may be compiler related or to do with the array. when i made a new array called qwerty and put numbers 1~4 in it it worked.
-  input = traininput[rrf] #and from here onward there is an endless list of issues. something about this line gives out an error that says its not "subscriptable"
+  rrf = np.random.randint(0,len(trainoutput))
+  input = traininput[rrf]
   targetgen(11)
   fireactivation()
   llm = trainoutput[rrf]
@@ -355,44 +361,13 @@ for fff in range(1120):
   if llm == 100:
     target[10] == 1
   backpropagationpt1()
-  updateweights(learnr)
-  updatebias(learnr * 3)
-  learnr = learnr * 0.9889
-correct = 0
-almost_right = 0
-for mmm in range(len(testinput)):
-    input = testinput[mmm]
-    fireactivation()
-    fish = np.argmax(output)
-    if fish == 0:
-      dee = 0
-    if fish == 1:
-      dee = 12
-    if fish == 2:
-      dee = 20
-    if fish == 3:
-      dee = 28
-    if fish == 4:
-      dee = 37
-    if fish == 5:
-      dee = 46
-    if fish == 6:
-      dee = 56
-    if fish == 7:
-      dee = 66
-    if fish == 8:
-      dee = 77
-    if fish == 9:
-      dee = 88
-    if fish == 10:
-      dee = 100
-    if dee == testoutput[mmm]:
-       correct = correct + 1
-    elif dee < (testoutput[mmm] + 15) or dee > (testoutput[mmm] - 15):
-        almost_right = almost_right + 1
-print(correct)
-print(almost_right)
-with open("bias1.p","wb") as ea:
+  updateweights(learnr * 2 *2 *2 *2)
+  updatebias(learnr * 8)
+  learnr = learnr * 0.9001
+
+with open("bias1I.p","wb") as ea:
     pickle.dump(bias,ea)
-with open("weights1.p","wb") as fa:
+with open("weights1I.p","wb") as fa:
     pickle.dump(weights,fa)
+
+print ("completed", NoOfRuns, "runs")
