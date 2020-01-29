@@ -1,5 +1,5 @@
 #download Wo-Long-Zhu-Ge-, then extract model1.p, open spyder and put all the P files in model1.p into the spyder directory where it can access them
-#run this code and tweak the for loop at line 326 to decide the number of cycles, when finished you will find 2 new files called bias1I.p and weights1I.p, drag them onto the desktop and rename them to bias1.p and weights1.p, then on github go into model1.p and upload the 2 files this will update the weights and bias, now delete all the garbage left on your pc, each time you train you must download the new files off github.note: do not change or tamper traininput1.p,testinput1.p ... , they will always stay the same
+#run this code and tweak the for loop at line 326 to decide the number of cycles, when finished you will find 2 new files called bias1I.p and weights1I.p,first delete bias1.p and weights1.p (the old files), rename bias1I.p and weigts1I.p to bias1.p and weights1.p, then on github go into model1.p and upload the 2 files this will update the weights and bias, now delete all the garbage left on your pc, each time you train you download the new files off github.   note: do not change or tamper traininput1.p,testinput1.p ... , they will always stay the same
 import numpy as np
 def reLU(x):
   global reLUout
