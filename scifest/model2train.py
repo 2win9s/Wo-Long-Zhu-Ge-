@@ -307,7 +307,7 @@ def randomconnect(forfsake):
   while len(listindice) <= forfsake:
     Leap= Leap + 1
     fire = np.random.randint(0,len(weights)) - 1
-    fish = np.random.randint(0,weights[fire].size) - 1
+    fish = np.random.randint(0,len(weights[fire])) - 1
     flight = np.random.randint(0,weights[fire][fish].size) - 1
     if weights[fire][fish][flight] == None:
       if len(listindice) == 0:
@@ -325,6 +325,7 @@ def randomconnect(forfsake):
     shadow = listindice[ssr][1] - 1
     legends = listindice[ssr][2] - 1
     weights[raid][shadow][legends] = np.random.random_sample()
+# download pickles
 # download pickles
 
 import pickle
