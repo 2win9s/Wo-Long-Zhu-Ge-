@@ -304,7 +304,9 @@ def diet(k):
 def randomconnect(forfsake):
   listindice = []
   global weights
+  Leap == 0
   while len(listindice) <= forfsake:
+    Leap= Leap + 1
     fire = np.random.randint(0,len(weights))
     fish = np.random.randint(0,weights[fire].size)
     flight = np.random.randint(0,weights[fire][fish].size
@@ -317,6 +319,8 @@ def randomconnect(forfsake):
             rrr = 1
       if rrr != 1:
         listindice.append([fire,fish,flight])
+      if Leap == 9001:
+        break 
   for ssr in range(len(listindice)):
     raid = listindice[ssr][0]
     shadow = listindice[ssr][1]
@@ -348,7 +352,7 @@ for fff in range(1120):
   heavyfat = heavyfat + 1
   if heavyfat % 250 == 0 and heavyfat!= 0:
     diet(0.007)
-    randomconnect(21)
+    randomconnect(38)
   if sp % 100 == 0:
     learnr = 0.020111812
   sp = sp + 1
