@@ -2,16 +2,7 @@ import numpy as np
 import time as tm
 print ("welcome to tic tac toe")
 
-Move = int(input())
-global P1
-global P2
-global P3
-global P4
-global P5
-global P6
-global P7
-global P8
-global P9
+
 P1 = " "
 P2 = " "
 P3 = " "
@@ -21,17 +12,29 @@ P6 = " "
 P7 = " "
 P8 = " "
 P9 = " "
-global Turn
 Turn = 0
 
+Move = int(input())
 
 def MakeMove():
+  global P1
+  global P2
+  global P3
+  global P4
+  global P5
+  global P6
+  global P7
+  global P8
+  global P9
+  global Turn
+    
   def DispBoard():
     print (P1, "¦", P2,"¦", P3)
     print ("---------")
     print (P4, "¦", P5,"¦", P6)
     print ("---------")  
     print (P7, "¦", P8,"¦", P9)
+    Move = int(input())
 
   if Move is 1:
     if P1 == " ":
@@ -43,9 +46,23 @@ def MakeMove():
         Turn == 1
       DispBoard()
   elif Move is 2:
-    print ("slot 2")
+    if P2 == " ":
+      if Turn == 0:
+        P2 = "X"
+        Turn = 1
+      else:
+        P2 = "O"
+        Turn == 1
+      DispBoard()
   elif Move is 3:
-    print ("slot 3")
+    if P3 == " ":
+      if Turn == 0:
+        P3 = "X"
+        Turn = 1
+      else:
+        P3 = "O"
+        Turn == 1
+      DispBoard()
   elif Move is 4:
     print ("slot 4")
   elif Move is 5:
@@ -62,4 +79,5 @@ def MakeMove():
     print ("false")
 
 
+MakeMove()
 MakeMove()
