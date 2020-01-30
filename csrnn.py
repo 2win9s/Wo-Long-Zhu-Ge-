@@ -259,35 +259,33 @@ def backpropagationpt1(realfish):
       placeholderz[x].append(0)
       for z in range(memoriesbias[x][y].size):
         placeholderz[x][y] = np.zeros(shape = [len(memories[x][y]),(memoriesbias[x][y][z].size)])
-  crap = []
-  lir = []
-  fate = []
-  for x in range(realfish):
-    crap.append([])
-    lir.append([])
-    if x == 0:
-     for shadow in range(len(placeholder)):
-      shadows = (shadow + 1) * -1
-      for kkr in range(placeholder[shadows].size):
-        klaus = (shadow + 1) * -1
-        crap[x].append([])
-        lir.append([])
-        for fire in range(placeholder[shadows][klaus].shape[0]):
-          crap[x][kkr].append(0)
-          for rmb in range(placeholder[shadows][klaus][fire].size):
-            if shadows == -1:
-              if memories[shadows][klaus][fire,rmb] != None:
-                placeholder[shadows][klaus][fire,rmb] = hiddenlayers[klaus][fire] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholder[shadows][klaus][fire,rmb]
-                placeholderz[shadows][klaus][fire,rmb] = (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholderz[shadows][klaus][fire,rmb]
-                crap[x][kkr][fire] = (memories[shadows][klaus][fire,rmb] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output))
-                for input in range(len(input))
-                  lir.append(0)
-                  for damn in range(memories[klaus][0][input].size)
-                    d = derivativereLU(hiddenlayers[klaus][damn]) 
-                    placeholder[klaus][0][input,damn] = input[input] * d * crap[x][kkr][fire] + placeholder[klaus][0][input,damn]
-                    lir[x][kkr][input] = memories[klaus][0,input] * d * crap[x][kkr][fire]
-                for beef in range(klaus - 1):
-                  turkey =   beef + 1
-                  for ham in range(len(hiddenlayers[turkey])):
-                    for lamb in range(len(hiddenlayers[klaus])):
-                      placeholder[klaus][turkey][ham][lamb] = hiddenlayers[turkey][ham] * crap[x][kkr][fire] + placeholder[klaus][turkey][ham][lamb]
+  for shadow in range(len(placeholder)):
+    shadows = (shadow + 1) * -1
+    for kkr in range(placeholder[shadows].size):
+      klaus = (shadow + 1) * -1
+      for fire in range(placeholder[shadows][klaus].shape[0]):
+        for rmb in range(placeholder[shadows][klaus][fire].size):
+          if shadows == -1:
+            if memories[shadows][klaus][fire,rmb] != None:
+              placeholder[shadows][klaus][fire,rmb] = hiddenlayers[klaus][fire] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholder[shadows][klaus][fire,rmb]
+              placeholderz[shadows][klaus][fire,rmb] = (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholderz[shadows][klaus][fire,rmb]
+              crap=(memories[shadows][klaus][fire,rmb] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output))
+              for input in range(len(input)):
+                for damn in range(memories[klaus][0][input].size)
+                  d = derivativereLU(hiddenlayers[klaus][damn]) 
+                  placeholder[klaus][0][input,damn] = input[input] * d * crap[x][kkr][fire] + placeholder[klaus][0][input,damn]
+                  lir = memories[klaus][0,input] * d * crap[x][kkr][fire]
+              for beef in range(klaus - 1):
+                turkey =   beef + 1
+                for ham in range(len(hiddenlayers[turkey])):
+                  for lamb in range(len(hiddenlayers[klaus])):
+                    bruh = derivativereLU(hiddenlayers[klaus][lamb])                
+                    placeholder[klaus][turkey][ham][lamb] = hiddenlayers[turkey][ham] * crap[x][kkr][fire] * bruh + placeholder[klaus][turkey][ham][lamb]
+            
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
+                                      
