@@ -273,15 +273,15 @@ def backpropagationpt1(realfish):
               for input in range(len(input)):
                 for damn in range(memories[klaus][0][input].size)
                   d = derivativereLU(hiddenlayers[klaus][damn]) 
-                  placeholder[klaus][0][input,damn] = input[input] * d * crap[x][kkr][fire] + placeholder[klaus][0][input,damn]
-                  lir = memories[klaus][0,input] * d * crap[x][kkr][fire]
+                  placeholder[klaus][0][input,damn] = input[input] * d * crap + placeholder[klaus][0][input,damn]
+                  lir = memories[klaus][0][input,damn] * d * crap
               for beef in range(klaus - 1):
                 turkey =   beef + 1
                 for ham in range(len(hiddenlayers[turkey])):
                   for lamb in range(len(hiddenlayers[klaus])):
                     bruh = derivativereLU(hiddenlayers[klaus][lamb])                
-                    placeholder[klaus][turkey][ham][lamb] = hiddenlayers[turkey][ham] * crap[x][kkr][fire] * bruh + placeholder[klaus][turkey][ham][lamb]
-            
+                    placeholder[klaus][turkey][ham][lamb] = hiddenlayers[turkey][ham] * crap * bruh + placeholder[klaus][turkey][ham][lamb]
+                    fate = memories[klaus][turkey][ham][lamb] * crap * bruh
                                       
                                       
                                       
