@@ -2,13 +2,16 @@ import numpy as np
 import time as tm
 print ("welcome to tic tac toe")
 
-GameBoard = np.array([[0,0,0],[0,0,0],[0,0,0]])
-
-#print (GameBoard)
-#print (GameBoard[0][1])
-
-m1 = int(input())
-
+Move = int(input())
+global P1
+global P2
+global P3
+global P4
+global P5
+global P6
+global P7
+global P8
+global P9
 P1 = " "
 P2 = " "
 P3 = " "
@@ -18,41 +21,45 @@ P6 = " "
 P7 = " "
 P8 = " "
 P9 = " "
+global Turn
+Turn = 0
 
 
-def DispBoard():
-  print ("   ¦   ¦   ")
-  print ("-----------")
-  print ("   ¦   ¦   ")
-  print ("-----------")  
-  print ("   ¦   ¦   ")
+def MakeMove():
+  def DispBoard():
+    print (P1, "¦", P2,"¦", P3)
+    print ("---------")
+    print (P4, "¦", P5,"¦", P6)
+    print ("---------")  
+    print (P7, "¦", P8,"¦", P9)
 
-if m1 is 1:
-  if GameBoard[0][0] == 0:
-    GameBoard[0,0]=1
-    DispBoard()
-elif m1 is 2:
-  print ("slot 2")
-elif m1 is 3:
-  print ("slot 3")
-elif m1 is 4:
-  print ("slot 4")
-elif m1 is 5:
-  print ("slot 5")  
-elif m1 is 6:
-  print ("slot 6") 
-elif m1 is 5:
-  print ("slot 7") 
-elif m1 is 5:
-  print ("slot 8") 
-elif m1 is 9:
-  print ("slot 9") 
-else:
-  print ("false")
+  if Move is 1:
+    if P1 == " ":
+      if Turn == 0:
+        P1 = "X"
+        Turn = 1
+      else:
+        P1 = "O"
+        Turn == 1
+      DispBoard()
+  elif Move is 2:
+    print ("slot 2")
+  elif Move is 3:
+    print ("slot 3")
+  elif Move is 4:
+    print ("slot 4")
+  elif Move is 5:
+    print ("slot 5")  
+  elif Move is 6:
+    print ("slot 6") 
+  elif Move is 5:
+    print ("slot 7") 
+  elif Move is 5:
+    print ("slot 8") 
+  elif Move is 9:
+    print ("slot 9") 
+  else:
+    print ("false")
 
-'''for (m1 is 1):
-  print ("true")
-  #tm.sleep(1)
-else:
-  print ("false")
-'''
+
+MakeMove()
