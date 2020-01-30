@@ -235,7 +235,7 @@ def derivativereLU(x):                                     #x is the value of th
     dereLU = a
   return dereLU
     
-not finished yet
+#not finished yet
 def backpropagationpt1(realfish):
   global output
   global input
@@ -280,9 +280,9 @@ def backpropagationpt1(realfish):
                 placeholder[shadows][klaus][fire,rmb] = hiddenlayers[klaus][fire] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholder[shadows][klaus][fire,rmb]
                 placeholderz[shadows][klaus][fire,rmb] = (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholderz[shadows][klaus][fire,rmb]
                 crap[x][kkr][fire] = (memories[shadows][klaus][fire,rmb] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output))
-                for input in range(len(input)):
+                for input in range(len(input))
                   lir.append(0)
-                  for damn in range(memories[klaus][0][input].size):
+                  for damn in range(memories[klaus][0][input].size)
                     d = derivativereLU(hiddenlayers[klaus][damn]) 
                     placeholder[klaus][0][input,damn] = input[input] * d * crap[x][kkr][fire] + placeholder[klaus][0][input,damn]
                     lir[x][kkr][input] = memories[klaus][0,input] * d * crap[x][kkr][fire]
@@ -291,16 +291,3 @@ def backpropagationpt1(realfish):
                   for ham in range(len(hiddenlayers[turkey])):
                     for lamb in range(len(hiddenlayers[klaus])):
                       placeholder[klaus][turkey][ham][lamb] = hiddenlayers[turkey][ham] * crap[x][kkr][fire] + placeholder[klaus][turkey][ham][lamb]
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
-                                
