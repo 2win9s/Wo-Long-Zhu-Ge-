@@ -47,7 +47,7 @@ def MakeMove():
         Turn = 1
       else:
         P1 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
       tst = 1
     elif P1 != " ":
@@ -66,7 +66,7 @@ def MakeMove():
         Turn = 1
       else:
         P2 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
       tst = 1
     elif P2 != " ":
@@ -85,7 +85,7 @@ def MakeMove():
         Turn = 1
       else:
         P3 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
       tst = 1
     elif P3 != " ":
@@ -104,7 +104,7 @@ def MakeMove():
         Turn = 1
       else:
         P4 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
       tst = 1
     elif P4 != " ":
@@ -123,7 +123,7 @@ def MakeMove():
         Turn = 1
       else:
         P5 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
       tst = 1
     elif P5 != " ":
@@ -134,6 +134,7 @@ def MakeMove():
       else:
         Move = int(input())
         return MakeMove()
+
   elif Move is 6:
     if P6 == " ":
       if Turn == 0:
@@ -141,11 +142,17 @@ def MakeMove():
         Turn = 1
       else:
         P6 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
-    else:
-      print ("That space is already taken!")
-      Move = int(input())
+      tst = 1
+    elif P6 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
       
   elif Move is 7:
     if P7 == " ":
@@ -154,11 +161,17 @@ def MakeMove():
         Turn = 1
       else:
         P7 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
-    else:
-      print ("That space is already taken!")
-      Move = int(input())
+      tst = 1
+    elif P7 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
       
   elif Move is 8:
     if P8 == " ":
@@ -167,11 +180,17 @@ def MakeMove():
         Turn = 1
       else:
         P8 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
-    else:
-      print ("That space is already taken!")
-      Move = int(input())
+      tst = 1
+    elif P8 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
       
   elif Move is 9:
     if P9 == " ":
@@ -180,11 +199,17 @@ def MakeMove():
         Turn = 1
       else:
         P9 = "O"
-        Turn == 1
+        Turn = 0
       DispBoard()
-    else:
-      print ("That space is already taken!")
-      Move = int(input())
+      tst = 1
+    elif P9 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
       
   else:
     print ("false")
