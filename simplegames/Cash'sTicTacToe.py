@@ -13,6 +13,9 @@ P7 = " "
 P8 = " "
 P9 = " "
 Turn = 0
+GameOver = 0
+Winner = " "
+tst = 0
 
 Move = int(input())
 
@@ -27,14 +30,15 @@ def MakeMove():
   global P8
   global P9
   global Turn
-    
+  global Move
+  global tst 
   def DispBoard():
     print (P1, "¦", P2,"¦", P3)
     print ("---------")
     print (P4, "¦", P5,"¦", P6)
     print ("---------")  
     print (P7, "¦", P8,"¦", P9)
-    Move = int(input())
+    print ("Whats your next move?")
 
   if Move is 1:
     if P1 == " ":
@@ -45,6 +49,16 @@ def MakeMove():
         P1 = "O"
         Turn == 1
       DispBoard()
+      tst = 1
+    elif P1 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
+        
   elif Move is 2:
     if P2 == " ":
       if Turn == 0:
@@ -54,6 +68,16 @@ def MakeMove():
         P2 = "O"
         Turn == 1
       DispBoard()
+      tst = 1
+    elif P2 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
+        
   elif Move is 3:
     if P3 == " ":
       if Turn == 0:
@@ -63,21 +87,113 @@ def MakeMove():
         P3 = "O"
         Turn == 1
       DispBoard()
+      tst = 1
+    elif P3 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
+        
   elif Move is 4:
-    print ("slot 4")
+    if P4 == " ":
+      if Turn == 0:
+        P4 = "X"
+        Turn = 1
+      else:
+        P4 = "O"
+        Turn == 1
+      DispBoard()
+      tst = 1
+    elif P4 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
+      
   elif Move is 5:
-    print ("slot 5")  
+    if P5 == " ":
+      if Turn == 0:
+        P5 = "X"
+        Turn = 1
+      else:
+        P5 = "O"
+        Turn == 1
+      DispBoard()
+      tst = 1
+    elif P5 != " ":
+      if tst == 0:
+        print ("That space is already taken! Try again!")
+        Move = int(input())
+        tst = 1
+      else:
+        Move = int(input())
+        return MakeMove()
   elif Move is 6:
-    print ("slot 6") 
-  elif Move is 5:
-    print ("slot 7") 
-  elif Move is 5:
-    print ("slot 8") 
+    if P6 == " ":
+      if Turn == 0:
+        P6 = "X"
+        Turn = 1
+      else:
+        P6 = "O"
+        Turn == 1
+      DispBoard()
+    else:
+      print ("That space is already taken!")
+      Move = int(input())
+      
+  elif Move is 7:
+    if P7 == " ":
+      if Turn == 0:
+        P7 = "X"
+        Turn = 1
+      else:
+        P7 = "O"
+        Turn == 1
+      DispBoard()
+    else:
+      print ("That space is already taken!")
+      Move = int(input())
+      
+  elif Move is 8:
+    if P8 == " ":
+      if Turn == 0:
+        P8 = "X"
+        Turn = 1
+      else:
+        P8 = "O"
+        Turn == 1
+      DispBoard()
+    else:
+      print ("That space is already taken!")
+      Move = int(input())
+      
   elif Move is 9:
-    print ("slot 9") 
+    if P9 == " ":
+      if Turn == 0:
+        P9 = "X"
+        Turn = 1
+      else:
+        P9 = "O"
+        Turn == 1
+      DispBoard()
+    else:
+      print ("That space is already taken!")
+      Move = int(input())
+      
   else:
     print ("false")
 
 
-MakeMove()
-MakeMove()
+for x in range(0, 13):
+  if GameOver == 0:
+    MakeMove()
+    x += 1
+  else:
+    print (Winner, "wins!")
+    break
