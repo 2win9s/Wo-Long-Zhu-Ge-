@@ -5,7 +5,7 @@ from datetime import datetime
 import time
 
 global NoOfRuns
-NoOfRuns = 15
+NoOfRuns = 74
 
 print (NoOfRuns,"cycles will be completed")
 def time_convert(sec):
@@ -21,13 +21,10 @@ def time_convert(sec):
 global CompRuns
 CompRuns = 1
 
-#global aabb
-
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 start_time = time.time()
-print("Start time", current_time)
-#current_time == aabb
+print("Starting...", current_time)
 
 def reLU(x):
   global reLUout
@@ -302,27 +299,32 @@ def backpropagationpt3(notfish):
 def backpropagationef():                                    #this one should be way more efficient in python as python isn't optimised for recursion but u need to cofigure the function in this module                                   
     print("i will eventually get around to writing backpropagationef, it is not necessary just more efficient as python is better at dealing with for loops (iterative) than repeatedly calling functions(recursive)")
 
-'''def randomconnect(forfsake):
+def randomconnect(forfsake):
   listindice = []
   global weights
+  Leap = 0
   while len(listindice) <= forfsake:
-    fire = np.random.randint(0,len(weights))
-    fish = np.random.randint(0,weights[fire].size)
-    flight = np.random.randint(0,weights[fire][fish].size
-    if weights[fire][fish][flight] == None
+    Leap= Leap + 1
+    fire = np.random.randint(0,len(weights)) 
+    fish = np.random.randint(0,len(weights[fire])) 
+    flight = np.random.randint(0,weights[fire][fish].size) 
+    if weights[fire][fish][flight] == None:
       if len(listindice) == 0:
        listindice.append([fire,fish,flight])
-      rrr=0
+      rrr = 0
       for x in range(len(listindice)):
         if listindice[x] == [fire,fish,flight]:
             rrr = 1
       if rrr != 1:
         listindice.append([fire,fish,flight])
+    if Leap == 77777:
+        break 
   for ssr in range(len(listindice)):
-    raid = listindice[ssr][0]
-    shadow = listindice[ssr][1]
-    legends = listindice[ssr][2]
-    weights[raid][shadow][legends] = np.random.random_sample()'''
+    raid = listindice[ssr][0] 
+    shadow = listindice[ssr][1] 
+    legends = listindice[ssr][2] 
+    weights[raid][shadow][legends] = np.random.random_sample()
+
 
 def updateweights(l):
     global weights                                          #the arguement l is the learning rate, here we update the weights to minimize the cost
@@ -360,7 +362,6 @@ hiddenlayersgen()
 outputgen(11)
 with open("weights1.p","rb") as kke:
   weights = pickle.load(kke)
-  print ("Starting...")
 with open("bias1.p","rb") as rrp:
   bias = pickle.load(rrp)
 eulerno(100000000000)
@@ -379,7 +380,7 @@ for fff in range(NoOfRuns):
   heavyfat = heavyfat + 1
   if heavyfat % 250 == 0 and heavyfat!= 0:
     diet(0.007)
-    #randomconnect(21)
+    randomconnect(21)
   if sp % 100 == 0:
     learnr = 0.020111812
   sp = sp + 1
