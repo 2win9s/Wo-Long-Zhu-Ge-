@@ -1,0 +1,17 @@
+We planned on modellinng data by using a simple feed-forward neural network,
+in this type of neural network the input travels through the hiddenlayers and then to the output,
+no information is retained between activations,this keeps the network simple.
+example of s feed forward neural network with 2 neurons
+let n be value of input neuron
+n -----multiplied by a weight ------ add a bias ------ put into an activation function -------value of neuron in next layer
+i.e.
+f(x) = somefunction
+nextlayerNeuron = f(n * weight + bias)
+That is only what a 2 neuron neural network would look like in reality the new neuron recieves inputs from multiple neurons,
+and there are multiple new neurons in the next layer.So it would look more like this
+f(x) = somefunction
+NextlayerNeuron[1] = f(n[1] * weight[1][1] + n[2] * weight[1][2]... + n[n] * weight[1][n] + bias)
+NextlayerNeuron[2] = f(n[1] * weights[2][1] + n[2] * weight[2][1]... + n[n] * weight[2][n] + bias)
+.
+.
+.
