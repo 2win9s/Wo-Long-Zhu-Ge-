@@ -14,7 +14,7 @@ P9 = " "
 Turn = "X"
 Winner = " "
 tst = 0
-TurnCount = 4
+TurnCount = 0
 WinConditMet = 0
 
 print ("welcome to tic tac toe")   #some intro stuff
@@ -273,6 +273,5 @@ def MakeMove():            #is called to make a move
     Move = int(input())
 
 
-for x in range(0, 13):
+for TurnCount in range(0, 9):
   MakeMove()
-x += 1                
