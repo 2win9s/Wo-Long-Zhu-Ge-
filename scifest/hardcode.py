@@ -1,5 +1,6 @@
 import numpy as np
-#THIS IS A TEST RUN FOR A WEIRD IDEA/ BACK UP PLAN
+#set number of neurons here
+neurons = np.zeros(shape = 1)
 def reLU(x):
   global reLUout
   if x > 0:
@@ -9,9 +10,7 @@ def reLU(x):
     reLUout = x*a  
   return reLUout  
 input = np.zeros(shape = 1)
-input[0] = 2
 output = np.zeros(shape = 1)
-neurons = np.zeros(shape = 1)
 def memoriesv1():
   global input
   global output
@@ -21,13 +20,13 @@ def memoriesv1():
   fullnet = np.copy(input)
   fullnet = np.append(fullnet,neurons)
   fullnet = np.append(fullnet,output)
-  memories = np.ones(shape = [len(fullnet),(len(fullnet ) - 1)])
-memoriesv1()
+  memories = np.zeros(shape = [len(fullnet),(len(fullnet ) - 1)])
+
 def memoriesbiasv1():
     global fullnet
     global memoriesbias
     memoriesbias = np.copy(fullnet)
-memoriesbiasv1()
+
 def startmemory():
   global memories
   for x in range(len(memories)):
@@ -153,3 +152,39 @@ def backpropagationpt2(a,b,c,d):
       placeholderz[sun] = wo_long_zhu_ge * sice + placeholderz[sun]
       backpropagationpt1(sun,nice,sice,wo_long_zhu_ge)
       backpropagationpt2(sun,nice,sice,wo_long_zhu_ge)
+def memorieslearn(l):
+  global memories
+  global placeholder
+  for x in range(len(memories)):
+    for y in range(memories[x].size):
+      memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
+def memoriesfall(l):
+  global memoriesbias
+  global placeholderz
+  for x in range(len(memoriesbias)):
+    memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
+
+def forget(careful):
+  global memories
+  for x in range(len(memories)):
+    for y in range(memories[x].size):
+      if memories[x,y] <= careful and memories[x,y] >= 0:
+        memories[x,y] = None
+      elif memories[x,y] >= (careful * -1) and memories[x,y] <= 0:
+        memories[x,y] = None
+def memorylink(please):
+  global memories
+  krusty = 0
+  fish = 0
+  while fish<= please:
+    krusty = krusty + 1
+     fire = np.random.randint(0,len(memories))
+     crap = np.random.randint(0,memories[fire].size)
+     if memories[fire][crap] == None:
+        memories[fire][crap] = np.random.random_sample()
+     elif krusty >= 31415926535900:
+        break
+      
+      
+      
+      
