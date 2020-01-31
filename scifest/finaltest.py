@@ -201,8 +201,15 @@ with open("memories.p","rb") as eb:
 with open("memoriesbias.p","rb") as fb:
     memoriesbias = pickle.load(fb)
 startmemory()
+sss = np.array([17 , 30 , 0 ,61, 68 , 4 , 8 ,19, 96, 96, 14,  7, 41, 61,  7]) 
+#sss = np.array([17, 30 , 0 ,61 ,68,  4,  8, 19, 96, 96, 14,  7, 41, 61,  7, 68, 50, 29, 85, 30])
+#sss = np.array([17 ,30 , 0, 61, 68 , 4 , 8 ,19 ,96 ,96, 14,  7 ,41, 61,  7, 68, 50, 29, 85, 30, 51, 56, 28, 41, 19]) 
+#sss = np.array([17, 30,  0, 61 ,68 , 4 , 8, 19, 96, 96, 14,  7, 41, 61,  7, 68, 50, 29, 85, 30, 51, 56, 28, 41, 19, 47, 39, 79 ,22 , 2])
+#sss = np.array([17 ,30 , 0 ,61 ,68  ,4  ,8 ,19 ,96 ,96 ,14  ,7 ,41 ,61 , 7 ,68 ,50 ,29 ,85 ,30 ,51 ,56 ,28, 41, 19,47 ,39 ,79 ,22 , 2, 65, 70 ,67 ,28 ,77])
+#sss = np.arrray([17 ,30  ,0 ,61 ,68  ,4  ,8 ,19 ,96 ,96 ,14  ,7 ,41 ,61 , 7 ,68 ,50 ,29 ,85 ,30 ,51 ,56 ,28 ,41 ,19,47 ,39 ,79, 22  ,2, 65, 70, 67 ,28, 77, 87, 92 , 3, 23 ,45])
+#sss = np..array([17 ,30  ,0 ,61 ,68  ,4  ,8 ,19 ,96 ,96, 14 , 7, 41, 61,  7 ,68, 50, 29 ,85 ,30 ,51 ,56 ,28 ,41 ,19,47 ,39, 79 ,22,  2 ,65 ,70 ,67 ,28 ,77 ,87 ,92 , 3 ,23, 45, 42, 74, 18 , 2 ,59])
 for x in range(10):
-  king = np.random.randint(0,100,size = 25)
+  king = sss
   fear = np.random.randint(0,777)
   lear = np.append([fear],king)
   lear = np.append(lear,[fear])
@@ -212,11 +219,11 @@ for x in range(10):
     input[0] = lear[y]
     memoryactivationv1()
     if y == (len(lear) - 3):
-    print(output)
+      print(output)
     if y == (len(lear) - 2):
-    print(output)
+      print(output)
     if y == (len(lear) - 1):
-    print(output)
+      print(output)
   
   
 with open("memories.p","wb") as ea:
