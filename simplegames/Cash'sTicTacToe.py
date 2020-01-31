@@ -1,9 +1,8 @@
 import numpy as np
 import time as tm
-print ("welcome to tic tac toe")
 
 
-P1 = " "
+P1 = " "     #defignes all the varibles i'll use.
 P2 = " "
 P3 = " "
 P4 = " "
@@ -12,56 +11,59 @@ P6 = " "
 P7 = " "
 P8 = " "
 P9 = " "
-Turn = 0
-GameOver = 0
+Turn = "X"
 Winner = " "
 tst = 0
 TurnCount = 4
 WinConditMet = 0
-Move = int(input())
 
-def CheckWin():
+print ("welcome to tic tac toe")   #some intro stuff
+print ("X what's your first move?")
+Move = int(input())          # sets "move" to an interger the player imputs
+
+def CheckWin():        #checks if the game has been won
   global Winner
   global WinConditMet
-  if P1 != " ":
-    Winner = P1
-    if P1 == P2 == P3:
-      WinConditMet = 1
-    if P1 == P5 == P9:
+  if P1 != " ":    #checks if P1 or the first slot is not blank
+    Winner = P1    #changes the var winner from blank to whatever is in P1
+    if P1 == P2 == P3:   #checks if the top row is all the same
+      WinConditMet = 1   # changes WinConditMet to 1 or true
+    if P1 == P5 == P9:   #rinse and repeat
       WinConditMet = 1
     if P1 == P4 == P7:
       WinConditMet = 1
+
   elif P5 != " ":
-    Winner = P1
+    Winner = P5
     if P4 == P5 == P6:
       WinConditMet = 1
     if P2 == P5 == P8:
       WinConditMet = 1
     if P3 == P5 == P7:
       WinConditMet = 1
+
   elif P9 != " ":
-    Winner = P1
+    Winner = P9
     if P7 == P8 == P9:
       WinConditMet = 1
     if P3 == P6 == P9:
       WinConditMet = 1
 
-def HasWon():
-  if TurnCount >3:
-    CheckWin()
+def HasWon():               #checks if someone has won yet
+  if TurnCount >3:          #checks if greater than 4 turns have been made
+    CheckWin()              #runs "CheckWin"
     global WinConditMet
     global Winner
-    if WinConditMet == 1:
-      GameOver = 1
-      if Winner == "X":
+    if WinConditMet == 1:  #checks if WinConditMet is true
+      if Winner == "X":    #checks if x won
         print ("X Wins!")
-        exit()
-      elif Winner == "O":
+        exit()             #kills the game
+      elif Winner == "O":  #checks if o won
         print ("O wins!")
-        exit()
+        exit()             #kills the game
 
-def MakeMove():
-  global P1
+def MakeMove():            #is called to make a move
+  global P1                #these are all set as globals so that when the yare referanced later they are not local because python just makes a new varible rather than scanning for global ones by default. this tells it scan for the global value
   global P2
   global P3
   global P4
@@ -75,27 +77,25 @@ def MakeMove():
   global tst 
   global TurnCount
 
-  def DispBoard():
+  def DispBoard():          #prints out the board
     global TurnCount
-    print (P1, "¦", P2,"¦", P3)
+    print (P1, "¦", P2,"¦", P3) #prints the varible P1 followed by ¦ and so on.
     print ("---------")
     print (P4, "¦", P5,"¦", P6)
     print ("---------")  
     print (P7, "¦", P8,"¦", P9)
-    #print (TurnCount)
-    HasWon()
-    if GameOver != 1:
-      print ("Whats your next move?")
-      TurnCount += 1
+    HasWon()                #calls the "HasWon" function made earlier.
+    print ("What's your next move?")
+    TurnCount += 1          #increases the turncount by 1 at the end of each move for the HasWon function
 
-  if Move is 1:
-    if P1 == " ":
-      if Turn == 0:
-        P1 = "X"
-        Turn = 1
+  if Move is 1:             #Checks if the players latest input is "1"
+    if P1 == " ":           #checks slot 1 is blank
+      if Turn == "X":         #checks who's turn it is
+        P1 = "X"            #sets the varble "P1"
+        Turn = "O"            #changes the turn
       else:
         P1 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P1 != " ":
@@ -105,16 +105,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
         
   elif Move is 2:
     if P2 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P2 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P2 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P2 != " ":
@@ -124,16 +125,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
         
   elif Move is 3:
     if P3 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P3 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P3 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P3 != " ":
@@ -143,16 +145,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
         
   elif Move is 4:
     if P4 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P4 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P4 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P4 != " ":
@@ -162,16 +165,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
       
   elif Move is 5:
     if P5 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P5 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P5 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P5 != " ":
@@ -181,16 +185,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
 
   elif Move is 6:
     if P6 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P6 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P6 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P6 != " ":
@@ -200,16 +205,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
       
   elif Move is 7:
     if P7 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P7 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P7 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P7 != " ":
@@ -219,16 +225,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
       
   elif Move is 8:
     if P8 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P8 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P8 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P8 != " ":
@@ -238,16 +245,17 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
       
   elif Move is 9:
     if P9 == " ":
-      if Turn == 0:
+      if Turn == "X":
         P9 = "X"
-        Turn = 1
+        Turn = "O"
       else:
         P9 = "O"
-        Turn = 0
+        Turn = "X"
       DispBoard()
       tst = 1
     elif P9 != " ":
@@ -257,13 +265,14 @@ def MakeMove():
         tst = 1
       else:
         Move = int(input())
+        tst = 0
         return MakeMove()
       
   else:
-    print ("false")
+    print ("That's an invalid move. Please use number 1 ~ 9.")
+    Move = int(input())
 
 
 for x in range(0, 13):
-  if GameOver == 0:
-    MakeMove()
-    x += 1
+  MakeMove()
+x += 1                
