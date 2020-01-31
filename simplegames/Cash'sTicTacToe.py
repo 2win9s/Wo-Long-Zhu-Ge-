@@ -22,14 +22,28 @@ Move = int(input())
 
 def CheckWin():
   global Winner
+  global WinConditMet
   if P1 != " ":
     Winner = P1
-    global WinConditMet
     if P1 == P2 == P3:
       WinConditMet = 1
     if P1 == P5 == P9:
       WinConditMet = 1
     if P1 == P4 == P7:
+      WinConditMet = 1
+  elif P5 != " ":
+    Winner = P1
+    if P4 == P5 == P6:
+      WinConditMet = 1
+    if P2 == P5 == P8:
+      WinConditMet = 1
+    if P3 == P5 == P7:
+      WinConditMet = 1
+  elif P9 != " ":
+    Winner = P1
+    if P7 == P8 == P9:
+      WinConditMet = 1
+    if P3 == P6 == P9:
       WinConditMet = 1
 
 def HasWon():
