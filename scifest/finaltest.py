@@ -12,7 +12,7 @@ def reLU(x):
   return reLUout  
 input = np.zeros(shape = 1)
 output = np.zeros(shape = 1)
-def memoriesv1():
+def fullnet():
   global input
   global output
   global neurons
@@ -21,7 +21,7 @@ def memoriesv1():
   fullnet = np.copy(input)
   fullnet = np.append(fullnet,neurons)
   fullnet = np.append(fullnet,output)
-  memories = np.zeros(shape = [len(fullnet),(len(fullnet ) - 1)])
+  
 
 def memoriesbiasv1():
     global fullnet
@@ -201,7 +201,7 @@ with open("memories.p","rb") as eb:
     memories = pickle.load(eb)
 with open("memoriesbias.p","rb") as fb:
     memoriesbias = pickle.load(fb)
-startmemory()
+fullnet()
 sss = np.array([17 , 30 , 0 ,61, 68 , 4 , 8 ,19, 96, 96, 14,  7, 41, 61,  7]) 
 #sss = np.array([17, 30 , 0 ,61 ,68,  4,  8, 19, 96, 96, 14,  7, 41, 61,  7, 68, 50, 29, 85, 30])
 #sss = np.array([17 ,30 , 0, 61, 68 , 4 , 8 ,19 ,96 ,96, 14,  7 ,41, 61,  7, 68, 50, 29, 85, 30, 51, 56, 28, 41, 19]) 
@@ -226,9 +226,5 @@ for x in range(10):
     if y == (len(lear) - 1):
       print(output)
   
-  
-with open("memories.p","wb") as ea:
-    pickle.dump(memories,ea)
-with open("memoriesbias.p","wb") as fa:
-    pickle.dump(memoriesbias,fa)
+
   
