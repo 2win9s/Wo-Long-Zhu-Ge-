@@ -1,3 +1,4 @@
 model1 initial 300 cycles gives 28 correct estimates out of 100 (11 different possible point values for leaving cert math not taking + 25 for H6 and above into consideration it  random guessing should only get 9 out of 100 correct)
 model2 initial 300 cycles gives 21 correct estimates out of 100 (in this model we take the H6 and above +25 points into account so 13 point values, that puts random guessing at around 7.7 estimates out of 100)
 (the training data and test data are always kept separate, the model never learns from the training data, so it is a true estimation)
+model2 next 1000 cycles 17 correct estimates out of 100 (but also 17 almost correct(almost correct meaning off by 1 grade)
