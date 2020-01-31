@@ -80,25 +80,76 @@ def hardcode():
    global neurons
    global fullnetbackup
    global placeholder
+   global placeholderz
    placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)])
    placeholderz = np.zeros(shape = len(fullnet))
    rise = derivativereLU(fullnet[-1])
+   placeholderz[-1] = (2 * (fullnet[-1] - target[0])) * rise + placeholderz[-1]
+   finbar = (2 * (fullnet[-1] - target[0])) * rise
    for x in range(memories[-1].size):
+    larry = finbar * memories[-1][x]
     placeholder[-1][x] = (2 * (fullnet[-1] - target[0])) * rise * fullnet[x] + placeholder[-1][x]
     dice = (2 * (fullnet[-1] - target[0])) * rise * memories[-1][x]
     rice = derivativereLU(fullnet[x])
+    placeholderz[x] = larry * rice + placeholderz[x]
     for y in range(memories[x].size):
+      fishcat = larry * memories[x][y]
       placeholder[x][y] = dice * rice * fullnetbackup[y + 1] + placeholder[x][y]
       cise = dice * rice * memories[x][y]
       pice = derivativereLU(fullnetbackup[y + 1])
+      placeholderz[y + 1]  = pice * fishcat + placeholderz[y + 1]
       for z in range(y):
+        coyne = fishcat * memories[y][z]
         placeholder[y][z] = cise * pice * fullnetbackup[z] + placeholder[y][z]
-        qice = cise * pice * memories[x][y]
+        qice = cise * pice * memories[y][z]
         eice = derivativereLU(fullnetbackup[z])
-        backpropagationpt1(z,qice,eice)
+        placeholderz[z] = eice * coyne + placeholderz[z]
+        backpropagationpt1(z,qice,eice,coyne)
     for sun in range(x):
+      firebar = finbar * memories[x][sun]
       placeholder[x][sun] = dice * rice * fullnet[sun] + placeholder[x][sun]
       nice = dice * rice * memories[x][sun]
       sice = derivativereLU(fullnet[sun])
-      backpropagationpt1(sun,nice,sice)
-      backpropagationpt2(sun,nice,sice)
+      placeholderz[sun] = firebar * sice + placeholderz[sun]
+      backpropagationpt1(sun,nice,sice,firebar)
+      backpropagationpt2(sun,nice,sice,firebar)
+      
+     
+     
+def backpropagationpt1(a,b,c,d):
+   global fullnet
+   global input
+   global output
+   global memories
+   global neuronsbackup
+   global memoriesbias
+   global neurons
+   global fullnetbackup
+   global placeholder  
+   global placeholderz
+   for k in range(a):
+    mr = d * memories[a][k]
+    placeholder[a][k] = b * c * fullnetbackup[a] + placeholder[a][k]
+    peace = b * c * memories[a][k]
+    harm = derivativereLU(fullnetbackup[a])
+    placeholderz[k] = mr * harm + placeholderz[k]
+    backpropagationpt1(k,peace,harm,mr)
+def backpropagationpt2(a,b,c,d):
+   global fullnet
+   global input
+   global output
+   global memories
+   global neuronsbackup
+   global memoriesbias
+   global neurons
+   global fullnetbackup
+   global placeholder
+   global placeholderz
+   for sun in range(a):
+      wo_long_zhu_ge = d * memories[a][sun] 
+      placeholder[a][sun] = b * c * fullnet[sun] + placeholder[a][sun]
+      nice = b * c * memories[a][sun]
+      sice = derivativereLU(fullnet[sun])
+      placeholderz[sun] = wo_long_zhu_ge * sice + placeholderz[sun]
+      backpropagationpt1(sun,nice,sice,wo_long_zhu_ge)
+      backpropagationpt2(sun,nice,sice,wo_long_zhu_ge)
