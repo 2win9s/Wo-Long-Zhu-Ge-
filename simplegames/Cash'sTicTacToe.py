@@ -16,8 +16,35 @@ Turn = 0
 GameOver = 0
 Winner = " "
 tst = 0
-
+TurnCount = 4
+WinConditMet = 0
 Move = int(input())
+
+def CheckWin():
+  global Winner
+  if P1 != " ":
+    Winner = P1
+    global WinConditMet
+    if P1 == P2 == P3:
+      WinConditMet = 1
+    if P1 == P5 == P9:
+      WinConditMet = 1
+    if P1 == P4 == P7:
+      WinConditMet = 1
+
+def HasWon():
+  if TurnCount >3:
+    CheckWin()
+    global WinConditMet
+    global Winner
+    if WinConditMet == 1:
+      GameOver = 1
+      if Winner == "X":
+        print ("X Wins!")
+        exit()
+      elif Winner == "O":
+        print ("O wins!")
+        exit()
 
 def MakeMove():
   global P1
@@ -32,13 +59,20 @@ def MakeMove():
   global Turn
   global Move
   global tst 
+  global TurnCount
+
   def DispBoard():
+    global TurnCount
     print (P1, "¦", P2,"¦", P3)
     print ("---------")
     print (P4, "¦", P5,"¦", P6)
     print ("---------")  
     print (P7, "¦", P8,"¦", P9)
-    print ("Whats your next move?")
+    #print (TurnCount)
+    HasWon()
+    if GameOver != 1:
+      print ("Whats your next move?")
+      TurnCount += 1
 
   if Move is 1:
     if P1 == " ":
@@ -219,6 +253,3 @@ for x in range(0, 13):
   if GameOver == 0:
     MakeMove()
     x += 1
-  else:
-    print (Winner, "wins!")
-    break
