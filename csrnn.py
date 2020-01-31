@@ -34,93 +34,46 @@ def inputwrite(x,y):
 
 
 #creates a list of 1d numpy arrays which acts as the hiddenlayers note:this function requires a list called nmofhl
-def hiddenlayersgen():#if you want 3 hiddenlayers then nmofhl should contain three elements
-  global nmofhl       #each element should be the number of neurons you want in that layer
-  global hiddenlayers #note:hiddenlayers[x] gets the particular layer and hiddenlayers[x][y] gets the particular neuron
-  hiddenlayers = []  
-  for x in range(len(nmofhl)):
-      hiddenlayers.append(np.zeros(shape = nmofhl[x]))
+def neuronsgen(x):
+  neurons = np.zeros(shape = x)
           
       
-  
 #creates a 1d numpy array of length x called output
 def outputgen(x):
   global output
   output = np.zeros(shape = x)
   
   
-def memories():
-  global memories
+def memoriesv1():
   global input
-  global hiddenlayers
   global output
-  memories = []
-  for x in range(len(hiddenlayers)+2):
-    memories.append([])
-    if x == 0:
-      for z in range(len(hiddenlayers)):
-        memories[0].append(np.zeros(shape = [hiddenlayers[z].size,len(input)]))
-    elif x <= (len(hiddenlayers)):
-      memories[x].append(np.zeros(shape = [len(input),hiddenlayers[x - 1].size]))
-      for c in range(x - 1):
-        memories[x].append(np.zeros(shape = [hiddenlayers[c].size,hiddenlayers[x - 1].size]))
-      for d in range(x,len(hiddenlayers)):
-        memories[x].append(np.zeros(shape = [hiddenlayers[d].size,hiddenlayers[x - 1].size]))
-    else:
-        for k in range(len(hiddenlayers)):
-            memories[x].append(np.zeros(shape = [hiddenlayers[k].size,len(output)]))
+  global neurons
+  global fullnet
+  global memories
+  fullnet = np.copy(input)
+  fullnet = np.append(fullnet,neurons)
+  fullnet = np.append(fullnet,output)
+  memories = np.zeros(shape = [len(fullnet),(len(fullnet ) - 1)])
+  
 
 #creates a list of 1d numpy arrays which acts as the bias
-def memoriesbias():
+def memoriesbiasv1():
+    global fullnet
     global memoriesbias
-    global memories
-    memoriesbias = memories.copy()
+    memoriesbias = np.copy(fullnet)
 
 def startmemory():
   global memories
-  for x in range(memories.size):
+  for x in range(len(memories)):
     for y in range(memories[x].size):
-      for z in range(memories[x][y].size):
-        for a in range(memories[x][y][z].size):
-          #rrr = np.random.randn()
-          #rrr = rrr * ((2/memories[x][y].size)) ** 0.5)
-          # or (choose one method)
-          #rrr = np.random.random_sample()
-          #if rrr < 0.5:
-          #rrr = rrr - 1
-          memories[x][y][z,a] = rrr
+     rrr = np.random.randn()
+     rrr = rrr * ((2/memories[x].size) ** 0.5)          
+     memories[x,y] = rrr 
+     
+
 
  #firing neurons/ forward pass--------------------------------------------------------------------------   
-    
-def memories():
-  global memories
-  global input
-  global hiddenlayers
-  global output
-  memories = []
-  for x in range(len(hiddenlayers)+2):
-    memories.append([])
-    if x == 0:
-      for z in range(len(hiddenlayers)):
-        memories[0].append(np.zeros(shape = [hiddenlayers[z].size,len(input)]))
-    elif x <= (len(hiddenlayers)):
-      memories[x].append(np.zeros(shape = [len(input),hiddenlayers[x - 1].size]))
-      for c in range(x - 1):
-        memories[x].append(np.zeros(shape = [hiddenlayers[c].size,hiddenlayers[x - 1].size]))
-      for d in range(x,len(hiddenlayers)):
-        memories[x].append(np.zeros(shape = [hiddenlayers[d].size,hiddenlayers[x - 1].size]))
-    else:
-        for k in range(len(hiddenlayers)):
-            memories[x].append(np.zeros(shape = [hiddenlayers[k].size,len(output)]))
-#creates a list of 1d numpy arrays which acts as the bias
-def memoriesbias():
-    global memoriesbias
-    global memories
-    memoriesbias = memories.copy()
 
- #firing neurons/ forward pass--------------------------------------------------------------------------   
-inputbackup = []
-hiddenlayersbackup = []
 count = 0
 
 
@@ -129,76 +82,34 @@ def input_record():
   global inputbackup
   global count
   if count!= 0 :
-    inputbackup.append(np.copy(input))
+    inputbackup = np.copy(input)
 
-def memoryactivation():
-    global count
+def memoryactivationv1():
+    global fullnet
     global input
-    global hiddenlayers
     global output
     global memories
+    global count
+    global neuronsbackup
     global memoriesbias
-    global hiddenlayersbackup
-    count = count + 1
-    if count != 0:
-      hiddenlayersbackup.append(hiddenlayers.copy())
-    for x in range(len(memories)):
-        if x == 0:
-            for y in range(len(hiddenlayers)):
-                placeholder = np.copy(memories[x][y])
-                placeholderz = np.zeros(shape = len(input))
-                for z in range(len(memories[x][y])):
-                    for a in range(len(memories[x][y][z])):
-                        placeholder[z,a] = hiddenlayers[y][z] * memories[x][y][z,a] + memoriesbias[x][y][z,a]
-                for p in range(len(placeholderz)):
-                    for pl in range(len(placeholder)):
-                        placeholderz[p] = placeholderz[p] + placeholder[pl,p]
-                for bi in range(len(input)):
-                    input[bi] = input[bi] + reLU(placeholderz[bi])
-        elif x != (len(memories) - 1) and x != 0:
-            for z in range(len(hiddenlayers)):
-                placeholder = np.copy(memories[x][z])
-                placeholderz = np.zeros(shape = (hiddenlayers[x - 1]).size)
-                if z == 0:
-                    for k in range(len(memories[x][z])):
-                        for kk in range(memories[x][z][k].size):
-                            placeholder[k,kk] = input[k] * memories[x][z][k,kk] + memoriesbias[x][z][k,kk]
-                    for p in range(len(placeholderz)):
-                        for pl in range(len(placeholder)):
-                            placeholderz[p] = placeholderz[p] + placeholder[pl,p]
-                    for bi in range(hiddenlayers[x - 1].size):
-                        hiddenlayers[x - 1][bi] = hiddenlayers[x - 1][bi] + reLU(placeholderz[bi])
-                tt = x - 1
-                for dee in range(tt):
-                    for r in range(len(memories[x][z])):
-                        for rr in range(len(memories[x][z][k])):
-                            placeholder[r,rr] = hiddenlayers[dee][r] * memories[x][z][r,rr] + memoriesbias[x][z][r,rr]
-                    for p in range(len(placeholderz)):
-                        for pl in range(len(placeholder)):
-                            placeholderz[p] = placeholderz[p] + placeholder[pl,p]
-                    for bi in range(hiddenlayers[x - 1].size):
-                        hiddenlayers[x - 1][bi] = hiddenlayers[x - 1][bi] + reLU(placeholderz[bi])
-                for thing in range(x,len(hiddenlayers)):
-                    for r in range(len(memories[x][z])):
-                        for rr in range(len(memories[x][z][k])):
-                            placeholder[r,rr] = hiddenlayers[thing][r] * memories[x][z][r,rr] + memoriesbias[x][z][r,rr]
-                    for p in range(len(placeholderz)):
-                        for pl in range(len(placeholder)):
-                            placeholderz[p] = placeholderz[p] + placeholder[pl,p]
-                    for bi in range(hiddenlayers[x - 1].size):
-                        hiddenlayers[x - 1][bi] = hiddenlayers[x - 1][bi] + reLU(placeholderz[bi])
-        elif x == (len(memories) - 1):
-            for y in range(len(hiddenlayers)):
-                placeholder = np.copy(memories[x][y])
-                placeholderz = np.zeros(shape = len(output))
-                for z in range(len(memories[x][y])):
-                    for a in range(len(memories[x][y][z])):
-                        placeholder[z,a] = hiddenlayers[y][z] * memories[x][y][z,a] + memoriesbias[x][y][z,a]
-            for p in range(len(placeholderz)):
-                for pl in range(len(placeholder)):
-                    placeholderz[p] = placeholderz[p] + placeholder[pl,p]
-            for bi in range(output.size):
-                output[bi] = output[bi] + reLU(placeholderz[bi])
+    global neurons
+    global fullnetbackup
+    if count!= 0:
+      fullnetbackup = np.copy(fullnet)
+    for y in range(1,len(fullnet)):
+          input[0] = input[0] + (fullnet[y] * memories[0][y - 1])
+    fullnet[0] = reLU(input[0] + memoriesbias[0])
+    for x in range(len(neurons)):
+      y = x + 1
+      for z in range(y+1,len(fullnet)):
+        fullnet[y] = fullnet[y] + (fullnet[z] * memories[x][z - 1])
+      for a in range(0,y):
+        fullnet[y] = fullnet[y] + (fullnet[a] * memories[x][a])
+      fullnet[y] = reLU(fullnet[y] + memoriesbias[y])
+    for x in range(0,len(fullnet) - 1):
+       fullnet[-1] = fullnet[-1] + (fullnet[x] * memories[-1][x])
+    fullnet[-1] = reLU(fullnet[-1] + memoriesbias[-1])
+    output[0] = fullnet[-1]
         
       
 def targetgen(x):
@@ -236,54 +147,90 @@ def derivativereLU(x):                                     #x is the value of th
   return dereLU
     
 #not finished yet
-def backpropagationpt1(realfish):
-  global output
+def backpropagationpt1():
+  global fullnet
   global input
-  global target
-  global hiddenlayers
-  global inputbackup
-  global hiddenlayersbackup
+  global output
   global memories
+  global count
+  global neuronsbackup
   global memoriesbias
-  placeholder = []
-  placeholderz = []
-  for x in range(len(memories)):
-    placeholder.append([])
-    for y in range(len(memories[x])):
-      placeholder[x].append(0)
-      for z in range(memories[x][y].size):
-        placeholder[x][y] = np.zeros(shape = [len(memories[x][y]),(memoriesbias[x][y][z].size)])
-  for x in range(len(memoriesbias)):
-    placeholderz.append([])
-    for y in range(memoriesbias[x].size):
-      placeholderz[x].append(0)
-      for z in range(memoriesbias[x][y].size):
-        placeholderz[x][y] = np.zeros(shape = [len(memories[x][y]),(memoriesbias[x][y][z].size)])
-  for shadow in range(len(placeholder)):
-    shadows = (shadow + 1) * -1
-    for kkr in range(placeholder[shadows].size):
-      klaus = (shadow + 1) * -1
-      for fire in range(placeholder[shadows][klaus].shape[0]):
-        for rmb in range(placeholder[shadows][klaus][fire].size):
-          if shadows == -1:
-            if memories[shadows][klaus][fire,rmb] != None:
-              placeholder[shadows][klaus][fire,rmb] = hiddenlayers[klaus][fire] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholder[shadows][klaus][fire,rmb]
-              placeholderz[shadows][klaus][fire,rmb] = (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output)) + placeholderz[shadows][klaus][fire,rmb]
-              crap=(memories[shadows][klaus][fire,rmb] * (output[rmb] * (1 - output[rmb])) * (2 * (output[rmb] - target[rmb])) * (1 / len(output))
-              for input in range(len(input)):
-                for damn in range(memories[klaus][0][input].size)
-                  d = derivativereLU(hiddenlayers[klaus][damn]) 
-                  placeholder[klaus][0][input,damn] = input[input] * d * crap + placeholder[klaus][0][input,damn]
-                  lir = memories[klaus][0][input,damn] * d * crap
-              for beef in range(klaus - 1):
-                turkey =   beef + 1
-                for ham in range(len(hiddenlayers[turkey])):
-                  for lamb in range(len(hiddenlayers[klaus])):
-                    bruh = derivativereLU(hiddenlayers[klaus][lamb])                
-                    placeholder[klaus][turkey][ham][lamb] = hiddenlayers[turkey][ham] * crap * bruh + placeholder[klaus][turkey][ham][lamb]
-                    fate = memories[klaus][turkey][ham][lamb] * crap * bruh
-                                      
-                                      
+  global neurons
+  global fullnetbackup
+  global target
+  placeholder = np.zeros(shape = [len(memories),memories[0].size])
+  placeholderz = np.zeros(shape = [len(fullnet)])
+  fire = np.zeros(shape = placeholderz.size - 1)
+  fish = np.copy(fire)
+  flame = np.copy(fish)
+  for x in range(memories[-1].size):
+    kek = (x+1) * -1
+    ni = derivativereLU(fullnet[-1])
+    placeholder[-1][kek] = (2 * (fullnet[-1] - target[0])) * ni * fullnet[kek - 1] + placeholder[-1][kek]
+    fire[kek] = (2 * (fullnet[-1] - target[0])) * ni * memories * [-1][kek]
+    for tr in range(0,(kek * -1)):
+      fish = (tr + 1) * -1
+      dev = derivativereLU(fullnet[kek - 1])
+      placeholder[kek - 1][fish] = dev * fire[kek] * fullnetbackup[fish] + placeholder[kek - 1][fish]
+      key = fire[kek] * dev * memories[kek - 1][fish]
+      for dee in range((fish * - 1), len(fullnet)): 
+        bob = (dee + 1) * -1
+        def = derivaticereLU(fullnetbackup[fish])
+        placeholder[fish][bob] = def * key * fullnetbackup[bob] + placeholder[fish][bob]
+        nextkey = key * def * memories[fish][bob]
+        backpropagationpt2(bob,nextkey)
+    for re in range(((kek - 1) * -1),len(fullnnet):
+        keam = (re + 1 ) * -1
+        dud = derivativereLU(fullnet[kek - 1])
+        placeholder[kek - 1][keam] = dud * fire[kek] * fullnet[keam] + placeholder[kek - 1][keam]
+        lock = dud * fire[kek] * memories[kek - 1][keam]
+        for dan in range(0,(keam * -1)):
+          pap = (dan + 1) * -1
+          flee = derivativereLU(fullnet[keam])
+          placeholder[keam][dan] = flee * lock * fullnetbackup[pap] + placeholder[keam][dan]
+          nextlock = flee * lock * memories[keam][dan]
+          backpropagationpt2(dan,nextlock)
+        backpropagationpt3(keam,lock)
+  ri = derivativereLU(fullnet[-1])
+  placeholderz[-1] = (2 * (fullnet[-1] - target[0])) * ri +  placeholderz[-1]
+  con = (2 * (fullnet[-1] - target[0])) * ri
+  for r in range(memories[-1].size):
+    bleach = (x+1) * -1
+    fish[bleach] = con * memories[-1][bleach]
+    dereLU(fullnet[bleach 1]
+    placeholderz[bleach] = 
+    
+def backpropagationpt2(bob,key):
+  global fullnet
+  global input
+  global output
+  global memories
+  global count
+  global neuronsbackup
+  global memoriesbias
+  global neurons
+  global fullnetbackup
+  global target
+  for dee in range((bob * - 1), len(fullnet)):
+    fll = (dee + 1) * -1
+    def = derivaticereLU(fullnetbackup[bob])
+    placeholder[bob][fll] = def * key * fullnetbackup[fll] + placeholder[bob][fll]
+    newkey = key * def * memories[bob][fll]
+    backpropagationpt2(fll,newkey)
+
+def backpropagationpt3(p,l)
+    for re in range(((p) * -1),len(fullnnet):
+        keam = (re + 1 ) * -1
+        dud = derivativereLU(fullnet[p])
+        placeholder[p][keam] = dud * l * fullnet[keam] + placeholder[p][keam]
+        lock = dud * l * memories[p][keam]
+        for dan in range(0,(keam * -1)):
+          pap = (dan + 1) * -1
+          flee = derivativereLU(fullnet[keam])
+          placeholder[keam][dan] = flee * lock * fullnetbackup[pap] + placeholder[keam][dan]
+          nextlock = flee * lock * memories[keam][dan]
+          backpropagationpt2(dan,nextlock)  
+        backpropagationpt3(keam,lock)                            
                                       
                                       
                                       
