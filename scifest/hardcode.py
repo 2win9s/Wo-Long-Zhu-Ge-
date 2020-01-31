@@ -46,16 +46,19 @@ def memoryactivationv1():
     global fullnetbackup
     fullnetbackup = np.copy(fullnet)
     for y in range(1,len(fullnet)):
+      if memories[0][y - 1] !=  None:
           input[0] = input[0] + (fullnet[y] * memories[0][y - 1])
     fullnet[0] = reLU(input[0] + memoriesbias[0])
     for x in range(len(neurons)):
       y = x + 1
       for z in range(y+1,len(fullnet)):
-        fullnet[y] = fullnet[y] + (fullnet[z] * memories[x][z - 1])
+        if memories[x][z - 1] != None:
+          fullnet[y] = fullnet[y] + (fullnet[z] * memories[x][z - 1])
       for a in range(0,y):
         fullnet[y] = fullnet[y] + (fullnet[a] * memories[x][a])
       fullnet[y] = reLU(fullnet[y] + memoriesbias[y])
     for x in range(0,len(fullnet) - 1):
+      if memories[-1][x] != None:
        fullnet[-1] = fullnet[-1] + (fullnet[x] * memories[-1][x])
     fullnet[-1] = reLU(fullnet[-1] + memoriesbias[-1])
     output[0] = fullnet[-1]
@@ -86,32 +89,36 @@ def hardcode():
    placeholderz[-1] = (2 * (fullnet[-1] - target[0])) * rise + placeholderz[-1]
    finbar = (2 * (fullnet[-1] - target[0])) * rise
    for x in range(memories[-1].size):
-    larry = finbar * memories[-1][x]
-    placeholder[-1][x] = (2 * (fullnet[-1] - target[0])) * rise * fullnet[x] + placeholder[-1][x]
-    dice = (2 * (fullnet[-1] - target[0])) * rise * memories[-1][x]
-    rice = derivativereLU(fullnet[x])
-    placeholderz[x] = larry * rice + placeholderz[x]
-    for y in range(memories[x].size):
-      fishcat = larry * memories[x][y]
-      placeholder[x][y] = dice * rice * fullnetbackup[y + 1] + placeholder[x][y]
-      cise = dice * rice * memories[x][y]
-      pice = derivativereLU(fullnetbackup[y + 1])
-      placeholderz[y + 1]  = pice * fishcat + placeholderz[y + 1]
-      for z in range(y):
-        coyne = fishcat * memories[y][z]
-        placeholder[y][z] = cise * pice * fullnetbackup[z] + placeholder[y][z]
-        qice = cise * pice * memories[y][z]
-        eice = derivativereLU(fullnetbackup[z])
-        placeholderz[z] = eice * coyne + placeholderz[z]
-        backpropagationpt1(z,qice,eice,coyne)
+    if memories[-1][x] != None:
+      larry = finbar * memories[-1][x]
+      placeholder[-1][x] = (2 * (fullnet[-1] - target[0])) * rise * fullnet[x] + placeholder[-1][x]
+      dice = (2 * (fullnet[-1] - target[0])) * rise * memories[-1][x]
+      rice = derivativereLU(fullnet[x])
+      placeholderz[x] = larry * rice + placeholderz[x]
+      for y in range(memories[x].size):
+        if memories[x][y] != None:
+          fishcat = larry * memories[x][y]
+          placeholder[x][y] = dice * rice * fullnetbackup[y + 1] + placeholder[x][y]
+          cise = dice * rice * memories[x][y]
+          pice = derivativereLU(fullnetbackup[y + 1])
+          placeholderz[y + 1]  = pice * fishcat + placeholderz[y + 1]
+          for z in range(y):
+            if memories[y][z] != None:
+              coyne = fishcat * memories[y][z]
+              placeholder[y][z] = cise * pice * fullnetbackup[z] + placeholder[y][z]
+              qice = cise * pice * memories[y][z]
+              eice = derivativereLU(fullnetbackup[z])
+              placeholderz[z] = eice * coyne + placeholderz[z]
+              backpropagationpt1(z,qice,eice,coyne)
     for sun in range(x):
-      firebar = finbar * memories[x][sun]
-      placeholder[x][sun] = dice * rice * fullnet[sun] + placeholder[x][sun]
-      nice = dice * rice * memories[x][sun]
-      sice = derivativereLU(fullnet[sun])
-      placeholderz[sun] = firebar * sice + placeholderz[sun]
-      backpropagationpt1(sun,nice,sice,firebar)
-      backpropagationpt2(sun,nice,sice,firebar)
+      if memories[x][sun] != None:
+        firebar = finbar * memories[x][sun]
+        placeholder[x][sun] = dice * rice * fullnet[sun] + placeholder[x][sun]
+        nice = dice * rice * memories[x][sun]
+        sice = derivativereLU(fullnet[sun])
+        placeholderz[sun] = firebar * sice + placeholderz[sun]
+        backpropagationpt1(sun,nice,sice,firebar)
+        backpropagationpt2(sun,nice,sice,firebar)
       
      
      
@@ -127,12 +134,13 @@ def backpropagationpt1(a,b,c,d):
    global placeholder  
    global placeholderz
    for k in range(a):
-    mr = d * memories[a][k]
-    placeholder[a][k] = b * c * fullnetbackup[a] + placeholder[a][k]
-    peace = b * c * memories[a][k]
-    harm = derivativereLU(fullnetbackup[a])
-    placeholderz[k] = mr * harm + placeholderz[k]
-    backpropagationpt1(k,peace,harm,mr)
+    if memories[a][k] != None:
+      mr = d * memories[a][k]
+      placeholder[a][k] = b * c * fullnetbackup[a] + placeholder[a][k]
+      peace = b * c * memories[a][k]
+      harm = derivativereLU(fullnetbackup[a])
+      placeholderz[k] = mr * harm + placeholderz[k]
+      backpropagationpt1(k,peace,harm,mr)
 def backpropagationpt2(a,b,c,d):
    global fullnet
    global input
@@ -145,19 +153,21 @@ def backpropagationpt2(a,b,c,d):
    global placeholder
    global placeholderz
    for sun in range(a):
-      wo_long_zhu_ge = d * memories[a][sun] 
-      placeholder[a][sun] = b * c * fullnet[sun] + placeholder[a][sun]
-      nice = b * c * memories[a][sun]
-      sice = derivativereLU(fullnet[sun])
-      placeholderz[sun] = wo_long_zhu_ge * sice + placeholderz[sun]
-      backpropagationpt1(sun,nice,sice,wo_long_zhu_ge)
-      backpropagationpt2(sun,nice,sice,wo_long_zhu_ge)
+      if memories[a][sun] != None
+        wo_long_zhu_ge = d * memories[a][sun] 
+        placeholder[a][sun] = b * c * fullnet[sun] + placeholder[a][sun]
+        nice = b * c * memories[a][sun]
+        sice = derivativereLU(fullnet[sun])
+        placeholderz[sun] = wo_long_zhu_ge * sice + placeholderz[sun]
+        backpropagationpt1(sun,nice,sice,wo_long_zhu_ge)
+        backpropagationpt2(sun,nice,sice,wo_long_zhu_ge)
 def memorieslearn(l):
   global memories
   global placeholder
   for x in range(len(memories)):
     for y in range(memories[x].size):
-      memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
+      if memories[x,y] != None:
+        memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
 def memoriesfall(l):
   global memoriesbias
   global placeholderz
@@ -168,10 +178,11 @@ def forget(careful):
   global memories
   for x in range(len(memories)):
     for y in range(memories[x].size):
-      if memories[x,y] <= careful and memories[x,y] >= 0:
-        memories[x,y] = None
-      elif memories[x,y] >= (careful * -1) and memories[x,y] <= 0:
-        memories[x,y] = None
+      if memories[x,y] != None:
+        if memories[x,y] <= careful and memories[x,y] >= 0:
+          memories[x,y] = None
+        elif memories[x,y] >= (careful * -1) and memories[x,y] <= 0:
+          memories[x,y] = None
 def memorylink(please):
   global memories
   krusty = 0
