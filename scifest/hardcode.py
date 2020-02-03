@@ -153,7 +153,7 @@ def backpropagationpt2(a,b,c,d):
    global placeholder
    global placeholderz
    for sun in range(a):
-      if memories[a][sun] != None
+      if memories[a][sun] != None:
         wo_long_zhu_ge = d * memories[a][sun] 
         placeholder[a][sun] = b * c * fullnet[sun] + placeholder[a][sun]
         nice = b * c * memories[a][sun]
@@ -189,13 +189,12 @@ def memorylink(please):
   fish = 0
   while fish<= please:
     krusty = krusty + 1
-     fire = np.random.randint(0,len(memories))
-     crap = np.random.randint(0,memories[fire].size)
-     if memories[fire][crap] == None:
-        memories[fire][crap] = np.random.random_sample()
-     elif krusty >= 31415926535900:
-        break
-      
+    fire = np.random.randint(0,len(memories))
+    crap = np.random.randint(0,memories[fire].size)
+    if memories[fire][crap] == None:
+      memories[fire][crap] = np.random.random_sample()
+    elif krusty >= 31415926535900:
+      break
       
       
       
