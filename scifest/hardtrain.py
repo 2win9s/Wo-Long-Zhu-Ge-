@@ -60,7 +60,10 @@ def startmemory():
      rrr = np.random.randn()
      rrr = rrr * ((2/memories[x].size) ** 0.5)          
      memories[x,y] = rrr 
-     
+
+fullnetbackup = 1
+fullnet = [1, 2]
+
 def memoryactivationv1():
     global fullnet
     global input
@@ -80,9 +83,9 @@ def memoryactivationv1():
       for z in range(y+1,len(fullnet)):
         if memories[x][z - 1] != None:
           fullnet[y] = fullnet[y] + (fullnet[z] * memories[x][z - 1])
-      for a in range(0,y):
-        fullnet[y] = fullnet[y] + (fullnet[a] * memories[x][a])
-      fullnet[y] = reLU(fullnet[y] + memoriesbias[y])
+      #for a in range(0,y):
+        #fullnet[y] = fullnet[y] + (fullnet[a] * memories[x][a])
+      #fullnet[y] = reLU(fullnet[y] + memoriesbias[y])
     for x in range(0,len(fullnet) - 1):
       if memories[-1][x] != None:
        fullnet[-1] = fullnet[-1] + (fullnet[x] * memories[-1][x])
@@ -145,9 +148,7 @@ def hardcode():
         placeholderz[sun] = firebar * sice + placeholderz[sun]
         backpropagationpt1(sun,nice,sice,firebar)
         backpropagationpt2(sun,nice,sice,firebar)
-      
-     
-     
+
 def backpropagationpt1(a,b,c,d):
    global fullnet
    global input
@@ -187,6 +188,7 @@ def backpropagationpt2(a,b,c,d):
         placeholderz[sun] = wo_long_zhu_ge * sice + placeholderz[sun]
         backpropagationpt1(sun,nice,sice,wo_long_zhu_ge)
         backpropagationpt2(sun,nice,sice,wo_long_zhu_ge)
+
 def memorieslearn(l):
   global memories
   global placeholder
@@ -194,6 +196,7 @@ def memorieslearn(l):
     for y in range(memories[x].size):
       if memories[x,y] != None:
         memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
+
 def memoriesfall(l):
   global memoriesbias
   global placeholderz
