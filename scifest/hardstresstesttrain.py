@@ -218,9 +218,9 @@ def memorylink(please):
     fire = np.random.randint(0,len(memories))
     crap = np.random.randint(0,memories[fire].size)
     if memories[fire][crap] == None:
-        memories[fire][crap] = np.random.random_sample()
-     elif krusty >= 31415926535900:
-        break
+      memories[fire][crap] = np.random.random_sample()
+    elif krusty >= 31415926535900:
+      break
 memoriesv1()
 memoriesbiasv1()
 startmemory()
