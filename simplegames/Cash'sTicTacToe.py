@@ -33,7 +33,7 @@ def CheckWin():        #checks if the game has been won
     if P1 == P4 == P7:
       WinConditMet = 1
 
-  elif P5 != " ":
+  if P5 != " ":
     Winner = P5
     if P4 == P5 == P6:
       WinConditMet = 1
@@ -42,7 +42,7 @@ def CheckWin():        #checks if the game has been won
     if P3 == P5 == P7:
       WinConditMet = 1
 
-  elif P9 != " ":
+  if P9 != " ":
     Winner = P9
     if P7 == P8 == P9:
       WinConditMet = 1
