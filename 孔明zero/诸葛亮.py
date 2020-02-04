@@ -18,12 +18,9 @@ def reLU(x):
   
 def sigmoid(x):                                   #requires euler's number
   global sigout 
-  eulern = 2.7182818284590452353602874713526624977572470936999595749669676277240766303535  
+  eulern = 2.71828182845904523536028747135266249775724709369995957  
   var = 0.1                                     
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
-
-
-
 
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -56,31 +53,20 @@ def memoryactivation():
     global input
     global output
     global memories
-    global neuronsbackup
     global memoriesbias
-    global neurons
-    global fullnetbackup
-    fullnetbackup = np.copy(fullnet)
-    
-    for x in range(len(neurons)):
-      y = x + 1
-      for z in range(y+1,len(fullnet)):
+    for x in range(len(fullnet)):
+      for z in range(x + 1,len(fullnet)):
         if memories[x][z - 1] != None:
-          fullnet[y] = fullnet[y] + (fullnet[z] * memories[x][z - 1])
-      for a in range(0,y):
-        fullnet[y] = fullnet[y] + (fullnet[a] * memories[x][a])
-      fullnet[y] = reLU(fullnet[y] + memoriesbias[y])
-    for x in range(0,len(fullnet) - 1):
-      if memories[-1][x] != None:
-       fullnet[-1] = fullnet[-1] + (fullnet[x] * memories[-1][x])
-    fullnet[-1] = reLU(fullnet[-1] + memoriesbias[-1])
-    output[0] = fullnet[-1]
-
-
-
-
-
-
+          fullnet[x] = fullnet[x] + (fullnet[z] * memories[x][z - 1])
+      for a in range(0,x):
+        fullnet[x] = fullnet[x] + (fullnet[a] * memories[x][a])
+      if x < len(input):
+        fullnet[x] = fullnet[x] + input[x]
+      fullnet[x] = reLU(fullnet[x] + memoriesbias[x]
+    for fish in range(len(output)):
+      itsraw = (len(output) - fish) * -1
+      output[itsraw] = fullnet[itsraw]
+    
 #----------------------------------------------------------------------------------------------------------------
 
 def derivativereLU(x):                                     #x is the value of the input to the reLU function 
@@ -92,8 +78,6 @@ def derivativereLU(x):                                     #x is the value of th
     dereLU = a
   return dereLU     
 target = np.array([0])
-
-
     
 def hardcode():
    global fullnet
@@ -143,8 +127,6 @@ def hardcode():
         backpropagationpt1(sun,nice,sice,firebar)
         backpropagationpt2(sun,nice,sice,firebar)
       
-     
-     
 def backpropagationpt1(a,b,c,d):
    global fullnet
    global input
@@ -195,8 +177,6 @@ def memorieslearn(l):
         memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
     for x in range(len(memoriesbias)):
       memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
-
-
 
 def forget(careful):
   global memories
