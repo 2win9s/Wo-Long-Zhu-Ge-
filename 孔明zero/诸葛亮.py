@@ -6,7 +6,7 @@ input = np.zeros(shape = 1)
 output = np.zeros(shape = 1)
 target = np.copy(output) 
 
------------------------------------------------------------------------------------------------------------------------
+#-----------------------------------------------------------------------------------------------------------------------
 def reLU(x):
   global reLUout
   if x > 0:
@@ -25,7 +25,7 @@ def sigmoid(x):                                   #requires euler's number
 
 
 
---------------------------------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------------------------------
 
 def memories():
   global input
@@ -81,7 +81,7 @@ def memoryactivation():
 
 
 
-----------------------------------------------------------------------------------------------------------------
+#----------------------------------------------------------------------------------------------------------------
 
 def derivativereLU(x):                                     #x is the value of the input to the reLU function 
   global dereLU
@@ -177,7 +177,7 @@ def backpropagationpt2(a,b,c,d):
    global placeholder
    global placeholderz
    for sun in range(a):
-      if memories[a][sun] != None
+      if memories[a][sun] != None:
         wo_long_zhu_ge = d * memories[a][sun] 
         placeholder[a][sun] = b * c * fullnet[sun] + placeholder[a][sun]
         nice = b * c * memories[a][sun]
@@ -214,9 +214,9 @@ def memorylink(please):
   fish = 0
   while fish<= please:
     krusty = krusty + 1
-     fire = np.random.randint(0,len(memories))
-     crap = np.random.randint(0,memories[fire].size)
-     if memories[fire][crap] == None:
-        memories[fire][crap] = np.random.random_sample()
-     elif krusty >= 31415926535900:
-        break
+    fire = np.random.randint(0,len(memories))
+    crap = np.random.randint(0,memories[fire].size)
+  if memories[fire][crap] == None:
+      memories[fire][crap] = np.random.random_sample()
+  elif krusty >= 31415926535900:
+      pass #break i think this should be exit or pass. if not then just have nothing here. 
