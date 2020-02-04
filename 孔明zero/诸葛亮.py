@@ -18,9 +18,10 @@ def reLU(x):
   
 def sigmoid(x):                                   #requires euler's number
   global sigout 
-  eulern = 2.71828182845904523536028747135266249775724709369995957  
-  var = 0.1                                     
+  eulern = 2.71828182845904523536028747135266249775
+  var = 0.0072973525693                                     
   sigout = 1 / ( 1 + ( eulern ** ( var * x * (-1) ) ) )
+  return sigout
 
 #--------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -62,11 +63,13 @@ def memoryactivation():
         fullnet[x] = fullnet[x] + (fullnet[a] * memories[x][a])
       if x < len(input):
         fullnet[x] = fullnet[x] + input[x]
-      fullnet[x] = reLU(fullnet[x] + memoriesbias[x]
+      fullnet[x] = sigmoid(fullnet[x] + memoriesbias[x])
     for fish in range(len(output)):
       itsraw = (len(output) - fish) * -1
       output[itsraw] = fullnet[itsraw]
     
+def netbackup(x,y):
+  
 #----------------------------------------------------------------------------------------------------------------
 
 def derivativereLU(x):                                     #x is the value of the input to the reLU function 
@@ -78,21 +81,45 @@ def derivativereLU(x):                                     #x is the value of th
     dereLU = a
   return dereLU     
 target = np.array([0])
-    
+
+def desig(x):
+  global desig
+  xx = x
+  desig = sigmoid(xx) * ( 1 - sigmoid(xx))
+  return desig
+
+NOT FINISHED 
+
+def RISE():
+  global fullnet
+  global input
+  global output
+  global memories
+  global memoriesbias
+  global fullnetbackup
+  global placeholder
+  global placeholderz
+  placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)])
+  placeholderz = np.zeros(shape = len(fullnet))
+  
+  
+  
+  
+  
 def hardcode():
    global fullnet
    global input
    global output
    global memories
-   global neuronsbackup
    global memoriesbias
-   global neurons
    global fullnetbackup
    global placeholder
    global placeholderz
+   global targetbackup
+   global outputbackup
    placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)])
    placeholderz = np.zeros(shape = len(fullnet))
-   rise = derivativereLU(fullnet[-1])
+   rise = desig(fullnet[-1])
    placeholderz[-1] = (2 * (fullnet[-1] - target[0])) * rise + placeholderz[-1]
    finbar = (2 * (fullnet[-1] - target[0])) * rise
    for x in range(memories[-1].size):
