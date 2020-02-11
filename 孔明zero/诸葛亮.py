@@ -63,7 +63,7 @@ def memoryactivation():
         fullnet[x] = fullnet[x] + (fullnet[a] * memories[x][a])
       if x < len(input):
         fullnet[x] = fullnet[x] + input[x]
-      fullnet[x] = sigmoid(fullnet[x] + memoriesbias[x])
+      fullnet[x] = reLU(fullnet[x] + memoriesbias[x])
     for fish in range(len(output)):
       itsraw = (len(output) - fish) * -1
       output[itsraw] = fullnet[itsraw]
@@ -88,22 +88,10 @@ def desig(x):
   desig = sigmoid(xx) * ( 1 - sigmoid(xx))
   return desig
 
-NOT FINISHED 
-
-def RISE():
-  global fullnet
-  global input
-  global output
-  global memories
-  global memoriesbias
-  global fullnetbackup
-  global placeholder
-  global placeholderz
-  placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)])
-  placeholderz = np.zeros(shape = len(fullnet))
+NOT FINISHED
   
-  
-  
+def ba_zhen_tu(notlost):
+   
   
   
 def hardcode():
@@ -119,7 +107,7 @@ def hardcode():
    global outputbackup
    placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)])
    placeholderz = np.zeros(shape = len(fullnet))
-   rise = desig(fullnet[-1])
+   rise = derivativereLU((fullnet[-1])
    placeholderz[-1] = (2 * (fullnet[-1] - target[0])) * rise + placeholderz[-1]
    finbar = (2 * (fullnet[-1] - target[0])) * rise
    for x in range(memories[-1].size):
