@@ -1,7 +1,12 @@
 This is empty at the moment
-set up backpropagation through time
+check up backpropagation through time
 test the network on long sequence echoing
 
+improve efficiency by using new weights system
+3d numpy array, x - neuron, y connections from which neurons, z - the value of the weight
+
+also think of neuron 'growth', have input and output as list of indices of which neurons to read as input/ output
+, new neurons that grow are tagged at the end, new input and output neurons are tagged at the end.
 
 
 how to do the diet function right
