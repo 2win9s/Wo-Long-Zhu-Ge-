@@ -94,124 +94,66 @@ def ba_zhen_tu(notlost):
    
   
   
-def hardcode():
-   global fullnet
-   global input
-   global output
-   global memories
-   global memoriesbias
-   global fullnetbackup
-   global placeholder
-   global placeholderz
-   global targetbackup
-   global outputbackup
-   placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)])
-   placeholderz = np.zeros(shape = len(fullnet))
-   rise = derivativereLU((fullnet[-1])
-   placeholderz[-1] = (2 * (fullnet[-1] - target[0])) * rise + placeholderz[-1]
-   finbar = (2 * (fullnet[-1] - target[0])) * rise
-   for x in range(memories[-1].size):
-    if memories[-1][x] != None:
-      larry = finbar * memories[-1][x]
-      placeholder[-1][x] = (2 * (fullnet[-1] - target[0])) * rise * fullnet[x] + placeholder[-1][x]
-      dice = (2 * (fullnet[-1] - target[0])) * rise * memories[-1][x]
-      rice = derivativereLU(fullnet[x])
-      placeholderz[x] = larry * rice + placeholderz[x]
-      for y in range(memories[x].size):
-        if memories[x][y] != None:
-          fishcat = larry * memories[x][y]
-          placeholder[x][y] = dice * rice * fullnetbackup[y + 1] + placeholder[x][y]
-          cise = dice * rice * memories[x][y]
-          pice = derivativereLU(fullnetbackup[y + 1])
-          placeholderz[y + 1]  = pice * fishcat + placeholderz[y + 1]
-          for z in range(y):
-            if memories[y][z] != None:
-              coyne = fishcat * memories[y][z]
-              placeholder[y][z] = cise * pice * fullnetbackup[z] + placeholder[y][z]
-              qice = cise * pice * memories[y][z]
-              eice = derivativereLU(fullnetbackup[z])
-              placeholderz[z] = eice * coyne + placeholderz[z]
-              backpropagationpt1(z,qice,eice,coyne)
-    for sun in range(x):
-      if memories[x][sun] != None:
-        firebar = finbar * memories[x][sun]
-        placeholder[x][sun] = dice * rice * fullnet[sun] + placeholder[x][sun]
-        nice = dice * rice * memories[x][sun]
-        sice = derivativereLU(fullnet[sun])
-        placeholderz[sun] = firebar * sice + placeholderz[sun]
-        backpropagationpt1(sun,nice,sice,firebar)
-        backpropagationpt2(sun,nice,sice,firebar)
-      
-def backpropagationpt1(a,b,c,d):
-   global fullnet
-   global input
-   global output
-   global memories
-   global neuronsbackup
-   global memoriesbias
-   global neurons
-   global fullnetbackup
-   global placeholder  
-   global placeholderz
-   for k in range(a):
-    if memories[a][k] != None:
-      mr = d * memories[a][k]
-      placeholder[a][k] = b * c * fullnetbackup[a] + placeholder[a][k]
-      peace = b * c * memories[a][k]
-      harm = derivativereLU(fullnetbackup[a])
-      placeholderz[k] = mr * harm + placeholderz[k]
-      backpropagationpt1(k,peace,harm,mr)
+def ba_zhen_tu(zhuge,targets,target_index): 
+   global memories 
+   global fullnet 
+   placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)]) 
+   placeholderz = np.zeros(shape = len(fullnet)) 
+   for thing in range(len(target_index)): 
+	    sima = target_index[thing] 
+	    target = targets[sima] 
+	    hardcode(zhuge,target,sima) 
 
-def backpropagationpt2(a,b,c,d):
-   global fullnet
-   global input
-   global output
-   global memories
-   global neuronsbackup
-   global memoriesbias
-   global neurons
-   global fullnetbackup
-   global placeholder
-   global placeholderz
-   for sun in range(a):
-      if memories[a][sun] != None:
-        wo_long_zhu_ge = d * memories[a][sun] 
-        placeholder[a][sun] = b * c * fullnet[sun] + placeholder[a][sun]
-        nice = b * c * memories[a][sun]
-        sice = derivativereLU(fullnet[sun])
-        placeholderz[sun] = wo_long_zhu_ge * sice + placeholderz[sun]
-        backpropagationpt1(sun,nice,sice,wo_long_zhu_ge)
-        backpropagationpt2(sun,nice,sice,wo_long_zhu_ge)
+def hardcode(fullnet,target,sima): 
+   global output 
+   global placeholder 
+   global placeholderz 
+   global memories 
+   faker = sima - 1
+   for ditto in range (len(output)): 
+    same = (ditto + 1 ) * -1 
+    rise = derivativereLU((fullnet[sima][same]) 
+    placeholderz[same] = (2 * (fullnet[sima][same] - target[same])) * rise + placeholderz[same] 
+    finbar = (2 * (fullnet[sima][same] - target[same])) * rise 
+    for x in range(memories[same].size): 
+        if ((len(fullnet[sima]) - x ) * -1 ) <= same: 
+            if memories[same][x] != None: 
+		            larry = finbar * memories[same][x] 
+		            placeholder[same][x] = finbar * fullnet[sima][x] + placeholder[same][x] 
+                dice = finbar * memories[same][x] 
+                rice = derivativereLU(fullnet[sima][x]) 
+                placeholderz[same] = larry * rice + placeholderz[same] 
+                mario(x,dice,rice,larry,fullnet,sima) 
+	      elif memories[same][x] != None:
+		      next_three_subjects = x + 1
+		      larry = finbar * memories[same][x]
+		      placeholder[same][x] = finbar * fullnet[faker][x + 1] + placeholder[same][x] 
+          dice = finbar * memories[same][x] 
+          rice = derivativereLU(fullnet[faker][x + 1]) 
+          placeholderz[same] = larry * rice + placeholderz[same] 
+          mario(next_three_subjects,dice,rice,larry,fullnet,faker) 
 
-def memorieslearn(l):
-  global memories
-  global placeholder
-  for x in range(len(memories)):
-    for y in range(memories[x].size):
-      if memories[x,y] != None:
-        memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
-    for x in range(len(memoriesbias)):
-      memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
-
-def forget(careful):
-  global memories
-  for x in range(len(memories)):
-    for y in range(memories[x].size):
-      if memories[x,y] != None:
-        if memories[x,y] <= careful and memories[x,y] >= 0:
-          memories[x,y] = None
-        elif memories[x,y] >= (careful * -1) and memories[x,y] <= 0:
-          memories[x,y] = None
-
-def memorylink(please):
-  global memories
-  krusty = 0
-  fish = 0
-  while fish<= please:
-    krusty = krusty + 1
-    fire = np.random.randint(0,len(memories))
-    crap = np.random.randint(0,memories[fire].size)
-  if memories[fire][crap] == None:
-      memories[fire][crap] = np.random.random_sample()
-  elif krusty >= 31415926535900:
-      pass #break i think this should be exit or pass. if not then just have nothing here. 
+def mario(bbr,b,c,d,fin,al): 
+   global memories 
+   global placeholder       
+   global placeholderz 
+   kill = 1
+   for k in range(len(memories[bbr])): 
+    	 if memories[bbr][k] != None: 
+		      if k >= bbr:
+			      if al != 0:
+			        ryuji = al - 1
+			        taiga = k + 1
+			        kill = 0
+      		elif bbr > k:
+			        ryuji = al
+			        taiga = k
+			        kill = 0
+		      if kill != 1:
+      			mr = d * memories[bbr][k] 
+      			placeholder[bbr][k] = b * c * fin[ryuji][taiga] + placeholder[bbr][k] 
+      			peace = b * c * memories[bbr][k] 
+      			harm = derivativereLU(fin[ryuji][taiga]) 
+      			placeholderz[bbr] = mr * harm + placeholderz[bbr] 
+      			mario(taiga,peace,harm,mr,fin,ryuji) 
+  
