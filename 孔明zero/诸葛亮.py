@@ -89,12 +89,10 @@ def desig(x):
   return desig
 
 NOT FINISHED
-  
-def ba_zhen_tu(notlost):
    
   
   
-def ba_zhen_tu(zhuge,targets,target_index): 
+def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    global memories 
    global fullnet 
    placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)]) 
