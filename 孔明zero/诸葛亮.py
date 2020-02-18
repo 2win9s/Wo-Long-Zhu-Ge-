@@ -68,7 +68,6 @@ def memoryactivation():
       itsraw = (len(output) - fish) * -1
       output[itsraw] = fullnet[itsraw]
     
-def netbackup(x,y):
   
 #----------------------------------------------------------------------------------------------------------------
 
@@ -88,7 +87,6 @@ def desig(x):
   desig = sigmoid(xx) * ( 1 - sigmoid(xx))
   return desig
 
-NOT FINISHED
    
   
   
@@ -110,26 +108,27 @@ def hardcode(fullnet,target,sima):
    faker = sima - 1
    for ditto in range (len(output)): 
     same = (ditto + 1 ) * -1 
-    rise = derivativereLU((fullnet[sima][same]) 
+    rise = derivativereLU(fullnet[sima][same]) 
     placeholderz[same] = (2 * (fullnet[sima][same] - target[same])) * rise + placeholderz[same] 
     finbar = (2 * (fullnet[sima][same] - target[same])) * rise 
     for x in range(memories[same].size): 
         if ((len(fullnet[sima]) - x ) * -1 ) <= same: 
             if memories[same][x] != None: 
-		            larry = finbar * memories[same][x] 
-		            placeholder[same][x] = finbar * fullnet[sima][x] + placeholder[same][x] 
+                larry = finbar * memories[same][x] 
+                placeholder[same][x] = finbar * fullnet[sima][x] + placeholder[same][x] 
                 dice = finbar * memories[same][x] 
                 rice = derivativereLU(fullnet[sima][x]) 
                 placeholderz[same] = larry * rice + placeholderz[same] 
                 mario(x,dice,rice,larry,fullnet,sima) 
-	      elif memories[same][x] != None:
-		      next_three_subjects = x + 1
-		      larry = finbar * memories[same][x]
-		      placeholder[same][x] = finbar * fullnet[faker][x + 1] + placeholder[same][x] 
-          dice = finbar * memories[same][x] 
-          rice = derivativereLU(fullnet[faker][x + 1]) 
-          placeholderz[same] = larry * rice + placeholderz[same] 
-          mario(next_three_subjects,dice,rice,larry,fullnet,faker) 
+        elif memories[same][x] != None:
+            if memories[same][x] != None:
+                next_three_subjects = x + 1
+                larry = finbar * memories[same][x]
+                placeholder[same][x] = finbar * fullnet[faker][x + 1] + placeholder[same][x] 
+                dice = finbar * memories[same][x] 
+                rice = derivativereLU(fullnet[faker][x + 1]) 
+                placeholderz[same] = larry * rice + placeholderz[same] 
+                mario(next_three_subjects,dice,rice,larry,fullnet,faker) 
 
 def mario(bbr,b,c,d,fin,al): 
    global memories 
@@ -137,21 +136,23 @@ def mario(bbr,b,c,d,fin,al):
    global placeholderz 
    kill = 1
    for k in range(len(memories[bbr])): 
-    	 if memories[bbr][k] != None: 
-		      if k >= bbr:
-			      if al != 0:
-			        ryuji = al - 1
-			        taiga = k + 1
-			        kill = 0
-      		elif bbr > k:
-			        ryuji = al
-			        taiga = k
-			        kill = 0
-		      if kill != 1:
-      			mr = d * memories[bbr][k] 
-      			placeholder[bbr][k] = b * c * fin[ryuji][taiga] + placeholder[bbr][k] 
-      			peace = b * c * memories[bbr][k] 
-      			harm = derivativereLU(fin[ryuji][taiga]) 
-      			placeholderz[bbr] = mr * harm + placeholderz[bbr] 
-      			mario(taiga,peace,harm,mr,fin,ryuji) 
+        if memories[bbr][k] != None: 
+            if k >= bbr:
+                if al != 0:
+                    ryuji = al - 1
+                    taiga = k + 1
+                    kill = 0
+                else:
+                    kill = 1
+            elif bbr > k:
+                ryuji = al
+                taiga = k
+                kill = 0
+        if kill != 1:
+            mr = d * memories[bbr][k] 
+            placeholder[bbr][k] = b * c * fin[ryuji][taiga] + placeholder[bbr][k] 
+            peace = b * c * memories[bbr][k] 
+            harm = derivativereLU(fin[ryuji][taiga]) 
+            placeholderz[bbr] = mr * harm + placeholderz[bbr] 
+            mario(taiga,peace,harm,mr,fin,ryuji)
   
