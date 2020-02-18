@@ -98,9 +98,9 @@ def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)],dtype = np.longdouble) 
    placeholderz = np.zeros(shape = len(fullnet),dtype = np.longdouble) 
    for thing in range(len(target_index)): 
-	    sima = target_index[thing] 
-	    target = targets[sima] 
-	    hardcode(zhuge,target,sima) 
+       sima = target_index[thing]
+       target = targets[sima]
+       hardcode(zhuge,target,sima) 
 
 def hardcode(fullnet,target,sima): 
    global output 
@@ -114,7 +114,7 @@ def hardcode(fullnet,target,sima):
     placeholderz[same] = (2 * (fullnet[sima,same] - target[same])) * rise + placeholderz[same] 
     finbar = (2 * (fullnet[sima,same] - target[same])) * rise 
     for x in range(memories[same].size): 
-        if ((len(fullnet[sima]) - x ) * -1 ) <= same + 1: 
+        if ((len(fullnet[sima]) - x )) > ditto + 1:
             if memories[same,x] != None: 
                 larry = finbar * memories[same,x] 
                 placeholder[same,x] = finbar * fullnet[sima,x] + placeholder[same,x] 
@@ -122,7 +122,8 @@ def hardcode(fullnet,target,sima):
                 rice = derivativereLU(fullnet[sima,x]) 
                 placeholderz[same] = larry * rice + placeholderz[same] 
                 mario(x,dice,rice,larry,fullnet,sima) 
-        elif memories[same,x] != None:
+        else:
+            if memories[same,x] != None: 
                 next_three_subjects = x + 1
                 larry = finbar * memories[same,x]
                 placeholder[same,x] = finbar * fullnet[faker,x + 1] + placeholder[same,x] 
@@ -159,12 +160,15 @@ def memorieslearn(l):
     global placeholder
     global memoriesbias
     global placeholderz
-    #for x in range(len(memories)):
-        #for y in range(memories[x].size):
-            #if memories[x,y] != None:
-                #memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
+    for x in range(len(memories)):
+        for y in range(memories[x].size):
+            if memories[x,y] != None:
+                memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
     for x in range(len(memoriesbias)):
         memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
     placeholder = None
     placeholderz = None
+memories()
+startmemory()
+memoriesbias()
   
