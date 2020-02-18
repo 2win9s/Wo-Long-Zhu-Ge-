@@ -31,9 +31,9 @@ def memories():
   global neurons
   global fullnet
   global memories
-  fullnet = np.copy(input)
-  fullnet = np.append(fullnet,neurons)
-  fullnet = np.append(fullnet,output)
+  global damnitt
+  damnitt = len(input) + len(neurons) + len(output)
+  fullnet = np.zeros(shape = damnitt)
   memories = np.zeros(shape = [len(fullnet),(len(fullnet ) - 1)])
 
 def memoriesbias():
@@ -93,8 +93,10 @@ def desig(x):
 def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    global memories 
    global fullnet 
-   placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)]) 
-   placeholderz = np.zeros(shape = len(fullnet)) 
+   global placeholder
+   global placeholderz
+   placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)],dtype = np.longdouble) 
+   placeholderz = np.zeros(shape = len(fullnet),dtype = np.longdouble) 
    for thing in range(len(target_index)): 
 	    sima = target_index[thing] 
 	    target = targets[sima] 
@@ -108,35 +110,32 @@ def hardcode(fullnet,target,sima):
    faker = sima - 1
    for ditto in range (len(output)): 
     same = (ditto + 1 ) * -1 
-    rise = derivativereLU(fullnet[sima][same]) 
-    placeholderz[same] = (2 * (fullnet[sima][same] - target[same])) * rise + placeholderz[same] 
-    finbar = (2 * (fullnet[sima][same] - target[same])) * rise 
+    rise = derivativereLU(fullnet[sima,same]) 
+    placeholderz[same] = (2 * (fullnet[sima,same] - target[same])) * rise + placeholderz[same] 
+    finbar = (2 * (fullnet[sima,same] - target[same])) * rise 
     for x in range(memories[same].size): 
-        if ((len(fullnet[sima]) - x ) * -1 ) <= same: 
-            if memories[same][x] != None: 
-                larry = finbar * memories[same][x] 
-                placeholder[same][x] = finbar * fullnet[sima][x] + placeholder[same][x] 
-                dice = finbar * memories[same][x] 
-                rice = derivativereLU(fullnet[sima][x]) 
+        if ((len(fullnet[sima]) - x ) * -1 ) <= same + 1: 
+            if memories[same,x] != None: 
+                larry = finbar * memories[same,x] 
+                placeholder[same,x] = finbar * fullnet[sima,x] + placeholder[same,x] 
+                dice = finbar * memories[same,x] 
+                rice = derivativereLU(fullnet[sima,x]) 
                 placeholderz[same] = larry * rice + placeholderz[same] 
                 mario(x,dice,rice,larry,fullnet,sima) 
-        elif memories[same][x] != None:
-            if memories[same][x] != None:
+        elif memories[same,x] != None:
                 next_three_subjects = x + 1
-                larry = finbar * memories[same][x]
-                placeholder[same][x] = finbar * fullnet[faker][x + 1] + placeholder[same][x] 
-                dice = finbar * memories[same][x] 
-                rice = derivativereLU(fullnet[faker][x + 1]) 
+                larry = finbar * memories[same,x]
+                placeholder[same,x] = finbar * fullnet[faker,x + 1] + placeholder[same,x] 
+                dice = finbar * memories[same,x] 
+                rice = derivativereLU(fullnet[faker,x + 1]) 
                 placeholderz[same] = larry * rice + placeholderz[same] 
                 mario(next_three_subjects,dice,rice,larry,fullnet,faker) 
-
 def mario(bbr,b,c,d,fin,al): 
    global memories 
    global placeholder       
    global placeholderz 
-   kill = 1
    for k in range(len(memories[bbr])): 
-        if memories[bbr][k] != None: 
+        if memories[bbr,k] != None: 
             if k >= bbr:
                 if al != 0:
                     ryuji = al - 1
@@ -149,10 +148,23 @@ def mario(bbr,b,c,d,fin,al):
                 taiga = k
                 kill = 0
         if kill != 1:
-            mr = d * memories[bbr][k] 
-            placeholder[bbr][k] = b * c * fin[ryuji][taiga] + placeholder[bbr][k] 
-            peace = b * c * memories[bbr][k] 
-            harm = derivativereLU(fin[ryuji][taiga]) 
+            mr = d * memories[bbr,k] 
+            placeholder[bbr,k] = b * c * fin[ryuji,taiga] + placeholder[bbr,k] 
+            peace = b * c * memories[bbr,k] 
+            harm = derivativereLU(fin[ryuji,taiga]) 
             placeholderz[bbr] = mr * harm + placeholderz[bbr] 
             mario(taiga,peace,harm,mr,fin,ryuji)
+def memorieslearn(l):
+    global memories
+    global placeholder
+    global memoriesbias
+    global placeholderz
+    #for x in range(len(memories)):
+        #for y in range(memories[x].size):
+            #if memories[x,y] != None:
+                #memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
+    for x in range(len(memoriesbias)):
+        memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
+    placeholder = None
+    placeholderz = None
   
