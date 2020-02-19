@@ -57,10 +57,11 @@ def memoryactivation():
     global memoriesbias
     for x in range(len(fullnet)):
       for z in range(x + 1,len(fullnet)):
-        if memories[x][z - 1] != None:
-          fullnet[x] = fullnet[x] + (fullnet[z] * memories[x][z - 1])
+        if memories[x,z - 1] != None:
+          fullnet[x] = fullnet[x] + (fullnet[z] * memories[x,z - 1])
       for a in range(0,x):
-        fullnet[x] = fullnet[x] + (fullnet[a] * memories[x][a])
+        if memories[x,a] != None:
+          fullnet[x] = fullnet[x] + (fullnet[a] * memories[x,a])
       if x < len(input):
         fullnet[x] = fullnet[x] + input[x]
       fullnet[x] = reLU(fullnet[x] + memoriesbias[x])
@@ -137,7 +138,7 @@ def mario(bbr,b,c,d,fin,al):
    global placeholderz 
    for k in range(len(memories[bbr])): 
         if memories[bbr,k] != None: 
-            if k >= bbr:
+           if k >= bbr:
                 if al != 0:
                     ryuji = al - 1
                     taiga = k + 1
@@ -148,14 +149,14 @@ def mario(bbr,b,c,d,fin,al):
                 ryuji = al
                 taiga = k
                 kill = 0
-        if kill != 1:
+          if kill != 1:
             mr = d * memories[bbr,k] 
             placeholder[bbr,k] = b * c * fin[ryuji,taiga] + placeholder[bbr,k] 
             peace = b * c * memories[bbr,k] 
             harm = derivativereLU(fin[ryuji,taiga]) 
             placeholderz[bbr] = mr * harm + placeholderz[bbr] 
             mario(taiga,peace,harm,mr,fin,ryuji)
-def memorieslearn(l):
+def memorieslearn(l,ra):
     global memories
     global placeholder
     global memoriesbias
@@ -164,10 +165,70 @@ def memorieslearn(l):
         for y in range(memories[x].size):
             if memories[x,y] != None:
                 memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
+            if memories[x,y] > ra:
+              memories[x,y] = ra
     for x in range(len(memoriesbias)):
         memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
     placeholder = None
     placeholderz = None
+
+    
+    
+def forget(n):
+  global memories
+  z = n * -1
+  for x in range(len(memories)):
+    for y in range(len(memories[x])):
+      if memories[x,y] < n:
+        if memories[x,y] >= 0:
+          memories[x,y] = None
+      elif memories[x,y] < 0:
+        if memories[x,y] > z:
+          memories[x,y] = None
+          
+def reconnect(r):               #r is growth rate, number between 0 and 1
+  global memories
+  feet = np.array([[]])
+  cube = 0
+  for x in range(len(memories)):
+    for y in range(len(memories[x])):
+      if memories[x,y] == None:
+        if cube == 0:
+          s = x
+          e = y
+          fish = np.array([[s,e]])
+        else:
+          kir = np.array([[x,y]])
+          fish = np.append(fish,kir,axis = 0)
+  zita = len(fish)
+  recet = proportional(zita,r)
+  c_plus = memories[0].size
+  for x in range(recet):
+    ssr = 1
+    a = len(fish) -1
+    recett = np.random.randint(0,a)
+    recette = fish[recett][0]
+    recettes = fish[recett][1]
+    for sss in range(c_plus):
+      if memories[recette][sss] != None:
+        ssr = ssr + 1
+    cp = np.random.randn()
+    rrr = cp * ((2/ssr) ** 0.5)           
+    memories[recette][recettes] = rrr
+    fish = np.delete(fish,recett,axis = 0)
+    
+ 
+def proportional(cd,xs):
+  global memories
+  r = memories.size
+  re = r - cd
+  if re != 0:
+    rec = re / r
+    rece = cd ** ((1 - re) ** (1 - xs))
+  else:
+    rece = 0
+  return rece
+    
 memories()
 startmemory()
 memoriesbias()
