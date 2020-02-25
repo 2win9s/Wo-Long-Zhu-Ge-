@@ -1,3 +1,5 @@
+FIX THE CODE FOR BACKPROP SOMETHING WENT WRONG
+
 test the network on long sequence echoing
 
 improve efficiency by using new weights system
