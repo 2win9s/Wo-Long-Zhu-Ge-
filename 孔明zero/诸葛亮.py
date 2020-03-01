@@ -100,7 +100,7 @@ def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    placeholderz = np.zeros(shape = len(fullnet),dtype = np.longdouble) 
    for thing in range(len(target_index)): 
        sima = target_index[thing]
-       target = targets[sima]
+       target = targets[thing]
        hardcode(zhuge,target,sima) 
 
 def hardcode(fullnet,target,sima): 
@@ -145,17 +145,17 @@ def mario(bbr,b,c,d,fin,al):
                     kill = 0
                 else:
                     kill = 1
-            elif bbr > k:
+           elif bbr > k:
                 ryuji = al
                 taiga = k
                 kill = 0
-          if kill != 1:
-            mr = d * memories[bbr,k] 
-            placeholder[bbr,k] = b * c * fin[ryuji,taiga] + placeholder[bbr,k] 
-            peace = b * c * memories[bbr,k] 
-            harm = derivativereLU(fin[ryuji,taiga]) 
-            placeholderz[bbr] = mr * harm + placeholderz[bbr] 
-            mario(taiga,peace,harm,mr,fin,ryuji)
+           if kill != 1:
+             mr = d * memories[bbr,k] 
+             placeholder[bbr,k] = b * c * fin[ryuji,taiga] + placeholder[bbr,k] 
+             peace = b * c * memories[bbr,k] 
+             harm = derivativereLU(fin[ryuji,taiga]) 
+             placeholderz[bbr] = mr * harm + placeholderz[bbr] 
+             mario(taiga,peace,harm,mr,fin,ryuji)
 def memorieslearn(l,ra):
     global memories
     global placeholder
