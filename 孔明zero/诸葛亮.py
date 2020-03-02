@@ -1,3 +1,17 @@
+# this is just the test/ starting point
+
+
+
+
+
+
+
+
+
+
+
+
+
 import numpy as np
 # back propagation requires a copy of the previous neurons
 #set number of neurons here
