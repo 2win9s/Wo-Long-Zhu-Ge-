@@ -4,7 +4,6 @@ import numpy as np
 neurons = np.zeros(shape = 1)
 input = np.zeros(shape = 1)
 output = np.zeros(shape = 1)
-target = np.copy(output) 
 
 #-----------------------------------------------------------------------------------------------------------------------
 def reLU(x):
@@ -80,7 +79,7 @@ def derivativereLU(x):                                     #x is the value of th
     a = 0.01                                    
     dereLU = a
   return dereLU     
-target = np.array([0])
+
 
 def desig(x):
   global desig
