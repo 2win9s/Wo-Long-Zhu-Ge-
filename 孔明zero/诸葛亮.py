@@ -182,7 +182,10 @@ def forget(xs):
         p = p + 1
   ds = memories.size
   ke = p / ds
-  n = ((1 - ke) ** (1 - xs)) * ( 1/ ( p ** 0.5 ))
+  if p != 0:
+          n = ((1 - ke) ** (1 - xs)) * ( 1/ ( p ** 0.5 ))
+  else:
+          n = ((1 - ke) ** (1 - xs))
   z = n * -1
   for x in range(len(memories)):
     for y in range(len(memories[x])):
