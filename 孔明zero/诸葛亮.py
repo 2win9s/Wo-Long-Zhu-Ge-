@@ -182,9 +182,8 @@ def forget(xs):
       if memories[x,y] == None:
         p = p + 1
   ds = memories.size
-  rs = ds - p
-  ke = rs / ds
-  n = rs ** ((1 - ke) ** (1 - xs))
+  ke = p / ds
+  n = ((1 - ke) ** (1 - xs)) * ( 1/ ( p ** 0.5 ))
   z = n * -1
   for x in range(len(memories)):
     for y in range(len(memories[x])):
@@ -206,6 +205,7 @@ def reconnect(r):               #r is growth rate, number between 0 and 1
           s = x
           e = y
           fish = np.array([[s,e]])
+          cube = 1
         else:
           kir = np.array([[x,y]])
           fish = np.append(fish,kir,axis = 0)
