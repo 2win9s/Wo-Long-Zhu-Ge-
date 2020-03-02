@@ -12,7 +12,7 @@ def reLU(x):
   if x > 0:
     reLUout = x
   else:
-    a = 0.01                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
+    a = 0.001                                      #zero for normal reLU, small number for leaky reLU,keep it as a learned parameter for Para Relu(effective not efficient,evolution may a good way to implement if there are  other parameterss that would also evolve)
     reLUout = x*a  
   return reLUout  
   
@@ -174,8 +174,17 @@ def memorieslearn(l,ra):
 
     
     
-def forget(n):
+def forget(xs):
   global memories
+  p = 0
+  for x in range(len(memories)):
+    for y in range(len(memories[x])):
+      if memories[x,y] == None:
+        p = p + 1
+  ds = memories.size
+  rs = ds - p
+  ke = rs / ds
+  n = rs ** ((1 - ke) ** (1 - xs))
   z = n * -1
   for x in range(len(memories)):
     for y in range(len(memories[x])):
@@ -224,7 +233,7 @@ def proportional(cd,xs):
   re = r - cd
   if re != 0:
     rec = re / r
-    rece = cd ** ((1 - re) ** (1 - xs))
+    rece = cd ** ((1 - rec) ** (1 - xs))
   else:
     rece = 0
   rett = rece // 1
