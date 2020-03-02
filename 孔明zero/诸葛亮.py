@@ -217,17 +217,17 @@ def reconnect(r):               #r is growth rate, number between 0 and 1
   for x in range(recet):
     ssr = 1
     a = len(fish) -1
-    recett = np.random.randint(0,a)
-    recette = fish[recett][0]
-    recettes = fish[recett][1]
-    for sss in range(c_plus):
-      if memories[recette][sss] != None:
-        ssr = ssr + 1
-    cp = np.random.randn()
-    rrr = cp * ((2/ssr) ** 0.5)           
-    memories[recette][recettes] = rrr
-    fish = np.delete(fish,recett,axis = 0)
-    
+    if a > 0:
+        recett = np.random.randint(0,a)
+        recette = fish[recett][0]
+        recettes = fish[recett][1]
+        for sss in range(c_plus):
+            if memories[recette][sss] != None:
+                ssr = ssr + 1
+        cp = np.random.randn()
+        rrr = cp * ((2/ssr) ** 0.5)           
+        memories[recette][recettes] = rrr
+        fish = np.delete(fish,recett,axis = 0)
  
 def proportional(cd,xs):
   global memories
@@ -239,7 +239,8 @@ def proportional(cd,xs):
   else:
     rece = 0
   rett = rece // 1
-  return rett
+  recipe = int(rece)
+  return recipe
     
 memories()
 startmemory()
