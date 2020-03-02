@@ -188,7 +188,7 @@ def forget(n):
           
 def reconnect(r):               #r is growth rate, number between 0 and 1
   global memories
-  feet = np.array([[]])
+  fish = np.array([])
   cube = 0
   for x in range(len(memories)):
     for y in range(len(memories[x])):
@@ -227,7 +227,8 @@ def proportional(cd,xs):
     rece = cd ** ((1 - re) ** (1 - xs))
   else:
     rece = 0
-  return rece
+  rett = rece // 1
+  return rett
     
 memories()
 startmemory()
