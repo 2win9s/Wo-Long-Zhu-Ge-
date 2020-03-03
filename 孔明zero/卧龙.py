@@ -45,6 +45,7 @@ def startmemory(ak):
   y = len(input)
   xt = len(output)
   yz = y + z - 1
+  yz1 = y + z
   y1 = y - 1
   for x in range(y):
     if x > 0:
@@ -53,7 +54,7 @@ def startmemory(ak):
   percent = percent // 1
   percent = int(percent)
   neurin = np.array([])                      #index for next part of function
-  for x in range(len(neurons)):
+  for x in range(z):
     index = x + y
     neurin = np.append(neurin,[index])
   for x in range(len(percent)):
@@ -61,6 +62,11 @@ def startmemory(ak):
     memories[neurin[resa]] = np.array([[y1,0]])
     neurin = np.delete(neurin,resa)
   for x in range(xt):
+    if x == 0:
+      for ytt in range(z):
+        int = ytt + y
+        if ytt == 0:
+          memories[yz1] = np.array([int,0])
     
     
   #still need to create this and change the hell out of the code
