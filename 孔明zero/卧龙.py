@@ -57,16 +57,17 @@ def startmemory(ak):
   for x in range(z):
     index = x + y
     neurin = np.append(neurin,[index])
+  neurin2 = np.copy(neurin)
   for x in range(len(percent)):
     resa = np.random.randint(0,len(neurin) - 1)
     memories[neurin[resa]] = np.array([[y1,0]])
     neurin = np.delete(neurin,resa)
   for x in range(xt):
     if x == 0:
-      for ytt in range(z):
-        int = ytt + y
-        if ytt == 0:
-          memories[yz1] = np.array([int,0])
+       for xrt in range(percent):
+          int = np.random.randint(0,len(neurin2) - 1)
+          memories[yz1] = np.array([neurin2[int],0])
+          
     
     
   #still need to create this and change the hell out of the code
