@@ -36,9 +36,30 @@ def memoriesbias():
     global memoriesbias
     memoriesbias = np.copy(fullnet)
     
-def startmemory():
+def startmemory(ak):
   global memories
-  
+  global input
+  global neurons
+  global output
+  z = len(neurons)
+  y = len(input)
+  xt = len(output)
+  yz = y + z - 1
+  for x in range(y):
+    if x > 0:
+      memories[x] = np.array([[x - 1,0]])
+  percent = ak * z
+  percent = percent // 1
+  percent = int(percent)
+  neurin = np.array([])                      #index for next part of function
+  for x in range(len(neurons)):
+    index = x + y
+    neurin = np.append(neurin,[index])
+  for x in range(len(percent)):
+    resa = np.random.randint(0,len(neurin) - 1)
+    memories[neurin[resa]]
+    
+    
   #still need to create this and change the hell out of the code
   
 def memoryactivation():
