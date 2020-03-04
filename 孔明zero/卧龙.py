@@ -36,7 +36,7 @@ def memoriesbias():
     global memoriesbias
     memoriesbias = np.copy(fullnet)
     
-def startmemory(ak):
+def startmemory(ak): #ak starts the number of intital connections to and from input and output, set below 0.6 please
   global memories
   global input
   global neurons
@@ -47,21 +47,22 @@ def startmemory(ak):
   yz = y + z - 1
   yz1 = y + z
   y1 = y - 1
-  for x in range(y):
-    if x > 0:
-      memories[x] = np.array([[x - 1,0]])
+  #for x in range(y):
+    #if x > 0:
+      #memories[x] = np.array([[x - 1,0]])
   percent = ak * z
   percent = percent // 1
-  percent = int(percent)
-  neurin = np.array([])                      #index for next part of function
+  percent = int(percent//y)
+  neurin = np.array([])                      #indexes/indices? for next part of function
   for x in range(z):
     index = x + y
     neurin = np.append(neurin,[index])
   neurin2 = np.copy(neurin)
-  for x in range(len(percent)):
-    resa = np.random.randint(0,len(neurin) - 1)
-    memories[neurin[resa]] = np.array([[y1,0]])
-    neurin = np.delete(neurin,resa)
+  for inputnm in range(y):
+    for x in range(len(percent)):
+      resa = np.random.randint(0,len(neurin) - 1)
+      memories[neurin[resa]] = np.array([[inputnm,0]])
+      neurin = np.delete(neurin,resa)
   for x in range(xt):
     if x == 0:
        for xrt in range(percent):
