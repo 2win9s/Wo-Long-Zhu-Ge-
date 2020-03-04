@@ -3,7 +3,7 @@ import numpy as np
 import pickle
 import sys
 import threading
-threading.stack_size(2 ** 27) #(around 17 mb)
+threading.stack_size(2 ** 27 - 1) #(around 17 mb)
 sys.setrecursionlimit(7777777)#change along with stack size and stuff
 neurons = np.zeros(shape = None)# don't forget to initialise these
 input = np.zeros(shape = None)#rule of thumb have more inter neurons than input + output
