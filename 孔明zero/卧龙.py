@@ -3,10 +3,10 @@ import numpy as np
 import pickle
 import sys
 import threading
-threading.stack_size(2 ** 31) #(quarter of a gb)
+threading.stack_size(2 ** 28) #(one 32th of a gb)
 sys.setrecursionlimit(7777777)#change along with stack size and stuff
 neurons = np.zeros(shape = None)# don't forget to initialise these
-input = np.zeros(shape = None)
+input = np.zeros(shape = None)#rule of thumb have more inter neurons than input + output
 output = np.zeros(shape = None)
 #remember to keep backup of fullnet for tbptt
 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
@@ -36,7 +36,7 @@ def memoriesbias():
     global memoriesbias
     memoriesbias = np.copy(fullnet)
     
-def startmemory(ak): #ak starts the number of intital connections to and from input and output, set below 0.6 please
+def startmemory(ak): #ak starts the number of intital connections to and from input and output, set below 0.6 please, also take into account the number of input neurons and interneurons you have
   global memories
   global input
   global neurons
@@ -52,7 +52,15 @@ def startmemory(ak): #ak starts the number of intital connections to and from in
       #memories[x] = np.array([[x - 1,0]])
   percent = ak * z
   percent = percent // 1
-  percent = int(percent//y)
+  krr = percent
+  if percent > y:
+    percent = int(percent//y)
+  else:
+    percent = 1
+  if krr > xt:
+    krr = int(krr//xt)
+  else:
+    krr = 1
   neurin = np.array([])                      #indexes/indices? for next part of function
   for x in range(z):
     index = x + y
@@ -61,18 +69,67 @@ def startmemory(ak): #ak starts the number of intital connections to and from in
   for inputnm in range(y):
     for x in range(len(percent)):
       resa = np.random.randint(0,len(neurin) - 1)
-      memories[neurin[resa]] = np.array([[inputnm,0]])
+      if memories[neurin[resa]] == None:
+        memories[neurin[resa]] = np.array([[inputnm,0]])
+      else:
+        memories[neurin[resa]] = np.append(memories[neurin[resa]],[[inputnm,0]]])
       neurin = np.delete(neurin,resa)
   for x in range(xt):
-    if x == 0:
-       for xrt in range(percent):
-          int = np.random.randint(0,len(neurin2) - 1)
-          memories[yz1] = np.array([neurin2[int],0])
-          
-    
-    
-  #still need to create this and change the hell out of the code
-  
+    for y in range(krr):
+      resa = np.random.randint(0,len(neurin2) - 1)
+      if memories[x] == None:
+        memories[x] = np.array([[neurin2[resa],0]])
+      else:
+        memories[x] = np.append(memories[x],[[neurin2[resa],0]])
+      neurin2 = np.delete(neurin2,resa)
+   
+def reconnect(r):               #r is growth rate, number between 0 and 1
+  global memories
+  fish = np.array([])
+  cube = 0
+  for x in range(len(memories)):
+    for y in range(len(memories[x])):
+      if memories[x,y] == None:
+        if cube == 0:
+          s = x
+          e = y
+          fish = np.array([[s,e]])
+          cube = 1
+        else:
+          kir = np.array([[x,y]])
+          fish = np.append(fish,kir,axis = 0)
+  zita = len(fish)
+  recet = proportional(zita,r)
+  c_plus = memories[0].size
+  for x in range(recet):
+    ssr = 1
+    a = len(fish) -1
+    if a > 0:
+        recett = np.random.randint(0,a)
+        recette = fish[recett][0]
+        recettes = fish[recett][1]
+        for sss in range(c_plus):
+            if memories[recette][sss] != None:
+                ssr = ssr + 1
+        cp = np.random.randn()
+        rrr = cp * ((2/ssr) ** 0.5)           
+        memories[recette][recettes] = rrr
+        fish = np.delete(fish,recett,axis = 0)
+        
+        
+def proportional(cd,xs):
+  global memories
+  r = memories.size
+  re = r - cd
+  if re != 0:
+    rec = re / r
+    rece = cd ** ((1 - rec) ** (1 - xs))
+  else:
+    rece = 0
+  rett = rece // 1
+  recipe = int(rece)
+  return recipe
+#still need to create this and change the hell out of the code
 def memoryactivation():
     global fullnet
     global input
@@ -185,7 +242,6 @@ def memorieslearn(l,ra):
     placeholderz = None
 
     
-    
 def forget(xs):
   global memories
   p = 0
@@ -209,51 +265,6 @@ def forget(xs):
         if memories[x,y] > z:
           memories[x,y] = None
           
-def reconnect(r):               #r is growth rate, number between 0 and 1
-  global memories
-  fish = np.array([])
-  cube = 0
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] == None:
-        if cube == 0:
-          s = x
-          e = y
-          fish = np.array([[s,e]])
-          cube = 1
-        else:
-          kir = np.array([[x,y]])
-          fish = np.append(fish,kir,axis = 0)
-  zita = len(fish)
-  recet = proportional(zita,r)
-  c_plus = memories[0].size
-  for x in range(recet):
-    ssr = 1
-    a = len(fish) -1
-    if a > 0:
-        recett = np.random.randint(0,a)
-        recette = fish[recett][0]
-        recettes = fish[recett][1]
-        for sss in range(c_plus):
-            if memories[recette][sss] != None:
-                ssr = ssr + 1
-        cp = np.random.randn()
-        rrr = cp * ((2/ssr) ** 0.5)           
-        memories[recette][recettes] = rrr
-        fish = np.delete(fish,recett,axis = 0)
- 
-def proportional(cd,xs):
-  global memories
-  r = memories.size
-  re = r - cd
-  if re != 0:
-    rec = re / r
-    rece = cd ** ((1 - rec) ** (1 - xs))
-  else:
-    rece = 0
-  rett = rece // 1
-  recipe = int(rece)
-  return recipe
     
 memories()
 startmemory()
