@@ -14,3 +14,8 @@ have dynamic baseline for diet/forget function
 
 also put a cap on weight size
 if time is enough use ctpyes libruary or just have parts of it in c for efficiency(write a c module)
+
+
+acknowledgements:
+https://arxiv.org/abs/1707.04780
+https://arxiv.org/abs/1504.00941
