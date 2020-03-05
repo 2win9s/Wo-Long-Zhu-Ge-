@@ -36,7 +36,7 @@ def memoriesbias():
     global memoriesbias
     memoriesbias = np.copy(fullnet)
     
-def startmemory(ak): #ak starts the number of intital connections to and from input and output, set below 0.6 please, also take into account the number of input neurons and interneurons you have
+def startmemory(ak): not finished#ak starts the number of intital connections to and from input and output, set below 0.6 please, also take into account the number of input neurons and interneurons you have
   global memories
   global input
   global neurons
@@ -47,9 +47,6 @@ def startmemory(ak): #ak starts the number of intital connections to and from in
   yz = y + z - 1
   yz1 = y + z
   y1 = y - 1
-  #for x in range(y):
-    #if x > 0:
-      #memories[x] = np.array([[x - 1,0]])
   percent = ak * z
   percent = percent // 1
   krr = percent
@@ -64,7 +61,7 @@ def startmemory(ak): #ak starts the number of intital connections to and from in
   neurin = np.array([])                      #indexes/indices? for next part of function
   for x in range(z):
     index = x + y
-    neurin = np.append(neurin,[index])
+    neurin = np.append(neurin,[index], axis = None)
   neurin2 = np.copy(neurin)
   for inputnm in range(y):
     for x in range(len(percent)):
@@ -72,7 +69,7 @@ def startmemory(ak): #ak starts the number of intital connections to and from in
       if memories[neurin[resa]] == None:
         memories[neurin[resa]] = np.array([[inputnm,0]])
       else:
-        memories[neurin[resa]] = np.append(memories[neurin[resa]],[[inputnm,0]]])
+        memories[neurin[resa]] = np.append(memories[neurin[resa]],[[inputnm,0]], axis = 0)
       neurin = np.delete(neurin,resa)
   for x in range(xt):
     for y in range(krr):
@@ -80,9 +77,10 @@ def startmemory(ak): #ak starts the number of intital connections to and from in
       if memories[x] == None:
         memories[x] = np.array([[neurin2[resa],0]])
       else:
-        memories[x] = np.append(memories[x],[[neurin2[resa],0]])
+        memories[x] = np.append(memories[x],[[neurin2[resa],0]], axis = 0)
       neurin2 = np.delete(neurin2,resa)
-   
+      
+work on reconnect when you think about it
 def reconnect(r):               #r is growth rate, number between 0 and 1
   global memories
   fish = np.array([])
@@ -130,25 +128,27 @@ def proportional(cd,xs):
   recipe = int(rece)
   return recipe
 #still need to create this and change the hell out of the code
+
+
 def memoryactivation():
     global fullnet
     global input
     global output
     global memories
     global memoriesbias
+    zzrot = len(neurons)
+    yep = len(input)
+    xt = len(output)
+    e = yep + zzrot - 1
+    f = yep + zzrot
     for x in range(len(fullnet)):
-      for z in range(x + 1,len(fullnet)):
-        if memories[x,z - 1] != None:
-          fullnet[x] = fullnet[x] + (fullnet[z] * memories[x,z - 1])
-      for a in range(0,x):
-        if memories[x,a] != None:
-          fullnet[x] = fullnet[x] + (fullnet[a] * memories[x,a])
-      if x < len(input):
+      for y in range(memories[x]):
+        fullnet[x] = fullnet[x] + (fullnet[memories[y,0]] * memories[y,1])
+      if x < yep:
         fullnet[x] = fullnet[x] + input[x]
       fullnet[x] = reLU(fullnet[x] + memoriesbias[x])
-    for fish in range(len(output)):
-      itsraw = (len(output) - fish) * -1
-      output[itsraw] = fullnet[itsraw]
+      if x > e:
+        output[x - f] = fullnet[x]
     
   
 #----------------------------------------------------------------------------------------------------------------
