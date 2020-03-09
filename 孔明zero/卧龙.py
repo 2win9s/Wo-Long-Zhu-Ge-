@@ -5,7 +5,8 @@ import sys
 import threading
 threading.stack_size(2 ** 27 - 1) #(around 17 mb)
 sys.setrecursionlimit(7777777)#change along with stack size and stuff
-neurons = np.zeros(shape = None)# don't forget to initialise these
+bintern = np.zeros(shape = None)# don't forget to initialise these
+cintern = np.zeros(shape = None)
 input = np.zeros(shape = None)#rule of thumb have more inter neurons than input + output
 output = np.zeros(shape = None)
 #remember to keep backup of fullnet for tbptt
@@ -29,7 +30,7 @@ def memories():
   fullnet = np.zeros(shape = damnitt)
   memories = []
   for x in range(len(fullnet)):
-    memories.append(None)
+    memories.append(np.array([]))
 
 def memoriesbias():
     global fullnet
