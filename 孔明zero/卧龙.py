@@ -80,6 +80,10 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
         memories[x] = np.append(memories[x],[[neurin2[resa],0]], axis = 0)
       neurin2 = np.delete(neurin2,resa)
       
+def proportional(x,lmt,c):    #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
+  average = (limit * x) / (x + c)
+  return average
+
 work on reconnect when you think about it
 def reconnect(r):               #r is growth rate, number between 0 and 1
   global memories
