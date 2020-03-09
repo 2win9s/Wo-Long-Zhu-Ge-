@@ -19,3 +19,4 @@ if time is enough use ctpyes libruary or just have parts of it in c for efficien
 acknowledgements:
 https://arxiv.org/abs/1707.04780
 https://arxiv.org/abs/1504.00941
+http://www.xuru.org/rt/NLR.asp#Manually (regression tool)
