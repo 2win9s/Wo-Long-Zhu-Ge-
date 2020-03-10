@@ -38,7 +38,7 @@ def memories():
   for x in range(len(fullnet)):
     memories.append(np.array([]))
 
-synapsec = proportional((len(neuron),synapselmt,df)
+
              
 def memoriesbias():
     global fullnet
@@ -279,3 +279,4 @@ def forget(xs):
 memories()
 startmemory()
 memoriesbias()
+synapsec = proportional((len(neuron),synapselmt,df)
