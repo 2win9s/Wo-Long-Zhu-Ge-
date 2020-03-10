@@ -3,14 +3,21 @@ import numpy as np
 import pickle
 import sys
 import threading
-threading.stack_size(2 ** 27 - 1) #(around 17 mb)
-sys.setrecursionlimit(7777777)#change along with stack size and stuff
-bintern = np.zeros(shape = None)# don't forget to initialise these
+threading.stack_size(2 ** 27 - 1) #(around 17 mb, change if gpu has a lot of vram)
+sys.setrecursionlimit(7777777)   #change along with stack size and stuff
+bintern = np.zeros(shape = None) #don't forget to initialise these
 cintern = np.zeros(shape = None)
-input = np.zeros(shape = None)#rule of thumb have more inter neurons than input + output
+input = np.zeros(shape = None)   #rule of thumb have more inter neurons than input + output
 output = np.zeros(shape = None)
+synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
+df =                             #sqrt of total number of neurons, if that is too much do cuberoot
 #remember to keep backup of fullnet for tbptt
 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
+def proportional(x,lmt,c):    #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
+  average = (limit * x) / (x + c)
+  return average
+proportional()
+
 def reLU(x):
   global reLUout
   if x > 0:
@@ -80,10 +87,7 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
       else:
         memories[x] = np.append(memories[x],[[neurin2[resa],0]], axis = 0)
       neurin2 = np.delete(neurin2,resa)
-      
-def proportional(x,lmt,c):    #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
-  average = (limit * x) / (x + c)
-  return average
+     
 
 work on reconnect when you think about it
 def reconnect(r):               #r is growth rate, number between 0 and 1
