@@ -16,7 +16,6 @@ df =                             #sqrt of total number of neurons, if that is to
 def proportional(x,lmt,c):    #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
   average = (limit * x) / (x + c)
   return average
-proportional()
 
 def reLU(x):
   global reLUout
@@ -39,6 +38,8 @@ def memories():
   for x in range(len(fullnet)):
     memories.append(np.array([]))
 
+synapsec = proportional((len(neuron),synapselmt,df)
+             
 def memoriesbias():
     global fullnet
     global memoriesbias
