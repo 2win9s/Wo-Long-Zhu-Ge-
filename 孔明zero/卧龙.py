@@ -91,7 +91,7 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
      
 
 work on reconnect when you think about it
-def reconnect(r):               #r is growth rate, number between 0 and 1
+def connect(r):               #r is growth rate, number between 0 and 1
   global memories
   fish = np.array([])
   cube = 0
@@ -123,6 +123,29 @@ def reconnect(r):               #r is growth rate, number between 0 and 1
         rrr = cp * ((2/ssr) ** 0.5)           
         memories[recette][recettes] = rrr
         fish = np.delete(fish,recett,axis = 0)
+        
+def cull(xs):
+  global memories
+  p = 0
+  for x in range(len(memories)):
+    for y in range(len(memories[x])):
+      if memories[x,y] == None:
+        p = p + 1
+  ds = memories.size
+  ke = p / ds
+  if p != 0:
+          n = ((1 - ke) ** (1 - xs)) * ( 1/ ( p ** 0.5 ))
+  else:
+          n = ((1 - ke) ** (1 - xs))
+  z = n * -1
+  for x in range(len(memories)):
+    for y in range(len(memories[x])):
+      if memories[x,y] < n:
+        if memories[x,y] >= 0:
+          memories[x,y] = None
+      elif memories[x,y] < 0:
+        if memories[x,y] > z:
+          memories[x,y] = None
         
         
 def proportional(cd,xs):
@@ -235,6 +258,8 @@ def mario(bbr,b,c,d,fin,al):
              harm = derivativereLU(fin[ryuji,taiga]) 
              placeholderz[bbr] = mr * harm + placeholderz[bbr] 
              mario(taiga,peace,harm,mr,fin,ryuji)
+            
+            
 def memorieslearn(l,ra):
     global memories
     global placeholder
@@ -250,30 +275,6 @@ def memorieslearn(l,ra):
         memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
     placeholder = None
     placeholderz = None
-
-    
-def forget(xs):
-  global memories
-  p = 0
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] == None:
-        p = p + 1
-  ds = memories.size
-  ke = p / ds
-  if p != 0:
-          n = ((1 - ke) ** (1 - xs)) * ( 1/ ( p ** 0.5 ))
-  else:
-          n = ((1 - ke) ** (1 - xs))
-  z = n * -1
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] < n:
-        if memories[x,y] >= 0:
-          memories[x,y] = None
-      elif memories[x,y] < 0:
-        if memories[x,y] > z:
-          memories[x,y] = None
           
     
 memories()
