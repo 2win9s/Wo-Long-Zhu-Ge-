@@ -13,21 +13,25 @@ synapselmt =                     #1.4 ** (the number of digits in total number o
 df =                             #sqrt of total number of neurons, if that is too much do cuberoot
 #remember to keep backup of fullnet for tbptt
 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
-def proportionalu(x,lmt,c):    #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
+def proportionalu(x,lmt,c):      #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
   out = (limit * x) / (x + c)
   return out
-
+   
 def setbase(lmt):
   global fullnet
   r = 1/ (len(fullnet) - 1)
   out = np.e ** (np.log(r)/lmt)
   return out
 
-def proportionald(x,a):       # the limit of setbase limits this output
+def proportionald(x,base):       #the limit of setbase limits this output
   global fullnet
-  p = x / (len(fullnet) - 1)
-  out = np.log(p) / np.log()
-  return recipe
+  global synapsec
+  if x < synapsec:
+    p = x / (len(fullnet) - 1)
+  else:
+    p = (((x - synapsec)**2) + synapsec) / (len(fullnet) - 1)
+  out = np.log(p) / np.log(base)
+  return out
 
 
 #still need to create this and change the hell out of the code
@@ -280,3 +284,4 @@ memories()
 startmemory()
 memoriesbias()
 synapsec = proportionalu((len(neuron),synapselmt,df)
+base = setbase(lmt)
