@@ -13,10 +13,24 @@ synapselmt =                     #1.4 ** (the number of digits in total number o
 df =                             #sqrt of total number of neurons, if that is too much do cuberoot
 #remember to keep backup of fullnet for tbptt
 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
-def proportional(x,lmt,c):    #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
-  average = (limit * x) / (x + c)
-  return average
+def proportionalu(x,lmt,c):    #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
+  out = (limit * x) / (x + c)
+  return out
 
+def setbase(lmt):
+  global fullnet
+  r = 1/ (len(fullnet) - 1)
+  out = np.e ** (np.log(r)/lmt)
+  return out
+
+def proportionald(x,a):       # the limit of setbase limits this output
+  global fullnet
+  p = x / (len(fullnet) - 1)
+  out = np.log(p) / np.log()
+  return recipe
+
+
+#still need to create this and change the hell out of the code
 def reLU(x):
   global reLUout
   if x > 0:
@@ -146,21 +160,6 @@ def cull(xs):
       elif memories[x,y] < 0:
         if memories[x,y] > z:
           memories[x,y] = None
-        
-        
-def proportional(cd,xs):
-  global memories
-  r = memories.size
-  re = r - cd
-  if re != 0:
-    rec = re / r
-    rece = cd ** ((1 - rec) ** (1 - xs))
-  else:
-    rece = 0
-  rett = rece // 1
-  recipe = int(rece)
-  return recipe
-#still need to create this and change the hell out of the code
 
 
 def memoryactivation():
@@ -280,4 +279,4 @@ def memorieslearn(l,ra):
 memories()
 startmemory()
 memoriesbias()
-synapsec = proportional((len(neuron),synapselmt,df)
+synapsec = proportionalu((len(neuron),synapselmt,df)
