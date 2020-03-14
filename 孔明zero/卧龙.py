@@ -4,7 +4,10 @@ import pickle
 import sys
 import threading
 import mpmath            # mpf(float) this converts it
-mp.dps = 100             # set precision of mpf
+miy = 777                # adjust for performence targets
+mp.dps = miy             # set precision of mpf
+kag = miy//2
+shiro = 1/(10 ** kag)
 threading.stack_size(2 ** 27 - 1) #(around 17 mb, change if gpu has a lot of vram)
 sys.setrecursionlimit(7777777)   #change along with stack size and stuff
 intern = np.zeros(shape = None) #don't forget to initialise these
@@ -108,11 +111,11 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
       neurin2 = np.delete(neurin2,resa)
      
 
-work on reconnect when you think about it
-def connect(r): 
-
+def connect(): 
+  global memories
+  global fullnet
         
-def cull(xs):
+def disconnect():
 
 
 def memoryactivation():
