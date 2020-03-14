@@ -3,7 +3,7 @@ import numpy as np
 import pickle
 import sys
 import threading
-import mpmath            # mpf(the number you want goes here)
+import mpmath            # mpf(float) this converts it
 mp.dps = 100             # set precision of mpf
 threading.stack_size(2 ** 27 - 1) #(around 17 mb, change if gpu has a lot of vram)
 sys.setrecursionlimit(7777777)   #change along with stack size and stuff
@@ -109,38 +109,8 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
      
 
 work on reconnect when you think about it
-def connect(r):               #r is growth rate, number between 0 and 1
-  global memories
-  fish = np.array([])
-  cube = 0
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] == None:
-        if cube == 0:
-          s = x
-          e = y
-          fish = np.array([[s,e]])
-          cube = 1
-        else:
-          kir = np.array([[x,y]])
-          fish = np.append(fish,kir,axis = 0)
-  zita = len(fish)
-  recet = proportional(zita,r)
-  c_plus = memories[0].size
-  for x in range(recet):
-    ssr = 1
-    a = len(fish) -1
-    if a > 0:
-        recett = np.random.randint(0,a)
-        recette = fish[recett][0]
-        recettes = fish[recett][1]
-        for sss in range(c_plus):
-            if memories[recette][sss] != None:
-                ssr = ssr + 1
-        cp = np.random.randn()
-        rrr = cp * ((2/ssr) ** 0.5)           
-        memories[recette][recettes] = rrr
-        fish = np.delete(fish,recett,axis = 0)
+def connect(r): 
+
         
 def cull(xs):
 
