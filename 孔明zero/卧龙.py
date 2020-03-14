@@ -3,6 +3,8 @@ import numpy as np
 import pickle
 import sys
 import threading
+import mpmath            # mpf(the number you want goes here)
+mp.dps = 100             # set precision of mpf
 threading.stack_size(2 ** 27 - 1) #(around 17 mb, change if gpu has a lot of vram)
 sys.setrecursionlimit(7777777)   #change along with stack size and stuff
 intern = np.zeros(shape = None) #don't forget to initialise these
