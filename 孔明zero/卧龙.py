@@ -5,8 +5,7 @@ import sys
 import threading
 threading.stack_size(2 ** 27 - 1) #(around 17 mb, change if gpu has a lot of vram)
 sys.setrecursionlimit(7777777)   #change along with stack size and stuff
-bintern = np.zeros(shape = None) #don't forget to initialise these
-cintern = np.zeros(shape = None)
+intern = np.zeros(shape = None) #don't forget to initialise these
 input = np.zeros(shape = None)   #rule of thumb have more inter neurons than input + output
 output = np.zeros(shape = None)
 synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
@@ -19,7 +18,7 @@ def proportionalu(x,lmt,c):      #(lmt sets the limit of what your function will
    
 def setbase(lmt):
   global fullnet
-  r = 1/ (len(fullnet) - 1)
+  r = 1/ ((len(fullnet) - 1) * len(fullnet))
   out = np.e ** (np.log(r)/lmt)
   return out
 
@@ -27,9 +26,9 @@ def proportionald(x,base):       #the limit of setbase limits this output
   global fullnet
   global synapsec
   if x < synapsec:
-    p = x / (len(fullnet) - 1)
+    p = x / ((len(fullnet) - 1) * len(fullnet))
   else:
-    p = (((x - synapsec)**2) + synapsec) / (len(fullnet) - 1)
+    p = (((x - synapsec)**2) + synapsec) /((len(fullnet) - 1) * len(fullnet))
   out = np.log(p) / np.log(base)
   return out
 
@@ -50,14 +49,13 @@ def memories():
   global fullnet
   global memories
   global damnitt
-  damnitt = len(input) + len(neurons) + len(output)
+  damnitt = len(input) + len(intern) + len(output)
   fullnet = np.zeros(shape = damnitt)
   memories = []
   for x in range(len(fullnet)):
     memories.append(np.array([]))
 
 
-             
 def memoriesbias():
     global fullnet
     global memoriesbias
@@ -143,47 +141,27 @@ def connect(r):               #r is growth rate, number between 0 and 1
         fish = np.delete(fish,recett,axis = 0)
         
 def cull(xs):
-  global memories
-  p = 0
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] == None:
-        p = p + 1
-  ds = memories.size
-  ke = p / ds
-  if p != 0:
-          n = ((1 - ke) ** (1 - xs)) * ( 1/ ( p ** 0.5 ))
-  else:
-          n = ((1 - ke) ** (1 - xs))
-  z = n * -1
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] < n:
-        if memories[x,y] >= 0:
-          memories[x,y] = None
-      elif memories[x,y] < 0:
-        if memories[x,y] > z:
-          memories[x,y] = None
 
 
 def memoryactivation():
     global fullnet
     global input
     global output
+    global intern
     global memories
     global memoriesbias
-    zzrot = len(neurons)
-    yep = len(input)
-    xt = len(output)
-    e = yep + zzrot - 1
-    f = yep + zzrot
-    for x in range(len(fullnet)):
+    a = len(input)
+    b = len(intern)
+    c = len(output)
+    e = a + b - 1
+    f = a + b
+    for x in range(fullnet):
       for y in range(memories[x]):
-        fullnet[x] = fullnet[x] + (fullnet[memories[y,0]] * memories[y,1])
-      if x < yep:
+        fullnet[x] = fullnet[memories[x][y,0]] * memories[x][y,1] + fullnet[x]
+      if x < a:
         fullnet[x] = fullnet[x] + input[x]
-      fullnet[x] = reLU(fullnet[x] + memoriesbias[x])
-      if x > e:
+      fullnet[x] = reLU(fullnet[x] + bias[x])
+      if fullnet[x] > e: 
         output[x - f] = fullnet[x]
     
   
@@ -196,6 +174,7 @@ def derivativereLU(x):                                     #x is the value of th
   else:
     dereLU = 0
   return dereLU
+
 def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    global memories 
    global fullnet 
