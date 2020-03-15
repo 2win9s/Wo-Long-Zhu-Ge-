@@ -110,7 +110,7 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
         memories[x] = np.append(memories[x],[[neurin2[resa],0]], axis = 0)
       neurin2 = np.delete(neurin2,resa)
      
-
+mean or standard deviation
 def connect(): 
   global memories
   global fullnet
