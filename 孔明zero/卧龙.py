@@ -73,9 +73,9 @@ def memoriesbias():
 def startmemory(ak,runs): not finished#ak starts the number of intital connections to and from input and output,set below 0.6, also take into account the , runs is the number of times connect() is run to randomly set up a few connections
   global memories
   global input
-  global neurons
+  global intern
   global output
-  z = len(neurons)
+  z = len(intern)
   y = len(input)
   xt = len(output)
   yz = y + z - 1
