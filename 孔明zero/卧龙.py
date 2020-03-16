@@ -42,7 +42,6 @@ def cregulator(x,base):          #the limit of setbase limits this output
   return out
 
 
-#still need to create this and change the hell out of the code
 def reLU(x):
   global reLUout
   if x > 0:
@@ -225,54 +224,65 @@ def hardcode(fullnet,target,sima):
    global placeholder 
    global placeholderz 
    global memories 
+   global input
+   global intern
    faker = sima - 1
+   otuput = len(input) + len(intern)
    for ditto in range (len(output)): 
-    same = (ditto + 1 ) * -1 
+    same = otup + ditto
     rise = derivativereLU(fullnet[sima,same]) 
-    placeholderz[same] = (2 * (fullnet[sima,same] - target[same])) * rise + placeholderz[same] 
-    finbar = (2 * (fullnet[sima,same] - target[same])) * rise 
-    for x in range(memories[same].size): 
-        if ((len(fullnet[sima]) - x )) > ditto + 1:
-            if memories[same,x] != None: 
-                larry = finbar * memories[same,x] 
-                placeholder[same,x] = finbar * fullnet[sima,x] + placeholder[same,x] 
-                dice = finbar * memories[same,x] 
-                rice = derivativereLU(fullnet[sima,x]) 
-                placeholderz[same] = larry * rice + placeholderz[same] 
-                mario(x,dice,rice,larry,fullnet,sima) 
+    finbar = (2 * (fullnet[sima,same] - target[ditto])) * rise 
+    placeholderz[same] = mpf(finbar + placeholderz[same]) 
+    for x in range(memories[same].size/2): 
+        orn = memories[same][x,0]
+        if same > orn:
+                placeholder[same][x,1] =mpf(finbar * fullnet[sima,orn] + placeholder[same][x,1]) 
+                rice = derivativereLU(fullnet[sima,orn]) 
+                larry = finbar * rice
+                placeholderz[orn] = mpf(larry + placeholderz[orn])
+                larry = larry * memories[same][x,1]
+                if rice != 0:
+                    mario(orn,larry,fullnet,sima)
         else:
-            if memories[same,x] != None: 
-                next_three_subjects = x + 1
-                larry = finbar * memories[same,x]
-                placeholder[same,x] = finbar * fullnet[faker,x + 1] + placeholder[same,x] 
-                dice = finbar * memories[same,x] 
-                rice = derivativereLU(fullnet[faker,x + 1]) 
-                placeholderz[same] = larry * rice + placeholderz[same] 
-                mario(next_three_subjects,dice,rice,larry,fullnet,faker) 
-def mario(bbr,b,c,d,fin,al): 
+            placeholder[same][x,1] =mpf(finbar * fullnet[faker,orn] + placeholder[same][x,1]) 
+            rice = derivativereLU(fullnet[faker,orn]) 
+            larry = finbar * rice
+            placeholderz[orn] = mpf(larry + placeholderz[orn])
+            larry = larry * memories[same][x,1]
+            if rice != 0:
+                mario(orn,larry,fullnet,faker)
+            
+def mario(bbr,b,fin,al): 
    global memories 
    global placeholder       
    global placeholderz 
-   for k in range(len(memories[bbr])): 
-        if memories[bbr,k] != None: 
-           if k >= bbr:
-                if al != 0:
-                    ryuji = al - 1
-                    taiga = k + 1
-                    kill = 0
-                else:
-                    kill = 1
-           elif bbr > k:
-                ryuji = al
-                taiga = k
-                kill = 0
-           if kill != 1:
-             mr = d * memories[bbr,k] 
-             placeholder[bbr,k] = b * c * fin[ryuji,taiga] + placeholder[bbr,k] 
-             peace = b * c * memories[bbr,k] 
-             harm = derivativereLU(fin[ryuji,taiga]) 
-             placeholderz[bbr] = mr * harm + placeholderz[bbr] 
-             mario(taiga,peace,harm,mr,fin,ryuji)
+   global shiro
+   for k in range(memories[bbr].size/2):
+       taiga = memories[bbr][k][0]
+       if taiga > bbr:
+           if al != 0:
+               ryuji = al - 1
+               kill = 0
+           else:
+               kill = 0
+       else:
+           ryuji = al
+           kill = 0
+       if kill != 1:
+           placeholder[bbr][taiga,1] =mpf(b * fin[ryuji,taiga] + placeholder[bbr][taiga,1])
+           harm = derivativereLU(fin[ryuji,taiga])
+           taiping = harm * b
+           placeholderz[ryuji] = mpf(taiping + placeholderz[ryuji])
+           taiping = peace * memories[bbr][taiga,1]
+           if harm != 0:
+               if taiping < 0:
+                   r = taiping * -1
+               else:
+                   r = taiping
+               if r > shiro:
+                       r = None
+                       mario(taiga,taiping,fin,ryuji)
+           
             
             
 def memorieslearn(l,ra):
@@ -280,14 +290,14 @@ def memorieslearn(l,ra):
     global placeholder
     global memoriesbias
     global placeholderz
+    global weightmax
     for x in range(len(memories)):
-        for y in range(memories[x].size):
-            if memories[x,y] != None:
-                memories[x,y] = memories[x,y] - (placeholder[x,y] * l)
-            if memories[x,y] > ra:
-              memories[x,y] = ra
-    for x in range(len(memoriesbias)):
-        memoriesbias[x] = memoriesbias[x] - (placeholderz[x] * l)
+        for y in range(memories[x].size / 2):
+            memories[x][y,1] = memories[x][y,1] + (placeholder[x][y,1] * l)
+            if memories[x][y,1] > weightmax:
+                memories[x][y,1] = weightmax
+    for x in range(len(placeholder)):
+        memoriesbias[x] = memoriesbias[x] + (placeholderz[x] * ra)
     placeholder = None
     placeholderz = None
           
@@ -295,5 +305,5 @@ def memorieslearn(l,ra):
 memories()
 startmemory()
 memoriesbias()
-synapsec = proportionalu((len(neuron),synapselmt,df)
+synapsec = proportionalu((len(fullnet),synapselmt,df)
 base = setbase()
