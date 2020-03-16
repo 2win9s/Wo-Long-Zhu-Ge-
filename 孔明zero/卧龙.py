@@ -128,6 +128,8 @@ def connect():
   global cbase
   for x in range(fullnet):
       weightn = memories[x].size // 2
+      if weightn < 1:
+        weightn = 1
       mi = (len(fullnet) - weightn) * 0.01
       connectn   =   cregulator(weightn,cbase) * connectrate * mi
       if connectn >= 1:
@@ -307,3 +309,4 @@ startmemory()
 memoriesbias()
 synapsec = proportionalu((len(fullnet),synapselmt,df)
 base = setbase()
+startmemory(0.4,4)
