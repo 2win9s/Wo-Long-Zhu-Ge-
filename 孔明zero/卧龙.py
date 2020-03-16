@@ -70,7 +70,7 @@ def memoriesbias():
     global memoriesbias
     memoriesbias = np.copy(fullnet)
     
-def startmemory(ak): not finished#ak starts the number of intital connections to and from input and output, set below 0.6 please, also take into account the number of input neurons and interneurons you have
+def startmemory(ak,runs): not finished#ak starts the number of intital connections to and from input and output,set below 0.6, also take into account the , runs is the number of times connect() is run to randomly set up a few connections
   global memories
   global input
   global neurons
@@ -99,7 +99,7 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
   neurin2 = np.copy(neurin)
   for inputnm in range(y):
     for x in range(len(percent)):
-      resa = np.random.randint(0,len(neurin) - 1)
+      resa = np.random.randint(0,len(neurin))
       if memories[neurin[resa]] == None:
         memories[neurin[resa]] = np.array([[inputnm,0]])
       else:
@@ -107,19 +107,50 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
       neurin = np.delete(neurin,resa)
   for x in range(xt):
     for y in range(krr):
-      resa = np.random.randint(0,len(neurin2) - 1)
+      resa = np.random.randint(0,len(neurin2))
       if memories[x] == None:
         memories[x] = np.array([[neurin2[resa],0]])
       else:
         memories[x] = np.append(memories[x],[[neurin2[resa],0]], axis = 0)
       neurin2 = np.delete(neurin2,resa)
+  for x in range(runs):
+      connect()
+  for x in range(len(memories)):
+      part = ((2/len(memories[x])) ** 0.5)
+      for y in range(len(memories[x])):
+          xinit = np.random.randn()
+          xinit = xinit * part
+          memories[x][y,1] = xinit
      
 def connect(): 
   global memories
   global fullnet
   global connectrate
-  for x in range(len(memories)):
-    weightn = memories[x].size // 2
+  global cbase
+  for x in range(fullnet):
+      weightn = memories[x].size // 2
+      mi = (len(fullnet) - weightn) * 0.01
+      connectn   =   cregulator(weightn,cbase) * connectrate * mi
+      if connectn >= 1:
+          connectn = int(connectn)
+      else:
+        random = np.random.random_sample()
+        if random <= connectn:
+            connectn = 1
+        else: 
+            connectn = 0
+      list = np.array([])
+      for y in range(x):
+          list = np.append(list,[y])
+      for z in range(x + 1 , len(fullnet)):
+          list = np.append(list,[z])
+      for t in range(connectn):
+          neuron = np.random.randint(0,len(list))
+          memories[x] = np.append(memories[x],[[list[neuron],0]],axis = 0)
+          list = np.delete(list,neuron)
+          xinit = np.random.randn()
+          xinit = xinit * ((2/len(memories[x])) ** 0.5)
+          memories[x][-1,1] = xinit
         
 def disconnect():
   use standard deviation
