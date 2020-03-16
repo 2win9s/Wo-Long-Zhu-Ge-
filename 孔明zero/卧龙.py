@@ -3,34 +3,37 @@ import numpy as np
 import pickle
 import sys
 import threading
-import mpmath            # mpf(float) this converts it
-miy = 777                # adjust for performence targets
-mp.dps = miy             # set precision of mpf
-kag = miy//2
-shiro = 1/(10 ** kag)
-threading.stack_size(2 ** 27 - 1) #(around 17 mb, change if gpu has a lot of vram)
-sys.setrecursionlimit(7777777)   #change along with stack size and stuff
-intern = np.zeros(shape = None) #don't forget to initialise these
-input = np.zeros(shape = None)   #rule of thumb have more inter neurons than input + output
-output = np.zeros(shape = None)
+import mpmath                    # mpf(float) this converts it to a custom presicison float i guess
+miy =                            # adjust for performence targets basically precision (will only be use for backpropagation)
+mp.dps = miy                     #set precision of mpf
+kag = miy//2             
+shiro = 1/(10 ** kag)            #will terminate branch of backpropagation if chain of prtial derivatives dips below this number(changes with prescision of mp.dps), reason being if this gets too small changes won't matter because of how small they are, the weights are only at most a longdouble
+threading.stack_size(2 ** 27 - 1)#(around 17 mb, change if gpu has a lot of vram/need more heap or u need more stackspace, cpython stores only references in stack so 17mb should be enough)
+sys.setrecursionlimit(7777777)   #change along with stack size and size of network& bptt/tpbtt depth
+intern = np.zeros(shape =     )  #don't forget to initialise these
+input = np.zeros(shape =     )   #rule of thumb have more inter neurons than input + output
+output = np.zeros(shape =     )
 synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
-df =                             #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionald
-deviations                       # how many deviations to keep, remember empirical rule 68,95,99.7 
-#remember to keep backup of fullnet for tbptt
-#remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
-def proportionalu(x,lmt,c):      #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
+df =                             #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionalu
+deviations=                      # how many deviations to keep, remember empirical rule 68,95,99.7 
+connectrate =                    #number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good oe), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
+weightmax =                      #this is the maximum value a weight should have (to prevent exploding weights)
+                                 #remember to keep backup of fullnet for tbptt, also use random number of timesteps for each set of tbptt, not sure why but it seems to be a good practice
+                                 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
+def proportionalu(x,lmt,c):      #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep i.e. when stuff plateaus, not sure about how to exactly correlate the curve and c just use a reasonable dependant variable that is scaled to the number of neurons)
   out = (limit * x) / (x + c)
   return out
    
-def setbase(lmt):
+def setbase():
   global fullnet
   r = 1/ ((len(fullnet) - 1) * len(fullnet))
-  out = np.e ** (np.log(r)/lmt)
+  out = np.e ** (np.log(r)/100)
   return out
 
-def proportionald(x,base):       #the limit of setbase limits this output
+def cregulator(x,base):          #the limit of setbase limits this output
   global fullnet
   global synapsec
+  global base
   if x < synapsec:
     p = x / ((len(fullnet) - 1) * len(fullnet))
   else:
@@ -111,13 +114,14 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
         memories[x] = np.append(memories[x],[[neurin2[resa],0]], axis = 0)
       neurin2 = np.delete(neurin2,resa)
      
-mean or standard deviation
 def connect(): 
   global memories
   global fullnet
+  for x in range(len(memories)):
+    weightn = memories[x].size // 2
         
 def disconnect():
-
+  use standard deviation
 
 def memoryactivation():
     global fullnet
@@ -239,4 +243,4 @@ memories()
 startmemory()
 memoriesbias()
 synapsec = proportionalu((len(neuron),synapselmt,df)
-base = setbase(lmt)
+base = setbase()
