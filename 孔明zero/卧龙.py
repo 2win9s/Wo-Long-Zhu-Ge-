@@ -16,7 +16,7 @@ output = np.zeros(shape =     )
 synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
 df =                             #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionalu
 deviations=                      # how many deviations to keep, remember empirical rule 68,95,99.7 
-connectrate =                    #number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good oe), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
+connectrate =                    # number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good oe), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
 weightmax =                      #this is the maximum value a weight should have (to prevent exploding weights)
                                  #remember to keep backup of fullnet for tbptt, also use random number of timesteps for each set of tbptt, not sure why but it seems to be a good practice
                                  #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
@@ -117,6 +117,7 @@ def startmemory(ak): not finished#ak starts the number of intital connections to
 def connect(): 
   global memories
   global fullnet
+  global connectrate
   for x in range(len(memories)):
     weightn = memories[x].size // 2
         
