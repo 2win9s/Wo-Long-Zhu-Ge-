@@ -131,7 +131,7 @@ def hardcode(fullnet,target,sima):
         if ((len(fullnet[sima]) - x )) > ditto + 1:
             if memories[same,x] != None: 
                 larry = finbar * memories[same,x] 
-                placeholder[same,x] = finbar * fullnet[sima,x] + placeholder[same,x] 
+                placeholder[same,x] = larry * fullnet[sima,x] + placeholder[same,x] 
                 dice = finbar * memories[same,x] 
                 rice = derivativereLU(fullnet[sima,x]) 
                 placeholderz[same] = larry * rice + placeholderz[same] 
@@ -140,7 +140,7 @@ def hardcode(fullnet,target,sima):
             if memories[same,x] != None: 
                 next_three_subjects = x + 1
                 larry = finbar * memories[same,x]
-                placeholder[same,x] = finbar * fullnet[faker,x + 1] + placeholder[same,x] 
+                placeholder[same,x] = larry * fullnet[faker,x + 1] + placeholder[same,x] 
                 dice = finbar * memories[same,x] 
                 rice = derivativereLU(fullnet[faker,x + 1]) 
                 placeholderz[same] = larry * rice + placeholderz[same] 
