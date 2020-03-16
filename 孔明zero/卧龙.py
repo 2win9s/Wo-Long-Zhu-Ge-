@@ -139,18 +139,19 @@ def connect():
             connectn = 1
         else: 
             connectn = 0
-      list = np.array([])
-      for y in range(x):
-          list = np.append(list,[y])
-      for z in range(x + 1 , len(fullnet)):
-          list = np.append(list,[z])
-      for t in range(connectn):
-          neuron = np.random.randint(0,len(list))
-          memories[x] = np.append(memories[x],[[list[neuron],0]],axis = 0)
-          list = np.delete(list,neuron)
-          xinit = np.random.randn()
-          xinit = xinit * ((2/len(memories[x])) ** 0.5)
-          memories[x][-1,1] = xinit
+      if connect != 0:
+        list = np.array([])
+        for y in range(x):
+            list = np.append(list,[y])
+        for z in range(x + 1 , len(fullnet)):
+            list = np.append(list,[z])
+        for t in range(connectn):
+            neuron = np.random.randint(0,len(list))
+            memories[x] = np.append(memories[x],[[list[neuron],0]],axis = 0)
+            list = np.delete(list,neuron)
+            xinit = np.random.randn()
+            xinit = xinit * ((2/len(memories[x])) ** 0.5)
+            memories[x][-1,1] = xinit
         
 def disconnect():
   use standard deviation
