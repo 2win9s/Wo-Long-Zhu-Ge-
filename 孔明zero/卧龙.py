@@ -14,7 +14,8 @@ intern = np.zeros(shape = None) #don't forget to initialise these
 input = np.zeros(shape = None)   #rule of thumb have more inter neurons than input + output
 output = np.zeros(shape = None)
 synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
-df =                             #sqrt of total number of neurons, if that is too much do cuberoot
+df =                             #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionald
+deviations                       # how many deviations to keep, remember empirical rule 68,95,99.7 
 #remember to keep backup of fullnet for tbptt
 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
 def proportionalu(x,lmt,c):      #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep)
