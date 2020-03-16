@@ -154,7 +154,27 @@ def connect():
             memories[x][-1,1] = xinit
         
 def disconnect():
-  use standard deviation
+  def disconnect():
+  global fullnet
+  global memories
+  global deviations
+  for x in range(len(fullnet)):
+      population = memories[x].size // 2
+      for y in range(population):
+          mean = memories[x][y][1] + mean
+      mean = mean / population
+      for z in range(population):
+          variance = ((memories[x][y][1] - mean) ** 2) + variance
+      variance = variance / population
+      s_deviation = variance ** 0.5
+      for z in range(population):
+          if memories[x][z][1] < 0:
+              absv = memories[x][z][1] * -1
+          else:
+              absv = memories[x][z][1]
+          remains = mean - (s_deviation * deviations)
+          if absv <= remains:
+              memories[x] = np.delete(memories[x],z,0)
 
 def memoryactivation():
     global fullnet
