@@ -162,6 +162,9 @@ def disconnect():
   for x in range(len(fullnet)):
       population = memories[x].size // 2
       for y in range(population):
+        if memories[x][y][1] < 0:
+          mean = (memories[x][y][1] * -1) + mean
+        else:
           mean = memories[x][y][1] + mean
       mean = mean / population
       for z in range(population):
