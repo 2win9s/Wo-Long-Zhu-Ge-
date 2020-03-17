@@ -217,7 +217,9 @@ def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    global fullnet 
    global placeholder
    global placeholderz
-   placeholder = np.zeros(shape = [len(memories),(len(memories) - 1)],dtype = np.longdouble) 
+   placeholder = []
+   for x in range(len(memories)):
+      placeholder.append(np.zeros(shape = len(memories[x])))
    placeholderz = np.zeros(shape = len(fullnet),dtype = np.longdouble) 
    for thing in range(len(target_index)): 
        sima = target_index[thing]
@@ -241,7 +243,7 @@ def hardcode(fullnet,target,sima):
     for x in range(memories[same].size/2): 
         orn = memories[same][x,0]
         if same > orn:
-                placeholder[same][x,1] =mpf(finbar * fullnet[sima,orn] + placeholder[same][x,1]) 
+                placeholder[same][x] =mpf(finbar * fullnet[sima,orn] + placeholder[same][x]) 
                 rice = derivativereLU(fullnet[sima,orn]) 
                 larry = finbar * rice
                 placeholderz[orn] = mpf(larry + placeholderz[orn])
@@ -249,7 +251,7 @@ def hardcode(fullnet,target,sima):
                 if rice != 0:
                     mario(orn,larry,fullnet,sima)
         else:
-            placeholder[same][x,1] =mpf(finbar * fullnet[faker,orn] + placeholder[same][x,1]) 
+            placeholder[same][x] =mpf(finbar * fullnet[faker,orn] + placeholder[same][x]) 
             rice = derivativereLU(fullnet[faker,orn]) 
             larry = finbar * rice
             placeholderz[orn] = mpf(larry + placeholderz[orn])
@@ -274,7 +276,7 @@ def mario(bbr,b,fin,al):
            ryuji = al
            kill = 0
        if kill != 1:
-           placeholder[bbr][taiga,1] =mpf(b * fin[ryuji,taiga] + placeholder[bbr][taiga,1])
+           placeholder[bbr][taiga] =mpf(b * fin[ryuji,taiga] + placeholder[bbr][taiga])
            harm = derivativereLU(fin[ryuji,taiga])
            taiping = harm * b
            placeholderz[ryuji] = mpf(taiping + placeholderz[ryuji])
@@ -298,7 +300,7 @@ def memorieslearn(l,ra):
     global weightmax
     for x in range(len(memories)):
         for y in range(memories[x].size / 2):
-            memories[x][y,1] = memories[x][y,1] + (placeholder[x][y,1] * l)
+            memories[x][y,1] = memories[x][y,1] + (placeholder[x][y] * l)
             if memories[x][y,1] > weightmax:
                 memories[x][y,1] = weightmax
     for x in range(len(placeholder)):
