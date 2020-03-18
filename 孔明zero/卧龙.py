@@ -258,7 +258,8 @@ def hardcode(fullnet,target,sima):
             if rice != 0:
                 mario(orn,larry,fullnet,faker)
 
-warning race condition occurs here any ideas on how to fix it?                
+warning race condition occurs here any ideas on how to fix it?  
+@vectorize  (do i need this?)
 @njit(parallel=True ,  nogil=True)
 def mario(bbr,b,fin,al): 
    global memories 
