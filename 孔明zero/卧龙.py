@@ -216,6 +216,9 @@ def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    placeholder = []
    for x in range(len(memories)):
       placeholder.append(np.zeros(shape = len(memories[x])))
+   for x in range(len(placeholder)):
+    for y in range(placeholder[x].size):
+      placeholder[x,y] = mpf(0.0)
    placeholderz = np.zeros(shape = len(fullnet),dtype = np.longdouble) 
    for thing in range(len(target_index)): 
        sima = target_index[thing]
@@ -235,26 +238,28 @@ def hardcode(fullnet,target,sima):
     same = otup + ditto
     rise = derivativereLU(fullnet[sima,same]) 
     finbar = (2 * (fullnet[sima,same] - target[ditto])) * rise 
-    placeholderz[same] = mpf(finbar + placeholderz[same]) 
+    placeholderz[same] += mpf(finbar) 
     for x in range(memories[same].size/2): 
         orn = memories[same][x,0]
         if same > orn:
-                placeholder[same][x] =mpf(finbar * fullnet[sima,orn] + placeholder[same][x]) 
+                placeholder[same][x] +=mpf(finbar * fullnet[sima,orn]) 
                 rice = derivativereLU(fullnet[sima,orn]) 
                 larry = finbar * rice
-                placeholderz[orn] = mpf(larry + placeholderz[orn])
+                placeholderz[orn] += mpf(larry + placeholderz[orn])
                 larry = larry * memories[same][x,1]
                 if rice != 0:
                     mario(orn,larry,fullnet,sima)
         else:
-            placeholder[same][x] =mpf(finbar * fullnet[faker,orn] + placeholder[same][x]) 
+            placeholder[same][x] +=mpf(finbar * fullnet[faker,orn]) 
             rice = derivativereLU(fullnet[faker,orn]) 
             larry = finbar * rice
-            placeholderz[orn] = mpf(larry + placeholderz[orn])
+            placeholderz[orn] += mpf(larry)
             larry = larry * memories[same][x,1]
             if rice != 0:
                 mario(orn,larry,fullnet,faker)
-            
+
+warning race condition occurs here any ideas on how to fix it?                
+@njit(parallel=True ,  nogil=True)
 def mario(bbr,b,fin,al): 
    global memories 
    global placeholder       
