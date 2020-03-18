@@ -2,6 +2,7 @@
 import numpy as np
 import pickle
 import sys
+import numba
 import threading
 import mpmath                    # mpf(float) this converts it to a custom presicison float i guess
 miy =                            # adjust for performence targets basically precision (will only be use for backpropagation)
