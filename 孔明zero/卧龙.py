@@ -16,7 +16,7 @@ input = np.zeros(shape =     )   #rule of thumb have more inter neurons than inp
 output = np.zeros(shape =     )
 synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
 df =                             #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionalu
-deviations=                      # how many deviations to keep, remember empirical rule 68,95,99.7 
+deviations=1.3                   # how many deviations to keep, remember empirical rule 68,95,99.7 
 connectrate =                    # number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good oe), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
 weightmax =                      #this is the maximum value a weight should have (to prevent exploding weights)
                                  #remember to keep backup of fullnet for tbptt, also use random number of timesteps for each set of tbptt, not sure why but it seems to be a good practice
@@ -34,7 +34,6 @@ def setbase():
 def cregulator(x,base):          #the limit of setbase limits this output
   global fullnet
   global synapsec
-  global base
   if x < synapsec:
     p = x / ((len(fullnet) - 1) * len(fullnet))
   else:
@@ -44,7 +43,6 @@ def cregulator(x,base):          #the limit of setbase limits this output
 
 
 def reLU(x):
-  global reLUout
   if x > 0:
     reLUout = x
   else:
@@ -57,7 +55,6 @@ def memories():
   global neurons
   global fullnet
   global memories
-  global damnitt
   damnitt = len(input) + len(intern) + len(output)
   fullnet = np.zeros(shape = damnitt)
   memories = []
@@ -156,7 +153,6 @@ def connect():
             memories[x][-1,1] = xinit
         
 def disconnect():
-  def disconnect():
   global fullnet
   global memories
   global deviations
@@ -164,12 +160,12 @@ def disconnect():
       population = memories[x].size // 2
       for y in range(population):
         if memories[x][y][1] < 0:
-          mean = (memories[x][y][1] * -1) + mean
+          mean += (memories[x][y][1] * -1)
         else:
-          mean = memories[x][y][1] + mean
+          mean += memories[x][y][1]
       mean = mean / population
       for z in range(population):
-          variance = ((memories[x][y][1] - mean) ** 2) + variance
+          variance += ((memories[x][y][1] - mean) ** 2)
       variance = variance / population
       s_deviation = variance ** 0.5
       for z in range(population):
@@ -195,9 +191,9 @@ def memoryactivation():
     f = a + b
     for x in range(fullnet):
       for y in range(memories[x]):
-        fullnet[x] = fullnet[memories[x][y,0]] * memories[x][y,1] + fullnet[x]
+        fullnet[x] += fullnet[memories[x][y,0]] * memories[x][y,1]
       if x < a:
-        fullnet[x] = fullnet[x] + input[x]
+        fullnet[x] += input[x]
       fullnet[x] = reLU(fullnet[x] + bias[x])
       if fullnet[x] > e: 
         output[x - f] = fullnet[x]
@@ -206,7 +202,6 @@ def memoryactivation():
 #----------------------------------------------------------------------------------------------------------------
 
 def derivativereLU(x):                                     #x is the value of the input to the reLU function 
-  global dereLU
   if x > 0:
     dereLU = 1
   else:
@@ -277,10 +272,10 @@ def mario(bbr,b,fin,al):
            ryuji = al
            kill = 0
        if kill != 1:
-           placeholder[bbr][taiga] =mpf(b * fin[ryuji,taiga] + placeholder[bbr][taiga])
+           placeholder[bbr][taiga] +=mpf(b * fin[ryuji,taiga])
            harm = derivativereLU(fin[ryuji,taiga])
            taiping = harm * b
-           placeholderz[ryuji] = mpf(taiping + placeholderz[ryuji])
+           placeholderz[ryuji] += mpf(taiping)
            taiping = peace * memories[bbr][taiga,1]
            if harm != 0:
                if taiping < 0:
@@ -301,11 +296,11 @@ def memorieslearn(l,ra):
     global weightmax
     for x in range(len(memories)):
         for y in range(memories[x].size / 2):
-            memories[x][y,1] = memories[x][y,1] + (placeholder[x][y] * l)
+            memories[x][y,1] += (placeholder[x][y] * l)
             if memories[x][y,1] > weightmax:
                 memories[x][y,1] = weightmax
     for x in range(len(placeholder)):
-        memoriesbias[x] = memoriesbias[x] + (placeholderz[x] * ra)
+        memoriesbias[x] += (placeholderz[x] * ra)
     placeholder = None
     placeholderz = None
           
@@ -314,5 +309,5 @@ memories()
 startmemory()
 memoriesbias()
 synapsec = proportionalu((len(fullnet),synapselmt,df)
-base = setbase()
+cbase = setbase()
 startmemory(0.4,4)
