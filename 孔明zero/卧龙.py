@@ -12,7 +12,7 @@ shiro = 1/(10 ** kag)            #will terminate branch of backpropagation if ch
 threading.stack_size(2 ** 27 - 1)#(around 17 mb, change if gpu has a lot of vram/need more heap or u need more stackspace, cpython stores only references in stack so 17mb should be enough)
 sys.setrecursionlimit(7777777)   #change along with stack size and size of network& bptt/tpbtt depth
 intern = np.zeros(shape =     )  #don't forget to initialise these
-input = np.zeros(shape =     )   #rule of thumb have more inter neurons than input + output
+inputs = np.zeros(shape =     )   #rule of thumb have more inter neurons than input + output
 output = np.zeros(shape =     )
 synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
 df =                             #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionalu
@@ -50,12 +50,12 @@ def reLU(x):
   return reLUout
 
 def memories():
-  global input
+  global inputs
   global output
   global neurons
   global fullnet
   global memories
-  damnitt = len(input) + len(intern) + len(output)
+  damnitt = len(inputs) + len(intern) + len(output)
   fullnet = np.zeros(shape = damnitt)
   memories = []
   for x in range(len(fullnet)):
@@ -69,11 +69,11 @@ def memoriesbias():
     
 def startmemory(ak,runs): not finished#ak starts the number of intital connections to and from input and output,set below 0.6, also take into account the , runs is the number of times connect() is run to randomly set up a few connections
   global memories
-  global input
+  global inputs
   global intern
   global output
   z = len(intern)
-  y = len(input)
+  y = len(inputs)
   xt = len(output)
   yz = y + z - 1
   yz1 = y + z
@@ -179,12 +179,12 @@ def disconnect():
 
 def memoryactivation():
     global fullnet
-    global input
+    global inputs
     global output
     global intern
     global memories
     global memoriesbias
-    a = len(input)
+    a = len(inputs)
     b = len(intern)
     c = len(output)
     e = a + b - 1
@@ -193,7 +193,7 @@ def memoryactivation():
       for y in range(memories[x]):
         fullnet[x] += fullnet[memories[x][y,0]] * memories[x][y,1]
       if x < a:
-        fullnet[x] += input[x]
+        fullnet[x] += inputs[x]
       fullnet[x] = reLU(fullnet[x] + bias[x])
       if fullnet[x] > e: 
         output[x - f] = fullnet[x]
@@ -227,10 +227,10 @@ def hardcode(fullnet,target,sima):
    global placeholder 
    global placeholderz 
    global memories 
-   global input
+   global inputs
    global intern
    faker = sima - 1
-   otuput = len(input) + len(intern)
+   otuput = len(inputs) + len(intern)
    for ditto in range (len(output)): 
     same = otup + ditto
     rise = derivativereLU(fullnet[sima,same]) 
@@ -260,7 +260,7 @@ def mario(bbr,b,fin,al):
    global placeholder       
    global placeholderz 
    global shiro
-   for k in range(memories[bbr].size/2):
+   for k in prange(memories[bbr].size/2):
        taiga = memories[bbr][k][0]
        if taiga > bbr:
            if al != 0:
