@@ -1,43 +1,73 @@
-# This is it, we are sticking with recursion multiprocessing will come later
 import numpy as np
-import pickle
 import sys
-import numba
+from numba import jit
+from numba import prange
+import dask
+from datetime import datetime
+import os
+import time
 import threading
-import mpmath                    # mpf(float) this converts it to a custom presicison float i guess
-miy =                            # adjust for performence targets basically precision (will only be use for backpropagation)
+from mpmath import mp 
+import psutil
+p = psutil.Process()
+p.cpu_affinity([])
+print ("cores",p.cpu_affinity())
+print("There are maximum",(psutil.cpu_count(logical=True)),"threads concurrently running")
+os.system("taskset -p 0xff %d" % os.getpid()) 
+                                #mp.mpf(float) this converts it to a custom presicison float i guess
+miy =  100                       # adjust for performence targets basically precision (will only be use for backpropagation)
 mp.dps = miy                     #set precision of mpf
 kag = miy//2             
 shiro = 1/(10 ** kag)            #will terminate branch of backpropagation if chain of prtial derivatives dips below this number(changes with prescision of mp.dps), reason being if this gets too small changes won't matter because of how small they are, the weights are only at most a longdouble
 threading.stack_size(2 ** 27 - 1)#(around 17 mb, change if gpu has a lot of vram/need more heap or u need more stackspace, cpython stores only references in stack so 17mb should be enough)
 sys.setrecursionlimit(7777777)   #change along with stack size and size of network& bptt/tpbtt depth
-intern = np.zeros(shape =     )  #don't forget to initialise these
-inputs = np.zeros(shape =     )   #rule of thumb have more inter neurons than input + output
-output = np.zeros(shape =     )
-synapselmt =                     #1.4 ** (the number of digits in total number of neurons - 1)
-df =                             #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionalu
+intern = np.zeros(shape = 10)  #don't forget to initialise these
+inputs = np.zeros(shape =  1  )  #rule of thumb have more inter neurons than input + output
+output = np.zeros(shape =  1  )
+synapselmt =5                  #1.4 ** (the number of digits in total number of neurons - 1)
+df = 100                         #sqrt of total number of neurons, if that is too much do cuberoot determines the curve for proportionalu
 deviations=1.3                   # how many deviations to keep, remember empirical rule 68,95,99.7 
-connectrate =                    # number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good oe), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
-weightmax =                      #this is the maximum value a weight should have (to prevent exploding weights)
-                                 #remember to keep backup of fullnet for tbptt, also use random number of timesteps for each set of tbptt, not sure why but it seems to be a good practice
-                                 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
+connectrate =0.05                # number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good oe), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
+weightmax = 2                    #this is the maximum value a weight should have (to prevent exploding weights)
+nlistp = len(intern) + len(inputs) + len(output)
+nlist = np.zeros(shape = nlistp)
+
+for x in range(nlistp):
+    nlist[x] = x
+    
+def time_convert(sec):
+  mins = sec // 60
+  minsb = round(mins)
+  sec = sec % 60
+  secb = round(sec,2)
+  hours = mins // 60
+  hoursb = round(hours)
+  mins = mins % 60
+  print("Completed in",hoursb,"hours",minsb, "mins and", secb, "seconds")
+  
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+start_time = time.time()
+print("Starting...", current_time)
+  
+                               #remember to keep backup of fullnet for tbptt, also use random number of timesteps for each set of tbptt, not sure why but it seems to be a good practice
+                 #remember the format for targets is [[10],[100],[1000]...] and the format for target indice is [4,5,6...], len(target indice) = len(targets), indice tells us which part of the back up data we start from and apply our target
 def proportionalu(x,lmt,c):      #(lmt sets the limit of what your function will converge to, c determines when the curve will get steep i.e. when stuff plateaus, not sure about how to exactly correlate the curve and c just use a reasonable dependant variable that is scaled to the number of neurons)
-  out = (limit * x) / (x + c)
+  out = (lmt * x) / (x + c)
   return out
    
-def setbase():
-  global fullnet
-  r = 1/ ((len(fullnet) - 1) * len(fullnet))
+
+def setbase(x):
+  r = 1/ ((x - 1) * x)
   out = np.e ** (np.log(r)/100)
   return out
 
-def cregulator(x,base):          #the limit of setbase limits this output
-  global fullnet
-  global synapsec
+
+def cregulator(x,base,fullnetsize,synapsec):          #the limit of setbase limits this output
   if x < synapsec:
-    p = x / ((len(fullnet) - 1) * len(fullnet))
+    p = x / ((fullnetsize - 1) * fullnetsize)
   else:
-    p = (((x - synapsec)**2) + synapsec) /((len(fullnet) - 1) * len(fullnet))
+    p = (((x - synapsec)**2) + synapsec) /((fullnetsize - 1) * fullnetsize)
   out = np.log(p) / np.log(base)
   return out
 
@@ -49,155 +79,162 @@ def reLU(x):
     reLUout = 0 
   return reLUout
 
-def memories():
-  global inputs
-  global output
-  global neurons
-  global fullnet
-  global memories
+
+def fullneting(inputs,intern,output):
   damnitt = len(inputs) + len(intern) + len(output)
   fullnet = np.zeros(shape = damnitt)
-  memories = []
-  for x in range(len(fullnet)):
-    memories.append(np.array([]))
+  return fullnet
 
 
-def memoriesbias():
-    global fullnet
-    global memoriesbias
-    memoriesbias = np.copy(fullnet)
-    
-def startmemory(ak,runs): not finished#ak starts the number of intital connections to and from input and output,set below 0.6, also take into account the , runs is the number of times connect() is run to randomly set up a few connections
-  global memories
-  global inputs
-  global intern
-  global output
-  z = len(intern)
-  y = len(inputs)
-  xt = len(output)
-  yz = y + z - 1
-  yz1 = y + z
-  y1 = y - 1
-  percent = ak * z
-  percent = percent // 1
-  krr = percent
-  if percent > y:
-    percent = int(percent//y)
-  else:
-    percent = 1
-  if krr > xt:
-    krr = int(krr//xt)
-  else:
-    krr = 1
-  neurin = np.array([])                      #indexes/indices? for next part of function
-  for x in range(z):
-    index = x + y
-    neurin = np.append(neurin,[index], axis = None)
-  neurin2 = np.copy(neurin)
-  for inputnm in range(y):
-    for x in range(len(percent)):
-      resa = np.random.randint(0,len(neurin))
-      if memories[neurin[resa]] == None:
-        memories[neurin[resa]] = np.array([[inputnm,0]])
-      else:
-        memories[neurin[resa]] = np.append(memories[neurin[resa]],[[inputnm,0]], axis = 0)
-      neurin = np.delete(neurin,resa)
-  for x in range(xt):
-    for y in range(krr):
-      resa = np.random.randint(0,len(neurin2))
-      if memories[x] == None:
-        memories[x] = np.array([[neurin2[resa],0]])
-      else:
-        memories[x] = np.append(memories[x],[[neurin2[resa],0]], axis = 0)
-      neurin2 = np.delete(neurin2,resa)
-  for x in range(runs):
-      connect()
-  for x in range(len(memories)):
-      part = ((2/len(memories[x])) ** 0.5)
-      for y in range(len(memories[x])):
-          xinit = np.random.randn()
-          xinit = xinit * part
-          memories[x][y,1] = xinit
-     
-def connect(): 
-  global memories
-  global fullnet
-  global connectrate
-  global cbase
-  for x in range(fullnet):
-      weightn = memories[x].size // 2
-      if weightn < 1:
-        weightn = 1
-      mi = (len(fullnet) - weightn) * 0.01
-      connectn   =   cregulator(weightn,cbase) * connectrate * mi
-      if connectn >= 1:
-          connectn = int(connectn)
-      else:
-        random = np.random.random_sample()
-        if random <= connectn:
-            connectn = 1
-        else: 
-            connectn = 0
-      if connect != 0:
-        list = np.array([])
-        for y in range(x):
-            list = np.append(list,[y])
-        for z in range(x + 1 , len(fullnet)):
-            list = np.append(list,[z])
-        for t in range(connectn):
-            neuron = np.random.randint(0,len(list))
-            memories[x] = np.append(memories[x],[[list[neuron],0]],axis = 0)
-            list = np.delete(list,neuron)
-            xinit = np.random.randn()
-            xinit = xinit * ((2/len(memories[x])) ** 0.5)
-            memories[x][-1,1] = xinit
-        
-def disconnect():
-  global fullnet
-  global memories
-  global deviations
+def memorieslist(fullnet):
+  memories= []
   for x in range(len(fullnet)):
-      population = memories[x].size // 2
-      for y in range(population):
-        if memories[x][y][1] < 0:
-          mean += (memories[x][y][1] * -1)
+    memories.append(None)
+  return memories
+
+def synapselist(fullnet):
+    synapse = []
+    for x in range(len(fullnet)):
+        synapse.append(None)
+    return synapse
+
+
+def startmemory(runs,memories,connectrate,cbase,synapselmt,nlist):
+    fno = len(memories)
+    for x in range(len(memories)):
+        if x == 0:
+            z = len(memories) - 1
+            memories[x] = np.array([z],dtype = int)
         else:
-          mean += memories[x][y][1]
-      mean = mean / population
-      for z in range(population):
-          variance += ((memories[x][y][1] - mean) ** 2)
-      variance = variance / population
-      s_deviation = variance ** 0.5
-      for z in range(population):
-          if memories[x][z][1] < 0:
-              absv = memories[x][z][1] * -1
-          else:
-              absv = memories[x][z][1]
-          remains = mean - (s_deviation * deviations)
-          if absv <= remains:
-              memories[x] = np.delete(memories[x],z,0)
-
-def memoryactivation():
-    global fullnet
-    global inputs
-    global output
-    global intern
+            r = x - 1
+            memories[x] = np.array([r],dtype = int)
+    for y in range(runs):
+        memories = memoriesconnect(memories,connectrate,cbase,synapselmt,nlist,fno)
+    return memories
+ 
+      
+def memoriesconnect(memories,connectrate,cbase,synapselmt,nlist,fno):
+    for x in range(len(memories)):
+        if type(memories[x]) == np.ndarray:
+            number = memories[x].size
+        else:
+            number = 1
+        mi = (fno - number) * 0.01
+        connectn = cregulator(number,cbase,fno,synapselmt) * connectrate * mi
+        if connectn > 1:
+            connectn = int(connectn // 1)
+        else:
+            rn = np.random.random_sample()
+            if rn < connectn:
+                connectn = 1
+            else:
+                connectn = 0
+        if connectn != 0:
+            listi = np.copy(nlist)
+            ppp = [x]
+            if type(memories[x]) == np.ndarray:
+                for y in range(len(memories[x])):
+                    ppp.append(memories[x][y])
+            listz = np.delete(listi,ppp)
+            for r in range(connectn):
+                if len(listz) != 0:
+                    neuron = np.random.randint(0,len(listz))
+                else:
+                    break
+                final_fish = np.array([listz[neuron]],dtype = int)
+                if type(memories[x]) == np.ndarray:
+                    memories[x] = np.append(memories[x],final_fish)
+                else:
+                    memories[x] = final_fish
+    return memories
+                    
+def synapsegrow(synapse,memories):
+    fish = len(memories)
+    for x in range(fish):
+        if type(synapse[x]) != np.ndarray:
+            p = 0
+        else:
+            p = len(synapse[x])
+        q = len(memories[x])
+        pq = int(q - p)
+        rtq = len(memories[x])
+        for y in range(pq):
+            init = np.random.randn()
+            init *= ((2/rtq) ** 0.5)
+            ainit = np.array([init],dtype=np.longdouble)
+            if type(synapse[x]) != np.ndarray:
+                synapse[x] = ainit
+            else:
+                synapse[x] = np.append(synapse[x],ainit)
+    return synapse
+                
+            
+def prune(deviations):
+    global synapse
     global memories
-    global memoriesbias
+    for x in range(len(synapse)):
+        population = len(memories[x])
+        mean = 0
+        for y in range(population):
+            if synapse[x][y] < 0:
+                mean += (synapse[x][y] * -1)
+            else:
+                mean += synapse[x][y]
+        mean = mean / population
+        variance = 0
+        for z in range(population):
+            variance += ((synapse[x][z] - mean) ** 2)
+        variance = variance / population
+        eviation = variance ** 0.5
+        devi = eviation * deviations
+        remains = mean - devi
+        rq = []
+        for t in range(population):
+            if synapse[x][t] < 0:
+                absv = synapse[x][t] * -1
+            else:
+                absv = synapse[x][t]
+            if absv <= remains:
+                rq.append(t)
+        synapse[x] = np.delete(synapse[x],rq)
+        memories[x] = np.delete(memories[x],rq)
+
+            
+
+
+
+
+def memoriesbiasst(fullnet):
+    memoriesbias = np.copy(fullnet)
+    return memoriesbias
+    
+
+
+        
+
+
+def memoryactivation(fullnet):
+    global memories
+    global inputs
+    global synapse
     a = len(inputs)
-    b = len(intern)
-    c = len(output)
-    e = a + b - 1
-    f = a + b
+    global memoriesbias
     for x in range(fullnet):
-      for y in range(memories[x]):
-        fullnet[x] += fullnet[memories[x][y,0]] * memories[x][y,1]
+      for y in prange(memories[x]):
+        fullnet[x] += fullnet[memories[x][y]] * synapse[x][y]
       if x < a:
         fullnet[x] += inputs[x]
-      fullnet[x] = reLU(fullnet[x] + bias[x])
-      if fullnet[x] > e: 
-        output[x - f] = fullnet[x]
-    
+      fullnet[x] = reLU(fullnet[x] + memoriesbias[x])
+    return fullnet
+      
+
+def outputread(output):
+    global fullnet
+    for x in prange(len(output)):
+        fish = (x + 1) * -1
+        output[fish] = fullnet[fish]
+    return output
+        
   
 #----------------------------------------------------------------------------------------------------------------
 
@@ -208,112 +245,114 @@ def derivativereLU(x):                                     #x is the value of th
     dereLU = 0
   return dereLU
 
-def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
-   global memories 
-   global fullnet 
+
+def ba_zhen_tu(targets,target_index,output,fullnet,inputs,intern):    #this is backpropagation
    global placeholder
-   global placeholderz
    placeholder = []
    for x in range(len(memories)):
       placeholder.append(np.zeros(shape = len(memories[x])))
    for x in range(len(placeholder)):
     for y in range(placeholder[x].size):
-      placeholder[x,y] = mpf(0.0)
-   placeholderz = np.zeros(shape = len(fullnet),dtype = np.longdouble) 
+      placeholder[x,y] = mp.mpf(0.0)
+   placeholder.append(np.zeros(shape = len(fullnet)))
+   for x in range(len(placeholder[-1])):
+      placeholder[-1][x] = mp.mpf(0.0)
    for thing in range(len(target_index)): 
        sima = target_index[thing]
        target = targets[thing]
-       hardcode(zhuge,target,sima) 
+       hardcode(target,sima,inputs,intern,output)
 
-def hardcode(fullnet,target,sima): 
-   global output 
-   global placeholder 
-   global placeholderz 
-   global memories 
-   global inputs
-   global intern
+
+
+def hardcode(target,sima,inputs,intern,output): 
+   global placeholder
+   global zhuge
+   global synapse
+   global memories
    faker = sima - 1
-   otuput = len(inputs) + len(intern)
+   otup = len(inputs) + len(intern)
    for ditto in range (len(output)): 
     same = otup + ditto
-    rise = derivativereLU(fullnet[sima,same]) 
-    finbar = (2 * (fullnet[sima,same] - target[ditto])) * rise 
-    placeholderz[same] += mpf(finbar) 
-    for x in range(memories[same].size/2): 
-        orn = memories[same][x,0]
+    rise = derivativereLU(zhuge[sima,same]) 
+    finbar = (2 * (zhuge[sima,same] - target[ditto])) * rise 
+    placeholder[-1][same] = mp.mpf(finbar) + placeholder[-1][same]
+    for x in range(memories[same].size): 
+        orn = memories[same][x]
         if same > orn:
-                placeholder[same][x] +=mpf(finbar * fullnet[sima,orn]) 
-                rice = derivativereLU(fullnet[sima,orn]) 
+                placeholder[same][x]=(mp.mpf(finbar * zhuge[sima,orn])) + placeholder[same][x]
+                rice = derivativereLU(zhuge[sima,orn]) 
                 larry = finbar * rice
-                placeholderz[orn] += mpf(larry + placeholderz[orn])
-                larry = larry * memories[same][x,1]
+                placeholder[-1][orn]=placeholder[-1][orn]+(mp.mpf(larry))
+                larry = larry * synapse[same][x]
                 if rice != 0:
-                    mario(orn,larry,fullnet,sima)
+                    dask.delayed(mario)(orn,larry,sima)
+                    placeholder = placeholder.compute()
         else:
-            placeholder[same][x] +=mpf(finbar * fullnet[faker,orn]) 
-            rice = derivativereLU(fullnet[faker,orn]) 
+            placeholder[same][x]=placeholder[same][x]+(mp.mpf(finbar * zhuge[faker,orn])) 
+            rice = derivativereLU(zhuge[faker,orn]) 
             larry = finbar * rice
-            placeholderz[orn] += mpf(larry)
-            larry = larry * memories[same][x,1]
+            placeholder[-1][orn]=placeholder[-1][orn]+(mp.mpf(larry))
+            larry = larry * synapse[same][x]
             if rice != 0:
-                mario(orn,larry,fullnet,faker)
+                dask.delayed(mario)(orn,larry,faker)
+                placeholder = placeholder.compute()
+   placeholder = placeholder.compute()
+        
 
-warning race condition occurs here any ideas on how to fix it?  
-@vectorize  (do i need this?)
-@njit(parallel=True ,  nogil=True)
-def mario(bbr,b,fin,al): 
-   global memories 
-   global placeholder       
-   global placeholderz 
-   global shiro
-   for k in prange(memories[bbr].size/2):
-       taiga = memories[bbr][k][0]
-       if taiga > bbr:
-           if al != 0:
-               ryuji = al - 1
-               kill = 0
-           else:
-               kill = 0
-       else:
-           ryuji = al
-           kill = 0
-       if kill != 1:
-           placeholder[bbr][taiga] +=mpf(b * fin[ryuji,taiga])
-           harm = derivativereLU(fin[ryuji,taiga])
-           taiping = harm * b
-           placeholderz[ryuji] += mpf(taiping)
-           taiping = peace * memories[bbr][taiga,1]
-           if harm != 0:
-               if taiping < 0:
-                   r = taiping * -1
+
+
+
+
+@dask.delayed
+def mario(bbr,b,al): 
+   global placeholder
+   global zhuge
+   global memories
+   global synapse
+   for k in range(memories[bbr].size):
+           taiga = memories[bbr][k]
+           if taiga > bbr:
+               if al != 0:
+                   ryuji = al - 1
+                   kill = 0
                else:
-                   r = taiping
-               if r > shiro:
-                       r = None
-                       mario(taiga,taiping,fin,ryuji)
-           
-            
-            
+                   kill = 0
+           else:
+               ryuji = al
+               kill = 0
+           if kill != 1:
+               placeholder[bbr][taiga]=placeholder[bbr][taiga]+(mp.mpf(b * zhuge[ryuji,taiga]))
+               harm = derivativereLU(zhuge[ryuji,taiga])
+               taiping = harm * b
+               placeholder[-1][ryuji]+=(mp.mpf(taiping))
+               taiping =taiping * synapse[bbr][taiga]
+               if harm != 0:
+                     mario(taiga,taiping,ryuji)
+
+    
+
+          
+
+
+  
+
 def memorieslearn(l,ra):
+    global synapse
     global memories
     global placeholder
     global memoriesbias
-    global placeholderz
     global weightmax
     for x in range(len(memories)):
         for y in range(memories[x].size / 2):
-            memories[x][y,1] += (placeholder[x][y] * l)
-            if memories[x][y,1] > weightmax:
-                memories[x][y,1] = weightmax
-    for x in range(len(placeholder)):
-        memoriesbias[x] += (placeholderz[x] * ra)
-    placeholder = None
-    placeholderz = None
-          
-    
-memories()
-startmemory()
-memoriesbias()
-synapsec = proportionalu((len(fullnet),synapselmt,df)
-cbase = setbase()
-startmemory(0.4,4)
+            synapse[x][y] -= (placeholder[x][y] * l)
+            if synapse[x][y] > weightmax:
+                syanpse[x][y] = weightmax
+    for x in range(len(placeholder[-1])):
+        memoriesbias[x] -= (placeholder[-1][x] * ra)
+    placeholder = None 
+fullnet = fullneting(inputs,intern,output)    
+memories = memorieslist(fullnet)
+synapse = synapselist(fullnet)
+memoriesbias = memoriesbiasst(fullnet)
+cbase = setbase(len(fullnet))
+memories = startmemory(10,memories,connectrate,cbase,synapselmt,nlist)
