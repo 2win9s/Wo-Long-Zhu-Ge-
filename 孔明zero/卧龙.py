@@ -1,13 +1,11 @@
+#full backpropagation through time,speed/time testing
 import numpy as np
 import sys
-from numba import jit
 from numba import prange
 import dask
 from datetime import datetime
-import os
 import time
 import threading
-from mpmath import mp 
 import psutil
 import gmpy2 as mp
 p = psutil.Process()
@@ -19,7 +17,7 @@ print(kagmiy,"this is the maximum precision you are allowed to set mpfr to, but 
 mp.get_context().precision = 200    #mp.mpfr(float)converts it to a custom presicison float i guess
 threading.stack_size(2 ** 27 - 1)   #(around 17 mb,shoud be enough
 sys.setrecursionlimit(7777777)      #change along with stack size and size of neuralnet & bptt/tpbtt depth
-intern = np.zeros(shape = 20000)       #don't forget to initialise these
+intern = np.zeros(shape = 10)       #don't forget to initialise these
 inputs = np.zeros(shape =  1  )     #rule of thumb have more inter neurons than input + output
 output = np.zeros(shape =  1  )     
 synapselmt = 10                     #1.4 ** (the number of digits in total number of neurons - 1) * 1, 2 ,5 pick one and round to nearest int (stick with 1 or 2)
@@ -27,21 +25,15 @@ df = 3                              #sqrt of total number of neurons, if that is
 deviations=1.3                      # how many deviations to keep, remember empirical rule 68,95,99.7 
 connectrate =0.05                   # number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good one), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
 weightmax = 2                       #this is the maximum value a weight should have (to prevent exploding weights)
+runs = 10   	                    # how many times to do the backprpagation for test
+timesteps = 100                     #number of timesteps
+s = timesteps - 1
 nlistp = len(intern) + len(inputs) + len(output)
 nlist = np.zeros(shape = nlistp)
 for x in range(nlistp):
     nlist[x] = x
     
-def time_convert(sec):
-  mins = sec // 60
-  minsb = round(mins)
-  sec = sec % 60
-  secb = round(sec,2)
-  hours = mins // 60
-  hoursb = round(hours)
-  mins = mins % 60
-  print("Completed in",hoursb,"hours",minsb, "mins and", secb, "seconds")
-  
+
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 start_time = time.time()
@@ -160,8 +152,8 @@ def synapsegrow(synapse):
         rtq = len(memories[x])
         for y in range(pq):
             init = np.random.randn()
-            init *= ((2/rtq) ** 0.5)
-            ainit = np.array([init],dtype=np.longdouble)
+            init *= mp.sqrt(2/rtq) * init
+            ainit = np.array([init],dtype=object)
             if type(synapse[x]) != np.ndarray:
                 synapse[x] = ainit
             else:
@@ -219,12 +211,12 @@ def memoryactivation(fullnet):
     a = len(inputs)
     global memoriesbias
     for x in range(a):
-      for y in prange(memories[x]):
+      for y in prange(len(memories[x])):
         fullnet[x] += fullnet[memories[x][y]] * synapse[x][y]
       fullnet[x] += inputs[x]
       fullnet[x] = reLU(fullnet[x] + memoriesbias[x])
     for x in range(a,len(fullnet)):
-        for y in prange(memories[x]):
+        for y in prange(len(memories[x])):
             fullnet[x] += fullnet[memories[x][y]] * synapse[x][y]
         fullnet[x] = reLU(fullnet[x] + memoriesbias[x])
     return fullnet
@@ -250,15 +242,16 @@ def ba_zhen_tu(targets,target_index):    #this is backpropagation
    global placeholder
    global synapse
    global fullnet
+   global placeholderz
    placeholder = []
    for x in range(len(synapse)):
-       placeholder.append(np.zeros(shape = len(synapse[x],dtype = object)))
+       placeholder.append(np.zeros(shape = len(synapse[x]),dtype = object))
    for x in range(len(placeholder)):
     for y in range(placeholder[x].size):
-      placeholder[x,y] = mp.mpfr(0.0)
-   placeholder.append(np.zeros(shape = len(fullnet),dtype = object))
-   for x in range(len(placeholder[-1])):
-      placeholder[-1][x] = mp.mpfr(0.0)
+      placeholder[x][y] = mp.mpfr(0.0)
+   placeholderz = np.zeros(shape = len(fullnet),dtype = object)
+   for x in range(len(placeholderz)):
+      placeholderz[x] = mp.mpfr(0.0)
    for thing in range(len(target_index)): 
        sima = target_index[thing]
        target = targets[thing]
@@ -273,6 +266,7 @@ def hardcode(target,sima):
    global memories
    global inputs
    global intern
+   global placeholderz
    t = len(inputs) + len(intern)
    for ditto in range (len(output)): 
     same = t + ditto
@@ -281,11 +275,11 @@ def hardcode(target,sima):
     placeholderz[same] = (finbar) + placeholderz[same]
     #dask.delayed(mario)(same,finbar,sima)
     mario(same,finbar,sima)
-    #placeholder = placeholder.compute()
-   #placeholder = placeholder.compute()
+     #placeholder = dask.compute(*placeholder)
+    #placeholder = dask.compute(*placeholder)
         
 
-#@dask.delayed
+ #@dask.delayed
 def mario(bbr,b,al): 
    global placeholder
    global zhuge
@@ -304,7 +298,7 @@ def mario(bbr,b,al):
                ryuji = al
            placeholder[bbr][k] = placeholder[bbr][k] + (b * zhuge[ryuji,taiga])
            harm = derivativereLU(zhuge[ryuji,taiga])
-           taiping = harm * b * mp.mpfr(synapse[bbr][k])
+           taiping = harm * b * synapse[bbr][k]
            placeholderz[taiga] = taiping + placeholderz[taiga]
            counter = counter + 1
            mario(taiga,taiping,ryuji)
@@ -327,8 +321,8 @@ def memorieslearn(l,ra):
     global weightmax
     global placeholderz
     for x in range(len(memories)):
-        for y in range(memories[x].size / 2):
-            synapse[x][y] = synapse[x][y] -  (placeholder[x][y] * l)
+        for y in range(memories[x].size):
+            synapse[x][y] = synapse[x][y] - (placeholder[x][y] * l)
             if synapse[x][y] > weightmax:
                 synapse[x][y] = weightmax
     for x in range(len(placeholderz)):
@@ -342,7 +336,7 @@ def memorieslearn(l,ra):
     
     
     
-    
+counter = 0 
 fullnet = fullneting(inputs,intern,output)    
 memories = memorieslist(fullnet)
 synapse = synapselist(fullnet)
@@ -359,12 +353,53 @@ else:
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 print ("Finished initialisation", "(",current_time,")")
+print("mario did",counter,"steps")
+counter = 0
 inputs[0] = 1
-targets = [[100],[95],[83],[69],[53],[30],[27],[12],[4]]
-targetindice = [99,94,82,68,52,29,26,11,3]
-
-
-
-
-
-
+targets = [[s+1],[95],[83],[69],[53],[30],[27],[12],[4]] 
+targetindice = [s,94,82,68,52,29,26,11,3]
+fullnet = memoryactivation(fullnet)
+zhuge = np.array([fullnet])
+for x in range(s):
+   fullnet = memoryactivation(fullnet)
+   zhuge = np.append(zhuge,[fullnet],axis = 0)
+output1 = outputread(output)
+ba_zhen_tu(targets,targetindice)
+memorieslearn(0.05,0.07)
+prune(deviations)
+memories = memoriesconnect(memories,connectrate,synapselmt,nlist)
+synapse = synapsegrow(synapse)
+now = datetime.now()
+current_time = now.strftime("%H:%M:%S")
+print ("Finished step1", "(",current_time,")")
+for x in range(runs):
+    fullnet = fullneting(inputs,intern,output)
+    fullnet = memoryactivation(fullnet)
+    zhuge = np.array([fullnet])
+    for y in range(s):
+        fullnet = memoryactivation(fullnet)
+        zhuge = np.append(zhuge,[fullnet],axis = 0)
+    output2 = outputread(output)
+    ba_zhen_tu(targets,targetindice)
+    memorieslearn(0.05,0.07)
+    prune(deviations)
+    memories = memoriesconnect(memories,connectrate,synapselmt,nlist)
+    synapse = synapsegrow(synapse)
+    if (output2 - (s+1)) ** 2 < (output1 - (s+1)) ** 2:
+        print("yesh",output2)
+    else:
+        print("something ish off...",output2,output1)
+    output1 = output2
+    now = datetime.now()
+    current_time = now.strftime("%H:%M:%S")
+    print ("Finished step",x + 2, "(",current_time,")")
+    print("mario did",counter,"steps")
+    counter = 0
+fullnet = fullneting(inputs,intern,output)
+fullnet = memoryactivation(fullnet)
+zhuge = np.array([fullnet])
+for y in range(99):
+        fullnet = memoryactivation(fullnet)
+        zhuge = np.append(zhuge,[fullnet],axis = 0)
+output2 = outputread(output)
+print("final cost after",runs+ 1, " cycles",(output2 - (s+1))**2)
