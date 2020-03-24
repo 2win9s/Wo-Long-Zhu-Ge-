@@ -1,24 +1,13 @@
-# this is just the test/ starting point
-
-
-
-
-
-
-
-
-
-
-
-
-
 import numpy as np
 # back propagation requires a copy of the previous neurons
 #set number of neurons here
-neurons = np.zeros(shape = 1)
-input = np.zeros(shape = 1)
-output = np.zeros(shape = 1)
-
+import sys
+import threading
+import psutil
+p = psutil.Process()
+p.cpu_affinity([])
+threading.stack_size(2 ** 27 - 1)   #(around 17 mb,shoud be enough
+sys.setrecursionlimit(7777777)      #change along with stack size and size of neuralnet & bptt/tpbtt depth
 #-----------------------------------------------------------------------------------------------------------------------
 def reLU(x):
   global reLUout
@@ -114,63 +103,53 @@ def ba_zhen_tu(zhuge,targets,target_index):    #this is backpropagation
    for thing in range(len(target_index)): 
        sima = target_index[thing]
        target = targets[thing]
-       hardcode(zhuge,target,sima) 
+       hardcode(target,sima) 
 
-def hardcode(fullnet,target,sima): 
-   global output 
-   global placeholder 
-   global placeholderz 
-   global memories 
-   faker = sima - 1
+def hardcode(target,sima): 
+   global placeholder
+   global zhuge
+   global memories
+   global input
+   global neurons
+   global placeholderz
+   global output
+   t = len(input) + len(neurons)
    for ditto in range (len(output)): 
-    same = (ditto + 1 ) * -1 
-    rise = derivativereLU(fullnet[sima,same]) 
-    placeholderz[same] = (2 * (fullnet[sima,same] - target[same])) * rise + placeholderz[same] 
-    finbar = (2 * (fullnet[sima,same] - target[same])) * rise 
-    for x in range(memories[same].size): 
-        if ((len(fullnet[sima]) - x )) > ditto + 1:
-            if memories[same,x] != None: 
-                larry = finbar * memories[same,x] 
-                placeholder[same,x] = larry * fullnet[sima,x] + placeholder[same,x] 
-                dice = finbar * memories[same,x] 
-                rice = derivativereLU(fullnet[sima,x]) 
-                placeholderz[same] = larry * rice + placeholderz[same] 
-                mario(x,dice,rice,larry,fullnet,sima) 
-        else:
-            if memories[same,x] != None: 
-                next_three_subjects = x + 1
-                larry = finbar * memories[same,x]
-                placeholder[same,x] = larry * fullnet[faker,x + 1] + placeholder[same,x] 
-                dice = finbar * memories[same,x] 
-                rice = derivativereLU(fullnet[faker,x + 1]) 
-                placeholderz[same] = larry * rice + placeholderz[same] 
-                mario(next_three_subjects,dice,rice,larry,fullnet,faker) 
-def mario(bbr,b,c,d,fin,al): 
-   global memories 
-   global placeholder       
-   global placeholderz 
+    same = t + ditto
+    rise = derivativereLU(zhuge[sima,same])
+    finbar = 2 * (zhuge[sima,same] - target[ditto]) * rise
+    placeholderz[same] = (finbar) + placeholderz[same]
+    #dask.delayed(mario)(same,finbar,sima)
+    mario(same,finbar,sima)
+    #placeholder = dask.compute(*placeholder)
+    #placeholder = dask.compute(*placeholder) 
+
+def mario(bbr,b,al): 
+   global placeholder
+   global zhuge
+   global memories
    global counter
-   for k in range(len(memories[bbr])): 
-        if memories[bbr,k] != None: 
+   global placeholderz
+   for k in range(memories[bbr].size):
            if k >= bbr:
-                if al != 0:
-                    ryuji = al - 1
-                    taiga = k + 1
-                    kill = 0
-                else:
-                    kill = 1
-           elif bbr > k:
-                ryuji = al
-                taiga = k
-                kill = 0
-           if kill != 1:
-             mr = d * memories[bbr,k] 
-             counter = counter + 1
-             placeholder[bbr,k] = b * c * fin[ryuji,taiga] + placeholder[bbr,k] 
-             peace = b * c * memories[bbr,k] 
-             harm = derivativereLU(fin[ryuji,taiga]) 
-             placeholderz[bbr] = mr * harm + placeholderz[bbr] 
-             mario(taiga,peace,harm,mr,fin,ryuji)
+               if al != 0:
+                   ryuji = al - 1
+                   taiga = k + 1
+               else:
+                   continue
+           else:
+               ryuji = al
+               taiga = k
+           placeholder[bbr][k] = placeholder[bbr][k] + (b * zhuge[ryuji,taiga])
+           harm = derivativereLU(zhuge[ryuji,taiga])
+           taiping = harm * b * memories[bbr][k]
+           placeholderz[bbr] = taiping + placeholderz[taiga]
+           counter = counter + 1
+           mario(taiga,taiping,ryuji)
+           
+           
+           
+           
 def memorieslearn(l,ra):
     global memories
     global placeholder
@@ -189,28 +168,6 @@ def memorieslearn(l,ra):
 
     
     
-def forget(xs):
-  global memories
-  p = 0
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] == None:
-        p = p + 1
-  ds = memories.size
-  ke = p / ds
-  if p != 0:
-          n = ((1 - ke) ** (1 - xs)) * ( 1/ ( p ** 0.5 ))
-  else:
-          n = ((1 - ke) ** (1 - xs))
-  z = n * -1
-  for x in range(len(memories)):
-    for y in range(len(memories[x])):
-      if memories[x,y] < n:
-        if memories[x,y] >= 0:
-          memories[x,y] = None
-      elif memories[x,y] < 0:
-        if memories[x,y] > z:
-          memories[x,y] = None
           
 def reconnect(r):               #r is growth rate, number between 0 and 1
   global memories
@@ -257,11 +214,10 @@ def proportional(cd,xs):
   rett = rece // 1
   recipe = int(rece)
   return recipe
-    
 neurons = np.zeros(shape = 1)
-input = np.zeros(shape = 8)
+input = np.zeros(shape = 0)
 output = np.zeros(shape = 1)
-deepness = 3
+deepness = 6000
 target = [[deepness]]
 targetindice = [deepness - 1]
 memories()
