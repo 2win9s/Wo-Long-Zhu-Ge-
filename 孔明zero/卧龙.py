@@ -269,6 +269,7 @@ def hardcode(target,sima):
    global inputs
    global intern
    global placeholderz
+   global output
    t = len(inputs) + len(intern)
    for ditto in range (len(output)): 
     same = t + ditto
