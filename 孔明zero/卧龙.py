@@ -72,7 +72,9 @@ def reLU(x):
 
 def fullneting(inputs,intern,output):
   damnitt = len(inputs) + len(intern) + len(output)
-  fullnet = np.zeros(shape = damnitt)
+  fullnet = np.zeros(shape = damnitt,dtype = object)
+  for c in range(fullnet):
+    fullnet[c] = mp.mpfr('0.0')
   return fullnet
 
 
@@ -201,9 +203,7 @@ def prune(deviations):
 
             
 def memoriesbiasst(fullnet):
-    memoriesbias = np.zeros(shape = len(fullnet),dtype = object)
-    for x in range(memoriesbias):
-        memoriesbias[x] = mp.mpf('0.0')
+    memoriesbias = np.copy(fullnet)
     return memoriesbias
     
 def memoryactivation(fullnet):
