@@ -149,6 +149,7 @@ def mario(bbr,b,c,d,fin,al):
    global memories 
    global placeholder       
    global placeholderz 
+   global counter
    for k in range(len(memories[bbr])): 
         if memories[bbr,k] != None: 
            if k >= bbr:
@@ -164,6 +165,7 @@ def mario(bbr,b,c,d,fin,al):
                 kill = 0
            if kill != 1:
              mr = d * memories[bbr,k] 
+             counter = counter + 1
              placeholder[bbr,k] = b * c * fin[ryuji,taiga] + placeholder[bbr,k] 
              peace = b * c * memories[bbr,k] 
              harm = derivativereLU(fin[ryuji,taiga]) 
@@ -256,6 +258,22 @@ def proportional(cd,xs):
   recipe = int(rece)
   return recipe
     
+neurons = np.zeros(shape = 1)
+input = np.zeros(shape = 8)
+output = np.zeros(shape = 1)
+deepness = 3
+target = [[deepness]]
+targetindice = [deepness - 1]
 memories()
 startmemory()
 memoriesbias()
+fno = len(fullnet)
+fullnet = np.zeros(shape = fno)
+memoryactivation()
+zhuge = np.array([fullnet])
+for x in range(deepness - 1):
+    memoryactivation()
+    zhuge = np.append(zhuge,[fullnet],axis = 0)
+counter = 0
+ba_zhen_tu(zhuge,target,targetindice)
+print(counter)
