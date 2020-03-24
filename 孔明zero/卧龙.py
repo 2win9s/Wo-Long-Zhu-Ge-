@@ -26,7 +26,7 @@ deviations=1.3                      # how many deviations to keep, remember empi
 connectrate =0.05                   # number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good one), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
 weightmax = 2                       #this is the maximum value a weight should have (to prevent exploding weights)
 runs = 10   	                    # how many times to do the backprpagation for test
-timesteps = 20                      #number of timesteps
+timesteps = 10                      #number of timesteps at least more than 5 to work
 s = timesteps - 1
 nlistp = len(intern) + len(inputs) + len(output)
 nlist = np.zeros(shape = nlistp)
@@ -277,11 +277,11 @@ def hardcode(target,sima):
     placeholderz[same] = (finbar) + placeholderz[same]
     #dask.delayed(mario)(same,finbar,sima)
     mario(same,finbar,sima)
-     #placeholder = dask.compute(*placeholder)
+    #placeholder = dask.compute(*placeholder)
     #placeholder = dask.compute(*placeholder)
         
 
- #@dask.delayed
+#@dask.delayed
 def mario(bbr,b,al): 
    global placeholder
    global zhuge
@@ -303,7 +303,8 @@ def mario(bbr,b,al):
            taiping = harm * b * synapse[bbr][k]
            placeholderz[taiga] = taiping + placeholderz[taiga]
            counter = counter + 1
-           mario(taiga,taiping,ryuji)
+           if harm != 0:
+               mario(taiga,taiping,ryuji)
 
     
 def shapems(memories):
@@ -355,11 +356,10 @@ else:
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 print ("Finished initialisation", "(",current_time,")")
-print("mario did",counter,"steps")
 counter = 0
 inputs[0] = 1
-targets = [[s+1],[95],[83],[69],[53],[30],[27],[12],[4]] 
-targetindice = [s,94,82,68,52,29,26,11,3]
+targets = [[s+1],[s],[s-1],[s-2],[s-3]] 
+targetindice = [s,s-1,s-2,s-3,s-4]
 fullnet = memoryactivation(fullnet)
 zhuge = np.array([fullnet])
 for x in range(s):
@@ -374,6 +374,8 @@ synapse = synapsegrow(synapse)
 now = datetime.now()
 current_time = now.strftime("%H:%M:%S")
 print ("Finished step1", "(",current_time,")")
+print("mario did",counter,"steps")
+counter = 0
 for x in range(runs):
     fullnet = fullneting(inputs,intern,output)
     fullnet = memoryactivation(fullnet)
@@ -400,7 +402,7 @@ for x in range(runs):
 fullnet = fullneting(inputs,intern,output)
 fullnet = memoryactivation(fullnet)
 zhuge = np.array([fullnet])
-for y in range(99):
+for y in range(s):
         fullnet = memoryactivation(fullnet)
         zhuge = np.append(zhuge,[fullnet],axis = 0)
 output2 = outputread(output)
