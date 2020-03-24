@@ -201,7 +201,9 @@ def prune(deviations):
 
             
 def memoriesbiasst(fullnet):
-    memoriesbias = np.copy(fullnet)
+    memoriesbias = np.zeros(shape = len(fullnet),dtype = object)
+    for x in range(memoriesbias):
+        memoriesbias[x] = mp.mpf('0.0')
     return memoriesbias
     
 def memoryactivation(fullnet):
