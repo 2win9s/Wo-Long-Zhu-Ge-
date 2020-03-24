@@ -73,7 +73,7 @@ def reLU(x):
 def fullneting(inputs,intern,output):
   damnitt = len(inputs) + len(intern) + len(output)
   fullnet = np.zeros(shape = damnitt,dtype = object)
-  for c in range(fullnet):
+  for c in range(len(fullnet)):
     fullnet[c] = mp.mpfr('0.0')
   return fullnet
 
