@@ -26,7 +26,7 @@ deviations=1.3                      # how many deviations to keep, remember empi
 connectrate =0.05                   # number should be between 0 and 0.1(keep it very small,fiddle around with the value to find a good one), basically a multiplier on how many neurons to grow everytime connect runs, adjust to suit frequency of the connect functions 
 weightmax = 2                       #this is the maximum value a weight should have (to prevent exploding weights)
 runs = 10   	                    # how many times to do the backprpagation for test
-timesteps = 100                     #number of timesteps
+timesteps = 20                      #number of timesteps
 s = timesteps - 1
 nlistp = len(intern) + len(inputs) + len(output)
 nlist = np.zeros(shape = nlistp)
