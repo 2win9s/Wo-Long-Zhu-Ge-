@@ -1,5 +1,5 @@
-test the network on MNIST
-somehow get multiprocessing started
+
+
 
 
 acknowledgements:
