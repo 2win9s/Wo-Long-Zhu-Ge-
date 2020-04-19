@@ -1,9 +1,6 @@
 /*
 Copyright (c) 2020 2win9s
-This code is not meant for proper real world use so please don't judge the quality of code too harshly, our github repository https://github.com/2win9s/Wo-Long-Zhu-Ge- is our few attempts at messing around with artificial neural networks 
-libraries used:  C++ standard library
-                 OpenMP
-                 Boost
+This code is not meant for proper real world use so please don't judge the quality of code too harshly.
 */
 #include<iostream>
 #include<fstream>
@@ -18,29 +15,33 @@ libraries used:  C++ standard library
 #include <boost/serialization/vector.hpp>
 
 
-thread_local std::random_device rdev;                            //this number may not be non deterministic e.g. on mingw before gcc 9.2, be careful
+thread_local std::random_device rdev;                            //this number may not be non deterministic e.g.on mingw before gcc 9.2, be careful
 thread_local std::mt19937 twisting(rdev());    
 
-//if you find that there isn't enough precision in long double use mpfr.h for some functions, feel free to parallelise stuff but rand and other functions will cause race conditions/bad stuff can happen
+//if you find that there isn't enough precision in long double use mpfr.h for some functions
 
 using namespace std;
 
 
-/*before you ready your pitchforks , yes we understand that there is probably an excess of global variables,
+/*before you ready your pitchforks , yes I understand that there is probably an excess of global variables,
 
-but many of these variables are used in multiple different functions so it would just be easier to have them as globals also some functions use way too many arguements
+but many of these variables are may take up large amounts of memory and are used in multiple different functions 
 
-changing our functions to use accept multiple arguements should be quite simple, we have labelled which global variables each function uses
+so it would just be easier to have them on the heap, 
 
-so that adding them as arguements should be a trivial job, also you might want to modify how each function works internally anyways
+also some functions will use way too many arguements
 
-another reason is so that i can have all of these variables in a list and group them here so their purpose can be explained
+changing our functions to use/accept multiple arguements should be quite simple,
+
+you might want to modify how each function works internally anyways.
+
+another reason is so that I can have all of these variables in a list and group them here so their purpose can be explained
 
 most of them are constants anyways*/
 
 
 int NNs;                                                //number of neurons
-vector<float> NN;                                       //the actual Neural Net is represented as a vector
+vector<float> NN;                                       //the Neural Network is represented as a vector
 
 
 vector<vector<int>> W1i;                                //weights pt1 index of input neurons
@@ -58,15 +59,10 @@ vector<vector<float>> W2s;                              //the multiplier of the 
 vector<float> bias;                                     //bias
 
 
-vector<float> placeholderz;                             //blacnk version of bias
-vector<vector<float>> placeholder1;                     //this is a blank version of W2s
-vector<vector<float>> placeholder2;                     //this is a blank version of W2s
-
-
 float connect_base;                                     //a percentage of available connections that will become new connections with each sync() call
-float rconnect_mean;                                    //to add some more randomness into the connecting of neurons (1 - random gaussian) * connect_base is used
-float rconnect_sdeviation;                              //the standard deviation for the random number (for connections)
-float rconnect_cap;                                     //the cap on the absolute value of the random number (we don't want problem where we try and connect more than possible)
+//to add some more randomness into the connecting of neurons (1 - random gaussian) * connect_base is used mean of gaussian is 0
+float rconnect_sdeviation;                              //the standard deviation for the random number (for connections) 
+float rconnect_cap;                                     //the cap on the absolute value of the random number (we don't want it to suddenly jump out of control)
 
 
 vector<int> inputi;                                     //vector of input indices
@@ -147,12 +143,10 @@ void weight_start(){
         float r = distribution(twisting);
         W1i[i].emplace_back(i - 1);
         W1s[i].emplace_back(r);
-        placeholder1[i].emplace_back(0);
     }
     double r = distribution(twisting);
     W2i[0].emplace_back(NNs - 1);
     W2s[0].emplace_back(r);
-    placeholder2[0].emplace_back(0);
 } 
 
 
@@ -162,7 +156,7 @@ void syncinit(){
     {
         #pragma omp for simd nowait
         for(int x = 0;x < NNs - 1; x++){
-            normal_distribution<double> d(rconnect_mean,rconnect_sdeviation);
+            normal_distribution<double> d(0,rconnect_sdeviation);
             int a = W1i[x].size();
             double mis = (x - a);
             a += W2i[x].size();
@@ -209,7 +203,6 @@ void syncinit(){
                 float in = F(twisting); 
                 W1s[x].insert(W1s[x].end(),in);
 
-                placeholder1[x].insert(placeholder1[x].end(),0);
                 a1i[x].erase(a1i[x].begin() + ng);
 
                 --lmt;
@@ -217,7 +210,7 @@ void syncinit(){
         }
     #pragma omp for simd
     for(int y = 1;y < NNs ;y++){
-        normal_distribution<double> dis(rconnect_mean,rconnect_sdeviation);
+        normal_distribution<double> dis(0,rconnect_sdeviation);
         int a = W2i[y].size();
         double mis = NNs - (y + 1);
         double randnm;
@@ -264,7 +257,6 @@ void syncinit(){
             float in = al(twisting); 
             W2s[y].insert(W2s[y].end(),in);
 
-            placeholder2[y].insert(placeholder2[y].end(),0);
             a2i[y].erase(a2i[y].begin() + ng);
 
             --lmt;
@@ -340,15 +332,6 @@ void savebinf(){
     ofstream biasbin("bias.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  biasesbin(biasbin); 
     biasesbin << bias;
-    ofstream placeholderzbin("placeholderz.bin",ofstream::trunc); 
-    boost::archive::binary_oarchive  pzbin(placeholderzbin); 
-    pzbin << placeholderz;   
-    ofstream placeholder1bin("placeholder1.bin",ofstream::trunc); 
-    boost::archive::binary_oarchive  p1bin(placeholder1bin); 
-    p1bin << placeholder1;
-    ofstream placeholder2bin("placeholder2.bin",ofstream::trunc); 
-    boost::archive::binary_oarchive  p2bin(placeholder2bin); 
-    p2bin << placeholder2;
     ofstream inputibin("inputi.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  iinputbin(inputibin); 
     iinputbin << inputi;  
@@ -383,16 +366,7 @@ void savexmlf(){
     sW2xml << BOOST_SERIALIZATION_NVP(W2s);  
     ofstream biasxml("bias.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  biasesxml(biasxml);  
-    biasesxml << BOOST_SERIALIZATION_NVP(bias); 
-    ofstream placeholderzxml("placeholderz.xml",ofstream::trunc);  
-    boost::archive::xml_oarchive  pzxml(placeholderzxml);  
-    pzxml << BOOST_SERIALIZATION_NVP(placeholderz);   
-    ofstream placeholder1xml("placeholder1.xml",ofstream::trunc);  
-    boost::archive::xml_oarchive  p1xml(placeholder1xml);  
-    p1xml << BOOST_SERIALIZATION_NVP(placeholder1);  
-    ofstream placeholder2xml("placeholder2.xml",ofstream::trunc);  
-    boost::archive::xml_oarchive  p2xml(placeholder2xml);  
-    p2xml << BOOST_SERIALIZATION_NVP(placeholder2);  
+    biasesxml << BOOST_SERIALIZATION_NVP(bias);   
     ofstream inputixml("inputi.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  iinputxml(inputixml);  
     iinputxml << BOOST_SERIALIZATION_NVP(inputi); 
@@ -418,7 +392,6 @@ int main(){
     vector<float> vec(NNs,0);
     NN = vec;
     bias = vec;
-    placeholderz = vec;
     vector<vector<int>> vec1(NNs,i);
     W1i = vec1;
     W2i = vec1;
@@ -427,8 +400,6 @@ int main(){
     vector<vector<float>> vec2(NNs,fl);
     W1s = vec2;
     W2s = vec2;
-    placeholder1 = vec2;
-    placeholder2 = vec2;
     i.clear();
     fl.clear();
     vec.clear();
