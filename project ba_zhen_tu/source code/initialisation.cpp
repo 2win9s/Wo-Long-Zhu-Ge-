@@ -1,5 +1,5 @@
 /*
-Copyright (c) 2020 2win9s
+Copyright (c) 2020 2win9s permission to copy without fee all or part of this material is granted.
 This code is not meant for proper real world use so please don't judge the quality of code too harshly.
 */
 #include<iostream>
