@@ -1,2 +1,2 @@
 Our few attempts at neural networks,
-the main project for sci fest is ba_zhen_tu
+the project for sci fest/main project is ba_zhen_tu
