@@ -1,4 +1,5 @@
 /*
+Copyright (c) 2020 2win9s
 This code is not meant for proper real world use so please don't judge the quality of code too harshly, our github repository https://github.com/2win9s/Wo-Long-Zhu-Ge- is our few attempts at messing around with artificial neural networks 
 libraries used:  C++ standard library
                  OpenMP
