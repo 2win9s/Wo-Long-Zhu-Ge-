@@ -284,7 +284,13 @@ inline void inputscan(){
     for(int x = 0; x < length; x++){
         cout<<"enter input neuron index (remember vector indexing starts from 0)"<<endl;
         cin>>ind;
-        inputi.insert(inputi.end(),ind);
+        if(ind >= NNs){
+            cout<<"error: index out of range"<<endl;
+            exit (EXIT_FAILURE);
+        }
+        else{
+            inputi.insert(inputi.end(),ind);
+        }
     }
 }
 
@@ -304,7 +310,14 @@ inline void outputscan(){
     for(int x = 0; x < length; x++){
         cout<<"enter output neuron index (remember vector indexing starts from 0)"<<endl;
         cin>>ind;
-        outputi.insert(outputi.end(),ind);
+        if(ind >= NNs){
+            cout<<"error: index out of range"<<endl;
+            exit (EXIT_FAILURE);
+        }
+        else
+        {
+            outputi.insert(outputi.end(),ind);
+        }
     }
 }
 
