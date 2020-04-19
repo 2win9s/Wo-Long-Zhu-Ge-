@@ -409,8 +409,6 @@ int main(){
     outputscan();
     cout<<"enter connect base for initialisation"<<endl;
     cin>>connect_base;
-    cout<<"enter rconnectrate mean for initialisation"<<endl;
-    cin>>rconnect_mean;
     cout<<"enter rconnectrate standard deviation"<<endl;
     cin>>rconnect_sdeviation;
     cout<<"enter rconnectrate cap "<<endl;
