@@ -391,6 +391,7 @@ int main(){
     omp_set_dynamic(0);
     vector<int> i = {};
     vector<float> fl = {};
+    cout<<"CHECK IF YOU HAVE ENOUGH MEMORY (in heap), always estimate worst case memory usage and have much more than enough memory available."<<endl;
     cout<<"when entering numbers use only decimal fractions and decimal integers, no fractions, only 1 decimal point is allowed per number, only one - (negative sign) sign is allowed per number"<<endl;
     cout<<"enter number of logical processors/number of threads you are allowed concurrently"<<endl;
     cin>>Lthreadz;
