@@ -284,7 +284,7 @@ inline void inputscan(){
     for(int x = 0; x < length; x++){
         cout<<"enter input neuron index (remember vector indexing starts from 0)"<<endl;
         cin>>ind;
-        if(ind >= NNs){
+        if((ind >= NNs) || (ind < 0)){
             cout<<"error: index out of range"<<endl;
             exit (EXIT_FAILURE);
         }
@@ -310,7 +310,7 @@ inline void outputscan(){
     for(int x = 0; x < length; x++){
         cout<<"enter output neuron index (remember vector indexing starts from 0)"<<endl;
         cin>>ind;
-        if(ind >= NNs){
+        if((ind >= NNs) || (ind < 0)){
             cout<<"error: index out of range"<<endl;
             exit (EXIT_FAILURE);
         }
@@ -391,7 +391,7 @@ int main(){
     omp_set_dynamic(0);
     vector<int> i = {};
     vector<float> fl = {};
-    cout<<"when entering numbers use only decimal fractions and decimal integers, no fractions, only 1 decimal point is allowed per number"<<endl;
+    cout<<"when entering numbers use only decimal fractions and decimal integers, no fractions, only 1 decimal point is allowed per number, only one - (negative sign) sign is allowed per number"<<endl;
     cout<<"enter number of logical processors/number of threads you are allowed concurrently"<<endl;
     cin>>Lthreadz;
     notnum(Lthreadz);
