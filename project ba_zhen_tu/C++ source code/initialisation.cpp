@@ -155,11 +155,11 @@ void weight_start(){
 } 
 
 
-void sync(){
+void syncinit(){
     int tas = (Lthreadz * 3);
     #pragma omp parallel num_threads(Lthreadz) proc_bind(spread)
     {
-        #pragma omp taskloop simd num_tasks(tas)
+        #pragma omp for simd nowait
         for(int x = 0;x < NNs - 1; x++){
             normal_distribution<double> d(rconnect_mean,rconnect_sdeviation);
             int a = W1i[x].size();
@@ -175,7 +175,7 @@ void sync(){
                 }
             }
             k = 1 - randnm;
-            double connectn = cregulator(a) *  k * mis * connect_base;
+            double connectn = 1 *  k * mis * connect_base;
             int connectnm;
             if(connectn > 1){
             connectnm = floor(connectn);
@@ -214,7 +214,7 @@ void sync(){
                 --lmt;
             }
         }
-    #pragma omp taskloop simd num_tasks(tas)
+    #pragma omp for simd
     for(int y = 1;y < NNs ;y++){
         normal_distribution<double> dis(rconnect_mean,rconnect_sdeviation);
         int a = W2i[y].size();
@@ -230,7 +230,7 @@ void sync(){
             }
         }
         k = 1 - randnm;
-        double connectn = cregulator(a) * k * mis * connect_base;
+        double connectn = 1 * k * mis * connect_base;
         int connectnm;
         if(connectn > 1){
            connectnm = floor(connectn);
