@@ -38,7 +38,7 @@ changing our functions to use/accept multiple arguements should be quite simple,
 
 you might want to modify how each function works internally anyways.
 
-another reason is so that I can have all of these variables in a list and group them here so their purpose can be explained
+another reason is so that I can have all of these variables in a list and group them here so their purpose can be explained to some extent
 
 most of them are constants anyways*/
 
