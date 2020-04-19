@@ -1,3 +1,4 @@
+WE HAVE NO GPU/ACCELERATOE OFFLOADING IN OUR CODE
 The code in this folder requires the following libraries:
 Boost
 OpenMP
