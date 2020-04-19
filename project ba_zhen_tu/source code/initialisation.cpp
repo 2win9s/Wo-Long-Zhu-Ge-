@@ -311,9 +311,6 @@ inline void outputscan(){
 
 //creates the binary files
 void savebinf(){
-    ofstream ntwkbin("NN.bin",ofstream::trunc);
-    boost::archive::binary_oarchive  ntbin(ntwkbin);
-    ntbin << NN;
     ofstream W1ibin("W1i.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  iW1bin(W1ibin); 
     iW1bin << NN; 
@@ -346,9 +343,6 @@ void savebinf(){
 
 //creates the xml files
 void savexmlf(){ 
-    ofstream ntwkxml("NN.xml",ofstream::trunc); 
-    boost::archive::xml_oarchive  ntxml(ntwkxml); 
-    ntxml << BOOST_SERIALIZATION_NVP(NN); 
     ofstream W1ixml("W1i.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  iW1xml(W1ixml);  
     iW1xml << BOOST_SERIALIZATION_NVP(W1i);  
