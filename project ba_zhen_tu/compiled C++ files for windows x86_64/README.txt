@@ -7,7 +7,8 @@ In our code the openMP parallel regions typically use proc_bind(spread), all ope
 always be careful, CHECK IF YOU HAVE ENOUGH MEMORY (in heap), always estimate worst case memory usage and have much more than enough memory available.
 
 
-If you want more flexibility change/ edit and compile the source code with gcc, also remember to download and link the necessary libraries
+If you want more flexibility change/ edit and compile the source code with gcc, also remember to download and link the necessary libraries.
+You can also try and set openMP environment variables
 
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
