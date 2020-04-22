@@ -27,19 +27,12 @@ using namespace std;
 
 
 /*before you ready your pitchforks , yes I understand that there is probably an excess of global variables,
-
 but many of these variables are may take up large amounts of memory and are used in multiple different functions 
-
 so it would just be easier to have them on the heap, 
-
 also some functions will use way too many arguements
-
 changing our functions to use/accept multiple arguements should be quite simple,
-
 you might want to modify how each function works internally anyways.
-
 another reason is so that I can have all of these variables in a list and group them here so their purpose can be explained to some extent
-
 most of them are constants anyways*/
 
 
@@ -123,18 +116,26 @@ void vec2dsize(const s& vec) {
 
 // function initialises list of available connects for each neuron (a1i and a2i), must be called before syncinit()
 void afill(){ 
-    for(int x = 0;x < a1i.size();x++){
-        for(int y = 0; y < x - 1; y++){
-            a1i[x].insert(a1i[x].end(),y);
+    #pragma omp parallel proc_bind(spread)
+    {
+        #pragma omp for simd 
+        for(int x = 0;x < a1i.size();x++){
+            for(int y = 0; y < x - 1; y++){
+                a1i[x].emplace_back(y);
+            }
         }
-    }
-    for(int x = 1; x < a2i.size();x++){
-        for(int y = x + 1; y < NNs; y++){
-            a2i[x].insert(a2i[x].end(),y);
+        #pragma omp for simd nowait
+        for(int x = 1; x < a2i.size();x++){
+            for(int y = x + 1; y < NNs; y++){
+                a2i[x].emplace_back(y);
+            }
         }
-    }
-    for(int i = 1; i < NNs - 1;i++){
-        a2i[0].insert(a2i[0].end(),i);
+        #pragma omp single
+        {
+            for(int i = 1; i < NNs - 1;i++){
+                a2i[0].emplace_back(i);
+            }
+        }
     }
 }
 
@@ -142,6 +143,7 @@ void afill(){
 //this ensures that information will flow through all the neurons
 void weight_start(){
     normal_distribution<float> distribution(0,1);
+    #pragma omp for simd nowait
     for(int i = 1;i < NNs;i++){
         float r = distribution(twisting);
         W1i[i].emplace_back(i - 1);
@@ -157,112 +159,82 @@ void syncinit(){
     int tas = (Lthreadz * 3);
     #pragma omp parallel num_threads(Lthreadz) proc_bind(spread)
     {
-        #pragma omp for simd nowait
-        for(int x = 0;x < NNs - 1; x++){
-            normal_distribution<double> d(0,rconnect_sdeviation);
-            int a = W1i[x].size();
-            double mis = (x - a);
-            a += W2i[x].size();
+        #pragma omp for
+        for(int y = 0;y < NNs - 1;y++){
+            normal_distribution<double> dis(0,rconnect_sdeviation);
             double randnm;
-            long double k;
-            randnm = d(twisting);
+            randnm = dis(twisting);
             if(abs(randnm) > rconnect_cap){
                 randnm = rconnect_cap;
-                if(rand() % 2 == 0){
+                if(twisting() % 2 == 0){
                     randnm *= -1;
                 }
             }
-            k = 1 - randnm;
-            double connectn = 1 *  k * mis * connect_base;
-            int connectnm;
+            double connectn = 1 * (1 - randnm) * (y - 1) * connect_base;
             if(connectn > 1){
-            connectnm = floor(connectn);
+            connectn = floor(connectn);
             }
             else{
-                uniform_real_distribution<double> rk(0.0,1.0);
-                double chance = rk(twisting);
+                uniform_real_distribution<double> tri(0.0,1.0);
+                double chance = tri(twisting);
                 if(connectn >= chance){
-                    connectnm = 1;
+                    connectn = 1;
                 }
                 else{
-                    connectnm = 0;
+                    connectn = 0;
                 }
             }
-            if(connectnm >= a1i[x].size()){
-                connectnm = a1i[x].size();
+            if(connectn >= a1i[y].size()){
+                connectn = a1i[y].size();
             }
-            int lmt = a1i[x].size();
-            float zz = W1i[x].size() + connectnm;
-            long double xy = 2.0 / zz;
-            double He = sqrt(xy);
-
-            normal_distribution<float> F(0,He); 
-
-            for(int i = 0; i < connectnm; i++){
-
+            normal_distribution<float> al(0,sqrt(2.0 / W1i[y].size() + connectn));
+            int lmt = a1i[y].size();
+            for(int i = 0; i < connectn; i++){
                 int ng = twisting() % lmt;
-                W1i[x].insert(W1i[x].end(),a1i[x][ng]);
-
-                float in = F(twisting); 
-                W1s[x].insert(W1s[x].end(),in);
-
-                a1i[x].erase(a1i[x].begin() + ng);
-
+                W1i[y].emplace_back(a1i[y][ng]);
+                float in = al(twisting); 
+                W1s[y].emplace_back(in);
+                a1i[y].emplace_back(ng);
                 --lmt;
             }
         }
-    #pragma omp for simd
-    for(int y = 1;y < NNs ;y++){
-        normal_distribution<double> dis(0,rconnect_sdeviation);
-        int a = W2i[y].size();
-        double mis = NNs - (y + 1);
-        double randnm;
-        long double k;
-        a += W1i[y].size();
-        randnm = dis(twisting);
-        if(abs(randnm) > rconnect_cap){
-            randnm = rconnect_cap;
-            if(twisting() % 2 == 0){
-                randnm *= -1;
+        #pragma omp for
+        for(int y = 1;y < NNs ;y++){
+            normal_distribution<double> dis(0,rconnect_sdeviation);
+            double randnm;
+            randnm = dis(twisting);
+            if(abs(randnm) > rconnect_cap){
+                randnm = rconnect_cap;
+                if(twisting() % 2 == 0){
+                    randnm *= -1;
+                }
             }
-        }
-        k = 1 - randnm;
-        double connectn = 1 * k * mis * connect_base;
-        int connectnm;
-        if(connectn > 1){
-           connectnm = floor(connectn);
-        }
-        else{
-            uniform_real_distribution<double> tri(0.0,1.0);
-            double chance = tri(twisting);
-            if(connectn >= chance){
-                connectnm = 1;
+            double connectn = 1 * (1 - randnm) * (NNs - (y + 1)) * connect_base;
+            if(connectn > 1){
+            connectn = floor(connectn);
             }
             else{
-                connectnm = 0;
+                uniform_real_distribution<double> tri(0.0,1.0);
+                double chance = tri(twisting);
+                if(connectn >= chance){
+                    connectn = 1;
+                }
+                else{
+                    connectn = 0;
+                }
             }
-        }
-        if(connectnm >= a2i[y].size()){
-            connectnm = a2i[y].size();
-        }
-        int lmt = a2i[y].size();
-        float zz = W2i[y].size() + connectnm;
-        long double xy = 2.0 / zz;
-        double He = sqrt(xy);
-
-        normal_distribution<float> al(0,He);
-
-        for(int i = 0; i < connectnm; i++){
-
-            int ng = twisting() % lmt;
-            W2i[y].insert(W2i[y].end(),a2i[y][ng]);
-
-            float in = al(twisting); 
-            W2s[y].insert(W2s[y].end(),in);
-
-            a2i[y].erase(a2i[y].begin() + ng);
-
-            --lmt;
+            if(connectn >= a2i[y].size()){
+                connectn = a2i[y].size();
+            }
+            normal_distribution<float> al(0,sqrt(2.0 / W2i[y].size() + connectn));
+            int lmt = a2i[y].size();
+            for(int i = 0; i < connectn; i++){
+                int ng = twisting() % lmt;
+                W2i[y].emplace_back(a2i[y][ng]);
+                float in = al(twisting); 
+                W2s[y].emplace_back(in);
+                a2i[y].emplace_back(ng);
+                --lmt;
             }
         }
     }
@@ -320,74 +292,92 @@ inline void outputscan(){
         }
     }
 }
-
+ 
 
 //creates the binary files
 void savebinf(){
-    ofstream W1ibin("W1i.bin",ofstream::trunc); 
-    boost::archive::binary_oarchive  iW1bin(W1ibin); 
-    iW1bin << NN; 
-    ofstream a1ibin("a1i.bin",ofstream::trunc); 
-    boost::archive::binary_oarchive  ia1bin(a1ibin); 
-    ia1bin << a1i; 
-    ofstream W2ibin("W2i.bin",ofstream::trunc); 
-    boost::archive::binary_oarchive  iW2bin(W2ibin); 
-    iW2bin << W2i; 
     ofstream a2ibin("a2i.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  ia2bin(a2ibin); 
     ia2bin << a2i; 
+    a2i.clear();
+    ofstream a1ibin("a1i.bin",ofstream::trunc); 
+    boost::archive::binary_oarchive  ia1bin(a1ibin); 
+    a1i.clear();
+    ia1bin << a1i; 
+    ofstream W2ibin("W2i.bin",ofstream::trunc); 
+    boost::archive::binary_oarchive  iW2bin(W2ibin); 
+    W2i.clear();
+    iW2bin << W2i; 
+    ofstream W1ibin("W1i.bin",ofstream::trunc); 
+    boost::archive::binary_oarchive  iW1bin(W1ibin); 
+    iW1bin << W1i;
+    W1i.clear();
     ofstream W1sbin("W1s.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  sW1bin(W1sbin); 
     sW1bin << W1s; 
+    W1s.clear();
     ofstream W2sbin("W2s.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  sW2bin(W2sbin); 
     sW2bin << W2s;
+    W2s.clear();
     ofstream biasbin("bias.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  biasesbin(biasbin); 
     biasesbin << bias;
+    bias.clear();
     ofstream inputibin("inputi.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  iinputbin(inputibin); 
     iinputbin << inputi;  
+    inputi.clear();
     ofstream outputibin("outputi.bin",ofstream::trunc); 
     boost::archive::binary_oarchive  ioutputbin(outputibin); 
     ioutputbin << outputi;  
+    outputi.clear();
 }
 
 
 //creates the xml files
 void savexmlf(){ 
-    ofstream W1ixml("W1i.xml",ofstream::trunc);  
-    boost::archive::xml_oarchive  iW1xml(W1ixml);  
-    iW1xml << BOOST_SERIALIZATION_NVP(W1i);  
-    ofstream a1ixml("a1i.xml",ofstream::trunc);  
-    boost::archive::xml_oarchive  ia1xml(a1ixml);  
-    ia1xml << BOOST_SERIALIZATION_NVP(a1i);  
-    ofstream W2ixml("W2i.xml",ofstream::trunc);  
-    boost::archive::xml_oarchive  iW2xml(W2ixml);  
-    iW2xml << BOOST_SERIALIZATION_NVP(W2i);  
     ofstream a2ixml("a2i.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  ia2xml(a2ixml);  
     ia2xml << BOOST_SERIALIZATION_NVP(a2i);  
+    a2i.clear();
+    ofstream a1ixml("a1i.xml",ofstream::trunc);  
+    boost::archive::xml_oarchive  ia1xml(a1ixml);  
+    ia1xml << BOOST_SERIALIZATION_NVP(a1i); 
+    a1i.clear(); 
+    ofstream W2ixml("W2i.xml",ofstream::trunc);  
+    boost::archive::xml_oarchive  iW2xml(W2ixml);  
+    iW2xml << BOOST_SERIALIZATION_NVP(W2i); 
+    W2i.clear();
+    ofstream W1ixml("W1i.xml",ofstream::trunc);  
+    boost::archive::xml_oarchive  iW1xml(W1ixml);  
+    iW1xml << BOOST_SERIALIZATION_NVP(W1i);   
+    W1i.clear();
     ofstream W1sxml("W1s.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  sW1xml(W1sxml);  
     sW1xml << BOOST_SERIALIZATION_NVP(W1s);  
+    W1s.clear();
     ofstream W2sxml("W2s.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  sW2xml(W2sxml);  
-    sW2xml << BOOST_SERIALIZATION_NVP(W2s);  
+    sW2xml << BOOST_SERIALIZATION_NVP(W2s);
+    W2s.clear();  
     ofstream biasxml("bias.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  biasesxml(biasxml);  
-    biasesxml << BOOST_SERIALIZATION_NVP(bias);   
+    biasesxml << BOOST_SERIALIZATION_NVP(bias);  
+    bias.clear(); 
     ofstream inputixml("inputi.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  iinputxml(inputixml);  
-    iinputxml << BOOST_SERIALIZATION_NVP(inputi); 
+    iinputxml << BOOST_SERIALIZATION_NVP(inputi);
+    inputi.clear(); 
     ofstream outputixml("outputi.xml",ofstream::trunc);  
     boost::archive::xml_oarchive  ioutputxml(outputixml);  
-    ioutputxml << BOOST_SERIALIZATION_NVP(outputi);   
+    ioutputxml << BOOST_SERIALIZATION_NVP(outputi);  
+    outputi.clear(); 
 }
 
 
 int main(){
-    string ttt;
+    clock_t r = clock();
     omp_set_dynamic(0);
     vector<int> i = {};
     vector<float> fl = {};
@@ -424,29 +414,47 @@ int main(){
     cin>>rconnect_sdeviation;
     cout<<"enter rconnectrate cap "<<endl;
     cin>>rconnect_cap;
+    cout<<"wait..."<<endl;
+    clock_t t = clock();
     weight_start();
     afill();
     syncinit();
+    string ttt;
+    t = clock() - t;
+    double time_elapsed = ((double)t) / CLOCKS_PER_SEC;
+    cout << time_elapsed << " seconds to complete initialisation" << endl;
+    cout<<"wait..."<<endl;
     while(true){
         cout<<"type xml for xml file, bin for binary files or both for both xml and binary files"<<endl;
         cin>>ttt;
         if(ttt == "xml"){
+            clock_t r = clock();
             savexmlf();
+            t = t + (clock() - r);
             break;
         }
         else if(ttt == "bin"){
+            clock_t r = clock();
             savebinf();
+            t = t + (clock() - r);
             break;
         }
         else if(ttt == "both"){
+            clock_t r = clock();
             savexmlf();
             savebinf();
+            t = t + (clock() - r);
             break;
         }
         else{
             cout<<"error: invalid input; enter xml for xml file, bin for binary files (omit the .), or both for copies of both file types"<<endl;
         }
     }
-    cout<<"files have been created, you can now move on"<<endl;
+    cout<<"files have been created"<<endl;
+    double time_taken = ((double)t) / CLOCKS_PER_SEC;
+    cout << time_taken << " seconds to complete all tasks" << endl;
+    r = clock() - r;
+    time_taken = ((double)r) / CLOCKS_PER_SEC;
+    cout << time_taken << " total runtime" << endl;
     return 0;
 }
