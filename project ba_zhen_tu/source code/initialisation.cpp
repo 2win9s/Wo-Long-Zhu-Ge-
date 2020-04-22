@@ -194,7 +194,7 @@ void syncinit(){
                 W1i[y].emplace_back(a1i[y][ng]);
                 float in = al(twisting); 
                 W1s[y].emplace_back(in);
-                a1i[y].emplace_back(ng);
+                a1i[y].erase(a2i[y].begin() + ng);
                 --lmt;
             }
         }
@@ -233,7 +233,7 @@ void syncinit(){
                 W2i[y].emplace_back(a2i[y][ng]);
                 float in = al(twisting); 
                 W2s[y].emplace_back(in);
-                a2i[y].emplace_back(ng);
+                a2i[y].erase(a2i[y].begin() + ng);
                 --lmt;
             }
         }
