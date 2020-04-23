@@ -1,5 +1,5 @@
 import numpy as np
-#welcome to q learning where i will need to replace it with a neural network sometime in the future
+#simple q table
 def statesinit():
   global states
   states = np.array([])
