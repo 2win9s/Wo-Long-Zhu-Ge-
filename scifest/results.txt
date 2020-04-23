@@ -2,5 +2,4 @@ model1 initial 300 cycles gives 28 correct estimates out of 100 (11 different po
 model2 initial 300 cycles gives 21 correct estimates out of 100 (in this model we take the H6 and above +25 points into account so 13 point values, that puts random guessing at around 7.7 estimates out of 100)
 The training data and test data are always kept separate, the model never learns from the training data, so it is a true estimation.
 model2 next 1000 cycles 17 correct estimates out of 100 (but also 17 almost correct(almost correct meaning off by 1 grade)
-This tells us that our network is more effective than just guessing so that suggests there is at least some correlation.
-Out accurcy is so low because of the limited data set we had. A rough estimate of how many sets of data we would need to achieve 99.9% accuracy is somewhere in the range of 10,000 to 50,000 exam results. 
+This tells us that our network is more effective than just guessing so that suggests there is at least some correlation.(looking at the weights suggests that only 1 or 2 subjects had any real impact)
