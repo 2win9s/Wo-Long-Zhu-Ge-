@@ -125,9 +125,10 @@ void syncinit(){
         double connectn;
         int ng;
         float in;
+        normal_distribution<double> dis(0,rconnect_sdeviation);
+        uniform_real_distribution<double> tri(0.0,1.0);
         #pragma omp for
         for(int y = 1;y < NNs;y++){
-            normal_distribution<double> dis(0,rconnect_sdeviation);
             randnm = dis(twisting);
             randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
             connectn = (1 + randnm) * (y - 1) * connect_base;
@@ -135,7 +136,6 @@ void syncinit(){
             connectn = floor(connectn);
             }
             else{
-                uniform_real_distribution<double> tri(0.0,1.0);
                 chance = tri(twisting);
                 connectn  = (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
@@ -151,7 +151,6 @@ void syncinit(){
         }
         #pragma omp for
         for(int y = 0;y < NNs - 1;y++){
-            normal_distribution<double> dis(0,rconnect_sdeviation);
             randnm = dis(twisting);
             randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
             connectn = (1 + randnm) * (NNs - (y + 1)) * connect_base;
@@ -159,7 +158,6 @@ void syncinit(){
             connectn = floor(connectn);
             }
             else{
-                uniform_real_distribution<double> tri(0.0,1.0);
                 chance = tri(twisting);
                 connectn  = (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
