@@ -112,12 +112,7 @@ void syncinit(){
             else{
                 uniform_real_distribution<double> tri(0.0,1.0);
                 double chance = tri(twisting);
-                if(connectn >= chance){
-                    connectn = 1;
-                }
-                else{
-                    connectn = 0;
-                }
+                connectn =  (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
             normal_distribution<float> al(0,sqrt(2.0 / ((W1i[y].size() + connectn) * 2)));
             vector<int> vec = avi;
@@ -163,12 +158,7 @@ void syncinit(){
             else{
                 uniform_real_distribution<double> tri(0.0,1.0);
                 double chance = tri(twisting);
-                if(connectn >= chance){
-                    connectn = 1;
-                }
-                else{
-                    connectn = 0;
-                }
+                connectn =  (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
             normal_distribution<float> al(0,sqrt(2.0 / ((W2i[y].size() + connectn)*2)));
             vector<int> vec = avi;
