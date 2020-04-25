@@ -47,7 +47,6 @@ vector<vector<int>> a1i;                                //list of available inpu
 vector<vector<int>> W2i;                                //weights pt2 index of input
 vector<vector<int>> a2i;                                //list of available input neurons for W2i
 
-
 vector<vector<float>> W1s;                              //the multiplier of the weight
 vector<vector<float>> W2s;                              //the multiplier of the weight 
 
@@ -56,9 +55,9 @@ vector<float> bias;                                     //bias
 
 
 float connect_base;                                     //a percentage of available connections that will become new connections with each sync() call
-//to add some more randomness into the connecting of neurons (1 - random gaussian) * connect_base is used mean of gaussian is 0
+//to add some more randomness into the connecting of neurons (1 + |random gaussian|) * connect_base is used mean of gaussian is 0, |a| means absolute value of a
 float rconnect_sdeviation;                              //the standard deviation for the random number (for connections) 
-float rconnect_cap;                                     //the cap on the absolute value of the random number (we don't want it to suddenly jump out of control)
+float rconnect_cap;                                     //the cap on the absolute value of the random number (we don't want any single neuron to start with too many connections)
 
 
 vector<int> inputi;                                     //vector of input indices
@@ -119,7 +118,7 @@ void afill(){
     #pragma omp parallel proc_bind(spread)
     {
         #pragma omp for simd 
-        for(int x = 0;x < a1i.size();x++){
+        for(int x = 0;x < a1i.size() - 1;x++){
             for(int y = 0; y < x - 1; y++){
                 a1i[x].emplace_back(y);
             }
@@ -159,82 +158,57 @@ void syncinit(){
     int tas = (Lthreadz * 3);
     #pragma omp parallel num_threads(Lthreadz) proc_bind(spread)
     {
-        #pragma omp for
-        for(int y = 0;y < NNs - 1;y++){
+        double randnm;
+        double chance;
+        double connectn;
+        int ng;
+        float in;
+        #pragma omp for simd
+        for(int y = 1;y < NNs;y++){
             normal_distribution<double> dis(0,rconnect_sdeviation);
-            double randnm;
             randnm = dis(twisting);
-            if(abs(randnm) > rconnect_cap){
-                randnm = rconnect_cap;
-                if(twisting() % 2 == 0){
-                    randnm *= -1;
-                }
-            }
-            double connectn = 1 * (1 - randnm) * (y - 1) * connect_base;
+            randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
+            connectn = (1 + randnm) * (y - 1) * connect_base;
             if(connectn > 1){
             connectn = floor(connectn);
             }
             else{
                 uniform_real_distribution<double> tri(0.0,1.0);
-                double chance = tri(twisting);
-                if(connectn >= chance){
-                    connectn = 1;
-                }
-                else{
-                    connectn = 0;
-                }
+                chance = tri(twisting);
+                connectn  = (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
-            if(connectn >= a1i[y].size()){
-                connectn = a1i[y].size();
-            }
-            normal_distribution<float> al(0,sqrt(2.0 / W1i[y].size() + connectn));
-            int lmt = a1i[y].size();
+            connectn =  (connectn<a1i[y].size()) ? connectn:a1i[y].size();  //min(connectn,a1i[y].size())
+            normal_distribution<float> al(0,sqrt(2.0 / ((W1i[y].size() + connectn)*2)));
             for(int i = 0; i < connectn; i++){
-                int ng = twisting() % lmt;
+                ng = twisting() % a1i[y].size();
                 W1i[y].emplace_back(a1i[y][ng]);
-                float in = al(twisting); 
+                in = al(twisting); 
                 W1s[y].emplace_back(in);
-                a1i[y].erase(a2i[y].begin() + ng);
-                --lmt;
+                a1i[y].erase(a1i[y].begin() + ng);
             }
         }
-        #pragma omp for
-        for(int y = 1;y < NNs ;y++){
+        #pragma omp for simd
+        for(int y = 0;y < NNs - 1;y++){
             normal_distribution<double> dis(0,rconnect_sdeviation);
-            double randnm;
             randnm = dis(twisting);
-            if(abs(randnm) > rconnect_cap){
-                randnm = rconnect_cap;
-                if(twisting() % 2 == 0){
-                    randnm *= -1;
-                }
-            }
-            double connectn = 1 * (1 - randnm) * (NNs - (y + 1)) * connect_base;
+            randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
+            connectn = (1 + randnm) * (NNs - (y + 1)) * connect_base;
             if(connectn > 1){
             connectn = floor(connectn);
             }
             else{
                 uniform_real_distribution<double> tri(0.0,1.0);
-                double chance = tri(twisting);
-                if(connectn >= chance){
-                    connectn = 1;
-                }
-                else{
-                    connectn = 0;
-                }
+                chance = tri(twisting);
+                connectn  = (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
-            if(connectn >= a2i[y].size()){
-                connectn = a2i[y].size();
-            }
-            normal_distribution<float> al(0,sqrt(2.0 / W2i[y].size() + connectn));
-            int lmt = a2i[y].size();
+            connectn =  (connectn<a2i[y].size()) ? connectn:a2i[y].size();  //min(connectn,a2i[y].size())
+            normal_distribution<float> al(0,sqrt(2.0 / ((W2i[y].size() + connectn)*2)));
             for(int i = 0; i < connectn; i++){
-                int ng = twisting() % lmt;
+                ng = twisting() % a2i[y].size();
                 W2i[y].emplace_back(a2i[y][ng]);
-                float in = al(twisting); 
+                in = al(twisting); 
                 W2s[y].emplace_back(in);
                 a2i[y].erase(a2i[y].begin() + ng);
-                --lmt;
             }
         }
     }
@@ -252,7 +226,7 @@ inline void inputscan(){
         exit (EXIT_FAILURE);
     }
     notnum(length);
-    cout<<"enter input neuron indices"<<endl<<"must start with lowest index"<<endl<<"e.g. if your list is {1,2} wait for prompt type 1 wait for next prompt then type 2 ..."<<endl;
+    cout<<"enter input neuron indices"<<endl<<"must start with lowest index"<<endl<<"e.g. if your list is {1,2} wait for prompt type 1, hit enter, wait for next prompt then type 2 ..."<<endl;
     for(int x = 0; x < length; x++){
         cout<<"enter input neuron index (remember vector indexing starts from 0)"<<endl;
         cin>>ind;
@@ -278,7 +252,7 @@ inline void outputscan(){
         exit (EXIT_FAILURE);
     }
     notnum(length);
-    cout<<"enter input neuron indices"<<endl<<"must start with lowest index"<<endl<<"e.g. if your list is {1,2} wait for prompt type 1 wait for next prompt then type 2 ..."<<endl;
+    cout<<"enter input neuron indices"<<endl<<"must start with lowest index"<<endl<<"e.g. if your list is {1,2} wait for prompt type 1, hit enter, wait for next prompt then type 2 ..."<<endl;
     for(int x = 0; x < length; x++){
         cout<<"enter output neuron index (remember vector indexing starts from 0)"<<endl;
         cin>>ind;
@@ -379,8 +353,6 @@ void savexmlf(){
 int main(){
     clock_t r = clock();
     omp_set_dynamic(0);
-    vector<int> i = {};
-    vector<float> fl = {};
     cout<<"CHECK IF YOU HAVE ENOUGH MEMORY (in heap), always estimate worst case memory usage and have much more than enough memory available."<<endl;
     cout<<"when entering numbers use only decimal fractions and decimal integers, no fractions"<<endl<< "only 1 decimal point is allowed per number, only one - (negative sign) sign is allowed per number"<<endl;
     cout<<"enter number of logical processors/number of threads you are allowed concurrently"<<endl;
@@ -390,22 +362,6 @@ int main(){
     cout<<"enter number of neurons"<<endl;
     cin>>NNs;
     notnum(NNs);
-    vector<float> vec(NNs,0);
-    NN = vec;
-    bias = vec;
-    vector<vector<int>> vec1(NNs,i);
-    W1i = vec1;
-    W2i = vec1;
-    a1i = vec1;
-    a2i = vec1;
-    vector<vector<float>> vec2(NNs,fl);
-    W1s = vec2;
-    W2s = vec2;
-    i.clear();
-    fl.clear();
-    vec.clear();
-    vec1.clear();
-    vec2.clear();
     inputscan();
     outputscan();
     cout<<"enter connect base for initialisation"<<endl;
@@ -414,8 +370,22 @@ int main(){
     cin>>rconnect_sdeviation;
     cout<<"enter rconnectrate cap "<<endl;
     cin>>rconnect_cap;
-    cout<<"wait..."<<endl;
     clock_t t = clock();
+    cout<<"wait..."<<endl;
+    vector<float> vec(NNs,0);
+    NN = vec;
+    bias = vec;
+    vector<vector<int>> vec1(NNs);
+    W1i = vec1;
+    W2i = vec1;
+    a1i = vec1;
+    a2i = vec1;
+    vector<vector<float>> vec2(NNs);
+    W1s = vec2;
+    W2s = vec2;
+    vec.clear();
+    vec1.clear();
+    vec2.clear();
     weight_start();
     afill();
     syncinit();
@@ -423,24 +393,26 @@ int main(){
     t = clock() - t;
     double time_elapsed = ((double)t) / CLOCKS_PER_SEC;
     cout << time_elapsed << " seconds to complete initialisation" << endl;
-    cout<<"wait..."<<endl;
     while(true){
         cout<<"type xml for xml file, bin for binary files or both for both xml and binary files"<<endl;
         cin>>ttt;
         if(ttt == "xml"){
             clock_t r = clock();
+            cout<<"wait..."<<endl;
             savexmlf();
             t = t + (clock() - r);
             break;
         }
         else if(ttt == "bin"){
             clock_t r = clock();
+            cout<<"wait..."<<endl;
             savebinf();
             t = t + (clock() - r);
             break;
         }
         else if(ttt == "both"){
             clock_t r = clock();
+            cout<<"wait..."<<endl;
             savexmlf();
             savebinf();
             t = t + (clock() - r);
@@ -455,6 +427,6 @@ int main(){
     cout << time_taken << " seconds to complete all tasks" << endl;
     r = clock() - r;
     time_taken = ((double)r) / CLOCKS_PER_SEC;
-    cout << time_taken << " total runtime" << endl;
+    cout << time_taken << " seconds total time" << endl;
     return 0;
 }
