@@ -75,44 +75,6 @@ void notnum(nu num){
 }
 
 
-//prints 1d vector
-template<typename r>            
-void vecprint1d(const r& vec){
-    cout << "{";
-    if (!vec.empty()) for (int x = 0; x < vec.size(); x++) {
-        cout<<vec[x]<<" ,";
-    } 
-    cout<<"}"<<endl;
-}
-
-//prints a 2d vector
-template<typename s>            
-void vecprint2d(const s& vec){
-    cout << "{" << endl;
-    if (!vec.empty()) for (int x = 0; x < vec.size(); x++) {
-        cout << "{";
-        if (!vec[x].empty()) {
-            for (int y = 0; y < vec[x].size() - 1; y++) {
-                cout << vec[x][y] << ", ";
-            }
-            cout << vec[x][vec[x].size() - 1];
-        }
-        cout << "}" << endl;
-    }
-    cout << "}" << endl;
-}
-
-//prints the size of all the vectors in a 2d vector
-template<typename s>  
-void vec2dsize(const s& vec) {          
-    cout<<"main vector size "<<vec.size()<<endl;
-    cout << "{";
-    if (!vec.empty()) for (int x = 0; x < vec.size(); x++) {
-            cout<<"{"<<vec[x].size()<<"}";
-    }
-    cout << "}" <<endl;
-}
-
 // function initialises list of available connects for each neuron (a1i and a2i), must be called before syncinit()
 void afill(){ 
     #pragma omp parallel proc_bind(spread)
@@ -142,7 +104,7 @@ void afill(){
 //this ensures that information will flow through all the neurons
 void weight_start(){
     normal_distribution<float> distribution(0,1);
-    #pragma omp for simd nowait
+    #pragma omp for simd nowait proc_bind(spread)
     for(int i = 1;i < NNs;i++){
         float r = distribution(twisting);
         W1i[i].emplace_back(i - 1);
@@ -163,7 +125,7 @@ void syncinit(){
         double connectn;
         int ng;
         float in;
-        #pragma omp for simd
+        #pragma omp for
         for(int y = 1;y < NNs;y++){
             normal_distribution<double> dis(0,rconnect_sdeviation);
             randnm = dis(twisting);
@@ -187,7 +149,7 @@ void syncinit(){
                 a1i[y].erase(a1i[y].begin() + ng);
             }
         }
-        #pragma omp for simd
+        #pragma omp for
         for(int y = 0;y < NNs - 1;y++){
             normal_distribution<double> dis(0,rconnect_sdeviation);
             randnm = dis(twisting);
