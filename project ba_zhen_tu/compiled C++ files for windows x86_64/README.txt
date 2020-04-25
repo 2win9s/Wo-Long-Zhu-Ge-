@@ -1,6 +1,6 @@
 These .exe files were compiled with gcc 9.3 with the flags -O3 -static.
 
-the suffix -S means that we made an attempt at reducing the amount of memory(RAM) used at the cost of speed.
+the suffix S means that we made an attempt at reducing the amount of memory(RAM) used at the cost of speed.
 
 
 Our programs have NO GPU/ACCELEROATOR OFFLOADING.
