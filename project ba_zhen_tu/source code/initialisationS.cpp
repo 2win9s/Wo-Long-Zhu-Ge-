@@ -73,44 +73,6 @@ void notnum(nu num){
 }
 
 
-//prints 1d vector
-template<typename r>            
-void vecprint1d(const r& vec){
-    cout << "{";
-    if (!vec.empty()) for (int x = 0; x < vec.size(); x++) {
-        cout<<vec[x]<<" ,";
-    } 
-    cout<<"}"<<endl;
-}
-
-//prints a 2d vector
-template<typename s>            
-void vecprint2d(const s& vec){
-    cout << "{" << endl;
-    if (!vec.empty()) for (int x = 0; x < vec.size(); x++) {
-        cout << "{";
-        if (!vec[x].empty()) {
-            for (int y = 0; y < vec[x].size() - 1; y++) {
-                cout << vec[x][y] << ", ";
-            }
-            cout << vec[x][vec[x].size() - 1];
-        }
-        cout << "}" << endl;
-    }
-    cout << "}" << endl;
-}
-
-//prints the size of all the vectors in a 2d vector
-template<typename s>  
-void vec2dsize(const s& vec) {          
-    cout<<"main vector size "<<vec.size()<<endl;
-    cout << "{";
-    if (!vec.empty()) for (int x = 0; x < vec.size(); x++) {
-            cout<<"{"<<vec[x].size()<<"}";
-    }
-    cout << "}" <<endl;
-}
-
 // function initialises list of available connects for each neuron (a1i and a2i), must be called before syncinit()
 void afill(){ 
     for(int x = 0; x < NNs; x++){
