@@ -1,5 +1,8 @@
 These .exe files were compiled with gcc 9.3 with the flags -O3 -static.
 
+the suffix -S means that we made an attempt at reducing the amount of memory(RAM) used at the cost of speed.
+
+
 Our programs have NO GPU/ACCELEROATOR OFFLOADING.
 In our code the openMP parallel regions typically use proc_bind(spread), all openMP for loops use default scheduling and we also use openMP synchronisation hints.
 
