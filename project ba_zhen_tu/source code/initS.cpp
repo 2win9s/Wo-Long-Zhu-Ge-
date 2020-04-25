@@ -99,19 +99,24 @@ void weight_start(){
 void syncinit(){
     #pragma omp parallel num_threads(Lthreadz) proc_bind(spread)
     {
-        #pragma omp for simd
-        for(int y = 0;y < NNs - 1;y++){
-            normal_distribution<double> dis(0,rconnect_sdeviation);
-            double randnm;
+        double randnm;
+        double connectn;
+        int rrn;
+        float in;
+        bool it;
+        double chance;
+        uniform_real_distribution<double> tri(0.0,1.0);
+        normal_distribution<double> dis(0,rconnect_sdeviation);
+        #pragma omp for
+        for(int y = 1;y < NNs;y++){
             randnm = dis(twisting);
             randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
-            double connectn = (1 + randnm) * (y - 1) * connect_base;
+            connectn = (1 + randnm) * (y - 1) * connect_base;
             if(connectn > 1){
             connectn = floor(connectn);
             }
             else{
-                uniform_real_distribution<double> tri(0.0,1.0);
-                double chance = tri(twisting);
+                chance = tri(twisting);
                 connectn =  (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
             normal_distribution<float> al(0,sqrt(2.0 / ((W1i[y].size() + connectn) * 2)));
@@ -121,9 +126,6 @@ void syncinit(){
                 vec.erase(vec.begin() + W1i[y][x]);          
             }
             connectn =  (connectn<vec.size()) ? connectn:vec.size(); //min(connectn,vec.size())
-            int rrn;
-            float in;
-            bool it;
             for(int i = 0; i < connectn; i++){
                 rrn = twisting() % vec.size();
                 it = true;
@@ -145,19 +147,16 @@ void syncinit(){
                 }
             }
         }
-        #pragma omp for simd
-        for(int y = 1;y < NNs ;y++){
-            normal_distribution<double> dis(0,rconnect_sdeviation);
-            double randnm;
+        #pragma omp for
+        for(int y = 0;y < NNs -1;y++){
             randnm = dis(twisting);
             randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
-            double connectn = 1 * (1 - randnm) * (NNs - (y + 1)) * connect_base;
+            connectn = 1 * (1 - randnm) * (NNs - (y + 1)) * connect_base;
             if(connectn > 1){
             connectn = floor(connectn);
             }
             else{
-                uniform_real_distribution<double> tri(0.0,1.0);
-                double chance = tri(twisting);
+                chance = tri(twisting);
                 connectn =  (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
             }
             normal_distribution<float> al(0,sqrt(2.0 / ((W2i[y].size() + connectn)*2)));
@@ -167,9 +166,6 @@ void syncinit(){
             }
             vec.erase(vec.begin(),vec.begin() + y);
             connectn = (connectn<vec.size()) ? connectn:vec.size(); //min(connectn,vec.size())
-            int rrn;
-            float in;
-            bool it;
             for(int i = 0; i < connectn; i++){
                 rrn = twisting() % vec.size();
                 it = true;
@@ -397,6 +393,6 @@ int main(){
     cout << time_taken << " seconds to complete all tasks" << endl;
     r = clock() - r;
     time_taken = ((double)r) / CLOCKS_PER_SEC;
-    cout << time_taken << " total time" << endl;
+    cout << time_taken << " seconds total time" << endl;
     return 0;
 }
