@@ -4,6 +4,9 @@ Boost
 OpenMP
 and C++ standard library
 
+the suffix S means that we made an attempt at saving memory(RAM) at the cost of speed, be aware that the 2 different versions will require different variables/files.
+
+
 The code must be compiled with the newest version of gcc or a compiler that implements both C++ threading and openMP with POSIX threads. 
 This is becuase that we have put some variables in thread_local storage where gcc's implementation of the openMP threadprivate clause wouldn't allow us to do so. 
 
