@@ -2,7 +2,7 @@ SciFest@College AIT 2020 project by Kacper Gibas, Sam Kierans and Billy Yan.
 
 
 
-A 'simpler' RNN?
+A 'simple' RNN?
 
 A basic RNN achieves memory by receiving 2 sets inputs the input and previous hidden state and returning 2 sets of outputs the output and the new hidden state.
 
