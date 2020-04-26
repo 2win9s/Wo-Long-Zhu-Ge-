@@ -14,7 +14,7 @@ LSTM(https://www.bioinf.jku.at/publications/older/2604.pdf) perhaps the most pop
 
 But is a hidden state essential for retaining information for many timesteps?
 
-Biological neural networks (brains) don't seem to use one; they probably don't send of its information to a separate entity in order to wipe or reset itself, I think we can all agree that the information stays in the brain and doesn't get wiped. One/multiple short-term 'memory regions' emerge within the network that through certain structures/mechanisms/properties combat decay and/or interference (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3971378/), allowing information to stay. 
+Biological neural networks (brains) don't seem to use one; they probably don't send of its information to a separate entity in order to wipe or reset itself, I think we can all agree that the information stays in the brain and doesn't get wiped. In our brains certain regions within the neural network, through certain structures/mechanisms/properties combat decay and/or interference (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3971378/), allowing information to persist. 
 
 Can we try something similiar with Artificial neural networks?
 Perhaps, but there could be many more mechanisms/structures/properties of biological neural networks that haven't been discovered, or that we do not understand yet that allow it to retain information the way it does, but there is no harm in trying.
