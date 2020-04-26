@@ -1,32 +1,29 @@
 SciFest@College AIT 2020 project by Kacper Gibas, Sam Kierans and Billy Yan.
 
+apologies we do not know how to put in citations so we just stuck the links in where needed.
 
 
-A 'simple' RNN?
-
-A basic RNN achieves memory by receiving 2 sets inputs the input and previous hidden state and returning 2 sets of outputs the output and the new hidden state.
-
-Even LSTM used in most if not all of the state of the art RNNs employ a hidden state. When we first saw this concept of hidden states we asked the question:
-Why do we need to output a hidden state? 
-One reason is because you can use it in attention& transformers, but those were ingenious ideas created around hidden states.
-We then started asking more and more questions.
-Before attention why did we have hidden states? 
+Retaining information through arbitrary timesteps with 'simple' RNN?
+Kacper Gibas, Sam Kierans and Billy Yan.
 
 
-Why do we need to store the information outside the neural network?
+
+A basic RNN(https://www.researchgate.net/publication/243698906_Finite_State_Automata_and_Simple_Recurrent_Networks) achieves memory by receiving 2 sets of inputs;new information input and previous hidden state and returning 2 sets of outputs the output and the new hidden state.
+
+LSTM(https://www.bioinf.jku.at/publications/older/2604.pdf) perhaps the most popular form of RNN uses hidden states and gates to retain information for arbitrary timesteps. This allows LSTMs ,when combined with other techniques such as transformers(https://papers.nips.cc/paper/7181-attention-is-all-you-need.pdf) become state of the art in practically all areas of a.i. research where it is applicable(e.g. Natural Language processing: https://github.com/huggingface/transformers).    
+
+But is a hidden state essential for retaining information for many timesteps?
+
+Biological neural networks (brains) don't seem to use one; they probably don't send of its information to a separate entity in order to wipe or reset itself, I think we can all agree that the information stays in the brain and doesn't get wiped. One/multiple short-term 'memory regions' emerge within the network that through certain structures/mechanisms/properties combat decay and/or interference (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3971378/), allowing information to stay. 
+
+Can we try something similiar with Artificial neural networks?
+Perhaps, but there could be many more mechanisms/structures/properties of biological neural networks that haven't been discovered, or that we do not understand yet that allow it to retain information the way it does, but there is no harm in trying.
+How will we retain information without a hidden state?
+The obvious method is to just not wipe the neural network and just do all the calculations on top of neurons that aren't reset to 0, information from the previous timestep for free!!! 
+
+But is it possible for that approach to retain information through arbitrary timesteps? 
 
 
-Do biological neural networks use the same technique?
-
-
-To us it seemed like a counter intuitive way to retain information; you have to gather information from you current timestep, manipulate it into a hidden state/ add to a existing hiddenstate, 'reset' your neural network, feed the hiddenstate back in with new input.
-Biological neural networks (brains) probably don't send information from the entire network to an external source, then wipe/reset the brain and then get the information back and uses it as part of input to the neurons.
-We just couldn't understand why artificial neural networks have to rely on hidden states, when biological neural networks probably don't.
-
-From there we wondered if we allow information to stay in the neural network perhaps we will see a/multiple 'memory regions' emerge that through certain structures/mechanisms combat decay and/or interference, which is what the brain seems to do (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3971378/). 
-
-
-We then decided try and reason how a simple artificial neural network might be able to retain information through long series of timesteps, being able to retain information through many timesteps is key for many difficult tasks; the reason for LSTM's popularity.
 
 
 
