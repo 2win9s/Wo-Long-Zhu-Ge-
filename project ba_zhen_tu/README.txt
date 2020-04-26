@@ -1,6 +1,6 @@
 SciFest@College AIT 2020 project by Kacper Gibas, Sam Kierans and Billy Yan.
 
-apologies we do not know how to put in citations so we just stuck the links in where needed.
+apologies we do not know how to put in citations so we just stuck the links in where needed. sorry about that
 
 
 Retaining information through arbitrary timesteps with 'simple' RNN?
