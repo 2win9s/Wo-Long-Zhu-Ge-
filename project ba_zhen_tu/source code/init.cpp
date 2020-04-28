@@ -117,7 +117,6 @@ void weight_start(){
 
 
 void syncinit(){
-    int tas = (Lthreadz * 3);
     #pragma omp parallel num_threads(Lthreadz) proc_bind(spread)
     {
         double randnm;
