@@ -21,8 +21,9 @@ Is a hidden state essential for retaining information for many timesteps?
 Biological neural networks (brains) don't seem to use one; they probably don't send of its information to a separate entity in order to wipe or reset itself, I think we can all agree that the information stays in the brain and doesn't get wiped. If the brain is able to work by keeping all the information in the brain, why don't we try do the same thing with artificial neural networks?
 
 What we aim to do is retain information for many timesteps without the use hidden states, to see if anything interesting happens.
-How could a network retain information without a hidden state?
-The obvious method is to not reset the neural network every timestep and just do all the calculations on top of the 'current value' of the neurons.
+
+Can a network retain information without a hidden state?
+Yes, an obvious method is to not reset the neural network every timestep and just do all the calculations on top of the 'current value' of the neurons.
 i.e. for a particular neuron  new_value = activation_function(current_value + Σinputs ⊙ weights  + bias)
 current_value is the value of the neuron from the previous timestep, new_value is the new value of the neuron for this timestep
 by (Σinputs ⊙ weights) we mean the sum of the elements of the Hadamard product of the input vector/tensor and weight vector/tensor for a particular neuron, and bias means the bias of a particular neuron.
@@ -32,7 +33,7 @@ let's assume e=π=3 (insert other ridiculous and covenient approximation/assumpt
 
 One way to try and prove that it is possible to hold information for arbitrary timesteps is to show for a particular neuron new_value can be equal to current_value. If new_value can be equal to current_value for given criteria as long as arbitrarily many timesteps fit that criteria then that information can theoretically stay in the network indefinitely i.e. holding information for arbitrary timesteps.
 
-First we ignore input,weights and bias considering just the activation function,we need: new_value = activation_function(current_value), sadly we are forced to use non-linear activation functions in most neural networks, or else the entire network becomes a linear regression model; a useful tool but usually not what most recurrent neural networks are trying to model. Non-linear activation functions would theoritically change the input at least bit by bit through every timestep until it becomes useless as a memory. So mission failed already? 
+First we ignore input,weights and bias considering just the activation function,we need: new_value = activation_function(current_value), sadly we are forced to use non-linear activation functions in most neural networks, or else the entire network becomes a linear regression model; a useful tool but usually not what most recurrent neural networks are trying to model. Non-linear activation functions would theoritically change the input at least bit by bit through every timestep until it becomes useless as a memory. So back to the drawing board? 
 
 No, we are saved by the saviour of deep learning: reLU!(https://ui.adsabs.harvard.edu/abs/2000Natur.405..947H/abstract), 
 for New_value = reLU(Current_value) to be true we just need current_value >= 0 becuase reLu is linear as long as current_value >= 0.
