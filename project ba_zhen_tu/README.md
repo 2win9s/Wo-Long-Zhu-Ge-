@@ -18,9 +18,9 @@ LSTM(https://www.bioinf.jku.at/publications/older/2604.pdf) perhaps the most suc
 
 Is a hidden state essential for retaining information for many timesteps?
 
-Biological neural networks (brains) don't seem to use one; they probably don't send of its information to a separate entity in order to wipe or reset itself, I think we can all agree that the information stays in the brain and doesn't get wiped. For working memory, in our brains certain regions within the neural network, through certain structures/mechanisms/properties combat decay and/or interference (https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3971378/), allowing information to persist through time. 
+Biological neural networks (brains) don't seem to use one; they probably don't send of its information to a separate entity in order to wipe or reset itself, I think we can all agree that the information stays in the brain and doesn't get wiped. If the brain is able to work by keeping all the information in the brain, why don't we try do the same thing with artificial neural networks?
 
-What we aim to do is achieve comething similiar with artificial neural networks, or at least retain information for many timesteps without hidden states.
+What we aim to do is retain information for many timesteps without the use hidden states, to see if anything interesting happens.
 How could a network retain information without a hidden state?
 The obvious method is to not reset the neural network every timestep and just do all the calculations on top of the 'current value' of the neurons.
 i.e. for a particular neuron  new_value = activation_function(current_value + Σinputs ⊙ weights  + bias)
@@ -49,6 +49,8 @@ Firstly, will the network learn to keep the inputs to a neuron at 0 if it needs 
 
 Secondly, will the network learn to keep bias close to 0 to preserve information? (probably, but we can't prove it with any level of rigour)
 
-Thirdly, will these "memory neurons" even emerge through a training process? (absolutely no idea)"wE LeAvE It As aN ExCercISe fOR thE ReaDER"
+Thirdly, will these "memory neurons" even emerge through a training process? (absolutely no idea)
 
-So we decided to try and design a new variant of RNN, that can fit the criteria and has a few other features.
+So we decided to try and design a new variant of RNN, that can fit the criteria and has a few other features. We are going to refer to these as "fastlane networks".
+
+We ditched a layered structure, instead we have an order for the neurons to "fire" in and every neuron can have connections with any other neuron(no connections to itself, no point in doing so).
