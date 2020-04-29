@@ -51,4 +51,4 @@ Secondly, will the network learn to keep bias close to 0 to preserve information
 
 Thirdly, will these "memory neurons" even emerge through a training process? (absolutely no idea)"wE LeAvE It As aN ExCercISe fOR thE ReaDER"
 
-So we decided to try and design a new variant of RNN.
+So we decided to try and design a new variant of RNN, that can fit the criteria and has a few other features.
