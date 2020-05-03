@@ -74,99 +74,62 @@ void notnum(nu num){
     }
 }
 
-
-// function initialises list of available connects for each neuron (a1i and a2i), must be called before syncinit()
-void afill(){ 
-    #pragma omp parallel proc_bind(spread)
+void syncinit(){
+    #pragma omp parallel num_threads(Lthreadz) proc_bind(spread)
     {
-        #pragma omp for simd 
-        for(int x = 0;x < a1i.size() - 1;x++){
-            for(int y = 0; y < x - 1; y++){
+        double connectn;
+        double connectn2;
+        unsigned long long int ng;
+        normal_distribution<double> dis(0,rconnect_sdeviation);
+        #pragma omp for 
+        for(unsigned long long int x = 0;x < NNs - 1;x++){
+            for(unsigned long long int y = 0; y < x - 1; y++){
                 a1i[x].emplace_back(y);
             }
         }
-        #pragma omp for simd nowait
-        for(int x = 1; x < a2i.size();x++){
-            for(int y = x + 1; y < NNs; y++){
+        #pragma omp for nowait
+        for(unsigned long long int x = 1; x < NNs;x++){
+            for(unsigned long long int y = x + 1; y < NNs; y++){
                 a2i[x].emplace_back(y);
             }
         }
         #pragma omp single
         {
-            for(int i = 1; i < NNs - 1;i++){
+            for(unsigned long long int i = 1; i < NNs - 1;i++){
                 a2i[0].emplace_back(i);
             }
         }
-    }
-}
-
-//function for staring the weights, this function makes sure that each neuron is connected to the one behind it, the first neuron is connected to the last;
-//this ensures that information will flow through all the neurons
-void weight_start(){
-    normal_distribution<float> distribution(0,1);
-    #pragma omp for simd nowait proc_bind(spread)
-    for(int i = 1;i < NNs;i++){
-        float r = distribution(twisting);
-        W1i[i].emplace_back(i - 1);
-        W1s[i].emplace_back(r);
-    }
-    double r = distribution(twisting);
-    W2i[0].emplace_back(NNs - 1);
-    W2s[0].emplace_back(r);
-} 
-
-
-void syncinit(){
-    #pragma omp parallel num_threads(Lthreadz) proc_bind(spread)
-    {
-        double randnm;
-        double chance;
-        double connectn;
-        int ng;
-        float in;
-        normal_distribution<double> dis(0,rconnect_sdeviation);
-        uniform_real_distribution<double> tri(0.0,1.0);
         #pragma omp for
-        for(int y = 1;y < NNs;y++){
-            randnm = dis(twisting);
-            randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
-            connectn = (1 + randnm) * (y - 1) * connect_base;
-            if(connectn > 1){
+        for(unsigned long long int y = 0;y < NNs;y++){
+            connectn = (1 + abs(dis(twisting))) * connect_base;
+            connectn2 = (1 + abs(dis(twisting))) * connect_base;
+            connectn = (connectn<connect_cap) ? connectn : connect_cap;//min(connectn,connect_cap)
+            connectn2 = (connectn2<connect_cap) ? connectn2 : connect_cap;//min(connectn,connect_cap)
+            connectn *=  (y - 1);  //y - 1 is number of available connections for W1
+            connectn2 *= (NNs - (y + 1)); //(NN.size() - (y + 1)) is number of available connections W2
             connectn = floor(connectn);
+            connectn2 = floor(connectn2);
+            connectn = (connectn<a1i[y].size()) ? connectn:a1i[y].size();
+            connectn2 = (connectn2<a2i[y].size()) ? connectn2:a2i[y].size();
+            normal_distribution<float> Xavier(0,sqrt(2.0 / (connectn+connectn2+1)));
+            if(y != 0){
+                W1i[y].emplace_back(y - 1);//this ensures that input will flow through all the neurons
+                W1s[y].emplace_back(Xavier(twisting));  
             }
             else{
-                chance = tri(twisting);
-                connectn  = (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
+                W2i[y].emplace_back(NNs-1);
+                W2s[y].emplace_back(Xavier(twisting));
             }
-            connectn =  (connectn<a1i[y].size()) ? connectn:a1i[y].size();  //min(connectn,a1i[y].size())
-            normal_distribution<float> al(0,sqrt(2.0 / ((W1i[y].size() + connectn)*2)));
-            for(int i = 0; i < connectn; i++){
+            for(unsigned long long int i = 0; i < connectn; i++){
                 ng = twisting() % a1i[y].size();
                 W1i[y].emplace_back(a1i[y][ng]);
-                in = al(twisting); 
-                W1s[y].emplace_back(in);
+                W1s[y].emplace_back(Xavier(twisting));
                 a1i[y].erase(a1i[y].begin() + ng);
             }
-        }
-        #pragma omp for
-        for(int y = 0;y < NNs - 1;y++){
-            randnm = dis(twisting);
-            randnm = (abs(randnm)<rconnect_cap) ? abs(randnm):rconnect_cap; //min(abs(randnm),rconnect_cap)
-            connectn = (1 + randnm) * (NNs - (y + 1)) * connect_base;
-            if(connectn > 1){
-            connectn = floor(connectn);
-            }
-            else{
-                chance = tri(twisting);
-                connectn  = (connectn >= chance) ? 1:0;                     //if(connectn >= chance) connectn = 1, else connectn = 0
-            }
-            connectn =  (connectn<a2i[y].size()) ? connectn:a2i[y].size();  //min(connectn,a2i[y].size())
-            normal_distribution<float> al(0,sqrt(2.0 / ((W2i[y].size() + connectn)*2)));
-            for(int i = 0; i < connectn; i++){
+            for(unsigned long long int i = 0; i < connectn2; i++){
                 ng = twisting() % a2i[y].size();
                 W2i[y].emplace_back(a2i[y][ng]);
-                in = al(twisting); 
-                W2s[y].emplace_back(in);
+                W2s[y].emplace_back(Xavier(twisting));
                 a2i[y].erase(a2i[y].begin() + ng);
             }
         }
@@ -345,8 +308,6 @@ int main(){
     vec.clear();
     vec1.clear();
     vec2.clear();
-    weight_start();
-    afill();
     syncinit();
     string ttt;
     t = clock() - t;
