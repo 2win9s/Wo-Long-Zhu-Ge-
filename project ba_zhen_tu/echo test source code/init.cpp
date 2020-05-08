@@ -270,7 +270,7 @@ int main(){
     cout<<"enter rconnectrate standard deviation"<<endl;
     cin>>rconnect_sdeviation;
     cout<<"enter rconnectrate cap "<<endl;
-    cin>>rconnect_cap;
+    cin>>connect_cap;
     clock_t t = clock();
     cout<<"wait..."<<endl;
     vector<float> vec(NNs,0);
