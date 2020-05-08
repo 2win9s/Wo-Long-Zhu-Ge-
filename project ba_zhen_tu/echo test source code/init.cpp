@@ -50,7 +50,7 @@ vector<float> bias;                                     //bias
 float connect_base;                                     //base percentage of available connections that will become new connections with each sync() call
 //to add some more randomness into the connecting of neurons (1 + |random gaussian|) * connect_base is used mean of gaussian is 0, |a| means absolute value of a
 float rconnect_sdeviation;                              //the standard deviation for the random number (for connections) 
-float rconnect_cap;                                     //the cap on the absolute value of the random number (we don't want any single neuron to start with too many connections)
+float connect_cap;                                     //the cap on the absolute value of the random number (we don't want any single neuron to start with too many connections)
 
 
 vector<int> inputi;                                     //vector of input indices
