@@ -76,20 +76,14 @@ void syncinit(){
         normal_distribution<double> dis(0,rconnect_sdeviation);
         #pragma omp for 
         for(unsigned long long int x = 0;x < NNs - 1;x++){
-            for(unsigned long long int y = 0; y < x - 1; y++){
+            for(unsigned long long int y = 0; y < x; y++){
                 a1i[x].emplace_back(y);
             }
         }
-        #pragma omp for nowait
-        for(unsigned long long int x = 1; x < NNs;x++){
+        #pragma omp for
+        for(unsigned long long int x = 0; x < NNs;x++){
             for(unsigned long long int y = x + 1; y < NNs; y++){
                 a2i[x].emplace_back(y);
-            }
-        }
-        #pragma omp single
-        {
-            for(unsigned long long int i = 1; i < NNs - 1;i++){
-                a2i[0].emplace_back(i);
             }
         }
         #pragma omp for
@@ -104,15 +98,7 @@ void syncinit(){
             connectn2 = floor(connectn2);
             connectn = (connectn<a1i[y].size()) ? connectn:a1i[y].size();
             connectn2 = (connectn2<a2i[y].size()) ? connectn2:a2i[y].size();
-            normal_distribution<float> Xavier(0,sqrt(2.0 / (connectn+connectn2+1)));
-            if(y != 0){
-                W1i[y].emplace_back(y - 1);//this ensures that input will flow through all the neurons
-                W1s[y].emplace_back(Xavier(twisting));  
-            }
-            else{
-                W2i[y].emplace_back(NNs-1);
-                W2s[y].emplace_back(Xavier(twisting));
-            }
+            normal_distribution<float> Xavier(0,sqrt(2.0 / (connectn+connectn2)));
             for(unsigned long long int i = 0; i < connectn; i++){
                 ng = twisting() % a1i[y].size();
                 W1i[y].emplace_back(a1i[y][ng]);
