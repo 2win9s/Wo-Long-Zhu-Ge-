@@ -1,4 +1,6 @@
-//compile with -Ofast
+//compile with -Ofast or -O3 -ffast-math
+//note: the initialised variables here weren't the exact ones used to train the network, we kept on tweking them around 
+//most of it is inefficient, no openMP pragmas for gpu offloading put in but doing so should be relatively easy
 #include<iostream>
 #include<fstream>
 #include<vector>
