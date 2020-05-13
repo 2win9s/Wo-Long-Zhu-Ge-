@@ -477,8 +477,6 @@ int main(){
     cin>>rconnect_sdeviation;
     cout<<"enter rconnectrate cap "<<endl;
     cin>>connect_cap;
-    inputi = {0};
-    outputi = {0};
     omp_set_num_threads(Lthreadz);
     clock_t t = clock();
     cout<<"wait..."<<endl;
