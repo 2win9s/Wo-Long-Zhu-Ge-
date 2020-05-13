@@ -93,6 +93,7 @@ void sync(){
     int itr = 0;
     vector<int> layer = {};
     int ind = 0;
+    layermap.clear();
     layermap.emplace_back(layer);
     static vector<int> layertrack;
     static vector<int> neuronindx;
@@ -278,35 +279,6 @@ void sync(){
                 }
             }      
         }
-        while(list > 0){
-            #pragma omp single
-            {
-                layermap.emplace_back(layer);
-                ++ind;
-                itr = 0;
-            }
-            #pragma omp for schedule(nonmonotonic:dynamic,32)
-            for(int i = 0 ; i < neuronindx.size(); ++i ){
-                for(int j = 0 ; j < layermap[ind].size(); ++j){
-                    #pragma omp simd
-                    for(int k = 0; k < W1i[i].size(); ++k){
-                        if(W1i[i][k] == layermap[ind - 1][j]){
-                            --layertrack[neuronindx[i]];
-                        }
-                    }
-                }
-                if(layertrack[i] == 0)
-                {
-                    #pragma omp critical
-                    {
-                        layermap[ind].emplace_back(neuronindx[i + itr]);
-                        neuronindx.erase(neuronindx.begin() + i + itr);
-                        --list;
-                        --itr;
-                    }
-                }
-            }
-        }
         #pragma omp for
         for(int i = 0 ; i < NN.size() ; i++){
             rW1i[i].clear();
@@ -359,12 +331,34 @@ void sync(){
             }
         } 
     }
+    while(list > 0){
+        layermap.emplace_back(layer);
+        ++ind;
+        itr = 0;
+        for(int i = 0 ; i < neuronindx.size(); ++i ){
+            for(int j = 0 ; j < layermap[ind].size(); ++j){
+                #pragma omp simd
+                for(int k = 0; k < W1i[i].size(); ++k){
+                    if(W1i[i][k] == layermap[ind - 1][j]){
+                       --layertrack[neuronindx[i]];
+                    }
+                }
+             }
+             if(layertrack[i] == 0){
+                layermap[ind].emplace_back(neuronindx[i + itr]);
+                neuronindx.erase(neuronindx.begin() + i + itr);
+                --list;
+                --itr;
+            }
+        }
+    }
 }
 void syncprune(){ 
     unsigned long long int list = NN.size();
     int itr = 0;
     vector<int> layer = {};
     int ind = 0;
+    layermap.clear();
     layermap.emplace_back(layer);
     static vector<int> layertrack;
     static vector<int> neuronindx;
@@ -454,35 +448,6 @@ void syncprune(){
                 }
             }      
         }
-        while(list > 0){
-            #pragma omp single
-            {
-                layermap.emplace_back(layer);
-                ++ind;
-                itr = 0;
-            }
-            #pragma omp for schedule(nonmonotonic:dynamic,32)
-            for(int i = 0 ; i < neuronindx.size(); ++i ){
-                for(int j = 0 ; j < layermap[ind].size(); ++j){
-                    #pragma omp simd
-                    for(int k = 0; k < W1i[i].size(); ++k){
-                        if(W1i[i][k] == layermap[ind - 1][j]){
-                            --layertrack[neuronindx[i]];
-                        }
-                    }
-                }
-                if(layertrack[i] == 0)
-                {
-                    #pragma omp critical
-                    {
-                        layermap[ind].emplace_back(neuronindx[i + itr]);
-                        neuronindx.erase(neuronindx.begin() + i + itr);
-                        --list;
-                        --itr;
-                    }
-                }
-            }
-        }
         #pragma omp for
         for(int i = 0 ; i < NN.size() ; i++){
             rW1i[i].clear();
@@ -534,6 +499,27 @@ void syncprune(){
                 }
             }
         } 
+    }
+    while(list > 0){
+        layermap.emplace_back(layer);
+        ++ind;
+        itr = 0;
+        for(int i = 0 ; i < neuronindx.size(); ++i ){
+            for(int j = 0 ; j < layermap[ind].size(); ++j){
+                #pragma omp simd
+                for(int k = 0; k < W1i[i].size(); ++k){
+                    if(W1i[i][k] == layermap[ind - 1][j]){
+                       --layertrack[neuronindx[i]];
+                    }
+                }
+             }
+             if(layertrack[i] == 0){
+                layermap[ind].emplace_back(neuronindx[i + itr]);
+                neuronindx.erase(neuronindx.begin() + i + itr);
+                --list;
+                --itr;
+            }
+        }
     }
 }
 inline float reLU(float x){
