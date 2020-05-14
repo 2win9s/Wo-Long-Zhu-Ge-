@@ -254,35 +254,6 @@ void syncinit(){
                 }
             }      
         }
-        while(list > 0){
-            #pragma omp single
-            {
-                layermap.emplace_back(layer);
-                ++ind;
-                itr = 0;
-            }
-            #pragma omp for schedule(nonmonotonic:dynamic,32)
-            for(int i = 0 ; i < neuronindx.size(); ++i ){
-                for(int j = 0 ; j < layermap[ind].size(); ++j){
-                    #pragma omp simd
-                    for(int k = 0; k < W1i[i].size(); ++k){
-                        if(W1i[i][k] == layermap[ind - 1][j]){
-                            --layertrack[neuronindx[i]];
-                        }
-                    }
-                }
-                if(layertrack[i] == 0)
-                {
-                    #pragma omp critical
-                    {
-                        layermap[ind].emplace_back(neuronindx[i + itr]);
-                        neuronindx.erase(neuronindx.begin() + i + itr);
-                        --list;
-                        --itr;
-                    }
-                }
-            }
-        }
         #pragma omp sections
         {
             #pragma omp section
@@ -319,6 +290,27 @@ void syncinit(){
             }
         }    
     }
+    
+while(list > 0){
+   layermap.emplace_back(layer);
+   ++ind;
+   itr = 0;
+   for(int i = 0 ; i < neuronindx.size(); ++i ){
+      for(int j = 0 ; j < layermap[ind].size(); ++j){
+      #pragma omp simd
+      for(int k = 0; k < W1i[i].size(); ++k){
+         if(W1i[i][k] == layermap[ind - 1][j]){
+             --layertrack[neuronindx[i]];
+         }
+      }
+      if(layertrack[i] == 0){
+        layermap[ind].emplace_back(neuronindx[i + itr]);
+        neuronindx.erase(neuronindx.begin() + i + itr);
+        --list;
+        --itr;
+      }
+    }
+  }
 }
 
 
