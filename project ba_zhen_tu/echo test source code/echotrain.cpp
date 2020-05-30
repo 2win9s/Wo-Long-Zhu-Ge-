@@ -1294,7 +1294,6 @@ int main(){
     for(int t = 0; t < TYBW; t++){
         syncprune();
         sync(); 
-        std::cout<<std::endl;
         lrateww = lratew;
         lratebb = lrateb;//.005;   
         for(int p = 0; p < cycling; p++){
