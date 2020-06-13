@@ -11,41 +11,27 @@
 #include <boost/serialization/vector.hpp>
 
 
-thread_local std::random_device rdev;                            //this number may not be non deterministic e.g.on mingw before gcc 9.2, be careful
+thread_local std::random_device rdev;                          
 thread_local std::mt19937 twisting(rdev());    
-
-//if you find that there isn't enough precision in long double use mpfr.h for some functions
-
-using namespace std;
-
-
-/*before you ready your pitchforks , yes I understand that there is probably an excess of global variables,
-but many of these variables are may take up large amounts of memory and are used in multiple different functions 
-so it would just be easier to have them on the heap, 
-also some functions will use way too many arguements
-changing our functions to use/accept multiple arguements should be quite simple,
-you might want to modify how each function works internally anyways.
-another reason is so that I can have all of these variables in a list and group them here so their purpose can be explained to some extent
-most of them are constants anyways*/
 
 
 int NNs;                                                //number of neurons
-vector<float> NN;                                       //the Neural Network is represented as a vector
+std::vector<float> NN;                                       //the Neural Network is represented as a vector
 
 
-vector<vector<int>> W1i;                                //weights pt1 index of input neuron
-vector<vector<int>> W2i;                                //weights pt2 index of input
-vector<vector<float>> W1s;                              //the multiplier of the weight
-vector<vector<float>> W2s;                              //the multiplier of the weight
+std::vector<vector<int>> W1i;                                //weights pt1 index of input neuron
+std::vector<vector<int>> W2i;                                //weights pt2 index of input
+std::vector<vector<float>> W1s;                              //the multiplier of the weight
+std::vector<vector<float>> W2s;                              //the multiplier of the weight
 
-vector<vector<int>> rW1i;                               //same connections put in different order for easier concurrent backpropagation
-vector<vector<int>> rW2i;                                
-vector<vector<float>> rW1s;                              
-vector<vector<float>> rW2s;                               
+std::vector<vector<int>> rW1i;                               //same connections put in different order for easier concurrent backpropagation
+std::vector<vector<int>> rW2i;                                
+std::vector<vector<float>> rW1s;                              
+std::vector<vector<float>> rW2s;                               
 
-vector<vector<int>> layermap;                           //map of fastlane into layers
+std::vector<vector<int>> layermap;                           //map of fastlane into layers
 
-vector<float> bias;                                     //bias
+std::vector<float> bias;                                     //bias
 
 
 float connect_base;                                     //base percentage of available connections that will become new connections with each sync() call
@@ -54,8 +40,8 @@ float rconnect_sdeviation;                              //the standard deviation
 float connect_cap;                                     //the cap on the absolute value of the random number (we don't want any single neuron to start with too many connections)
 
 
-vector<int> inputi;                                     //vector of input indices
-vector<int> outputi;                                    //vector of output indices
+std::vector<int> inputi;                                     //vector of input indices
+std::vector<int> outputi;                                    //vector of output indices
 
 int Lthreadz;
 
@@ -254,6 +240,35 @@ void syncinit(){
                 }
             }      
         }
+        while(list > 0){
+            #pragma omp single
+            {
+                layermap.emplace_back(layer);
+                ++ind;
+                itr = 0;
+            }
+            #pragma omp for schedule(nonmonotonic:dynamic,32)
+            for(int i = 0 ; i < neuronindx.size(); ++i ){
+                for(int j = 0 ; j < layermap[ind].size(); ++j){
+                    #pragma omp simd
+                    for(int k = 0; k < W1i[i].size(); ++k){
+                        if(W1i[i][k] == layermap[ind - 1][j]){
+                            --layertrack[neuronindx[i]];
+                        }
+                    }
+                }
+                if(layertrack[i] == 0)
+                {
+                    #pragma omp critical
+                    {
+                        layermap[ind].emplace_back(neuronindx[i + itr]);
+                        neuronindx.erase(neuronindx.begin() + i + itr);
+                        --list;
+                        --itr;
+                    }
+                }
+            }
+        }
         #pragma omp sections
         {
             #pragma omp section
@@ -290,27 +305,6 @@ void syncinit(){
             }
         }    
     }
-    
-while(list > 0){
-   layermap.emplace_back(layer);
-   ++ind;
-   itr = 0;
-   for(int i = 0 ; i < neuronindx.size(); ++i ){
-      for(int j = 0 ; j < layermap[ind].size(); ++j){
-      #pragma omp simd
-      for(int k = 0; k < W1i[i].size(); ++k){
-         if(W1i[i][k] == layermap[ind - 1][j]){
-             --layertrack[neuronindx[i]];
-         }
-      }
-      if(layertrack[i] == 0){
-        layermap[ind].emplace_back(neuronindx[i + itr]);
-        neuronindx.erase(neuronindx.begin() + i + itr);
-        --list;
-        --itr;
-      }
-    }
-  }
 }
 
 
@@ -453,7 +447,8 @@ int main(){
     clock_t r = clock();
     omp_set_dynamic(0);
     cout<<"CHECK IF YOU HAVE ENOUGH MEMORY (in heap), always estimate worst case memory usage and have much more than enough memory available."<<endl;
-    cout<<"when entering numbers use only decimal fractions and decimal integers, no fractions"<<endl<< "only 1 decimal point is allowed per number, only one - (negative sign) sign is allowed per number"<<endl;
+    cout<<endl;
+    cout<<endl;
     cout<<"enter number of logical processors/number of threads you are allowed concurrently"<<endl;
     cin>>Lthreadz;
     notnum(Lthreadz);
