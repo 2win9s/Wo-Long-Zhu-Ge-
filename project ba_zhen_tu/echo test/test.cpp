@@ -153,7 +153,7 @@ int test(){
         inputsr[1] = 1;
         fire();
         //NNout();
-        std::cout<<"---------------------------"<<std::endl;
+        //std::cout<<"---------------------------"<<std::endl;
         error += (outputsr[0] - avx) * (outputsr[0] - avx);
     }
     error = error/iterations;
