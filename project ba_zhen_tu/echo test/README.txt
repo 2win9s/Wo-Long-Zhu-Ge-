@@ -11,7 +11,7 @@ input               output
 8,0                 NaN
 3,0                 NaN
 ...                 ...
-5,9                 5   //the number that the neural network has to remember, labelled by setting the second input neuron's value to 9
+5,9                 5   //the number that the neural network needs to remember, labelled by setting the second input neuron's value to 9
 7,0                 NaN
 0,0                 NaN
 ...                 ...
