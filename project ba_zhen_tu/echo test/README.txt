@@ -1,3 +1,5 @@
+requires openMP and boost.
+
 parameters saved as XML files made with c++ boost serialisation
 coming soon...
 
