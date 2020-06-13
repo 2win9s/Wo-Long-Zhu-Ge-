@@ -2,8 +2,7 @@ parameters saved as XML files made with c++ boost serialisation
 coming soon...
 
 
-For this test the neural network receives a list of random integers between 0 and 9 inclusive, it has to remember one number and then recall it as output some timesteps later.
-e.g.
+For this test the neural network receives a list of random integers between 0 and 9 inclusive as part of the input, it has to remember one number and then recall it as output some timesteps later.
 
 input               output
 2,0                   NaN
