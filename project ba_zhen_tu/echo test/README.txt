@@ -6,7 +6,10 @@ coming soon...
 
 For this test the neural network receives a list of random integers between 0 and 9 inclusive as part of the input, it is trained to remember one number and then recall it as output some timesteps later.
 
+
+
 input               output
+
 2,0                 NaN
 8,0                 NaN
 3,0                 NaN
