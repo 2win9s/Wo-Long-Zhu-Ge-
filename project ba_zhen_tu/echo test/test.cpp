@@ -217,7 +217,7 @@ int main(){
     std::cin>>Lthreadz;
     notnum(Lthreadz);
     omp_set_num_threads(Lthreadz);
-    std::cout<<"enter max number of timesteps"<<std::endl;
+    std::cout<<"enter number of timesteps"<<std::endl;
     std::cin>>maxsteps;
     notnum(maxsteps);
     std::cout<<"enter iterations to test"<<std::endl;
