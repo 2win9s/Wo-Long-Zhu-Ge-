@@ -50,7 +50,7 @@ std::vector<std::vector<std::vector<float>>> Ttar;                //for storing 
 std::vector<std::vector<int>> Ttari;                              //for storing the index/(timestep) of the targets for each blocks
 
 
-float weight_cap = 1.2;                                  //cap on the absolute value of a weight
+float weight_cap = 4;                                  //cap on the absolute value of a weight
 float bias_cap = 18;                                     //cap on the absolute value of a weight
 
 
@@ -124,6 +124,7 @@ void sync(){
     static std::vector<int> neuronindx;
     layertrack.resize(NN.size());
     neuronindx.resize(NN.size());
+    float layerbalance = std::sqrt(NN.size()) * log(NN.size()/3) * log(NN.size()/3) * log(NN.size()/3);
     #pragma omp parallel proc_bind(spread)
     {   
         double connectn;
@@ -163,7 +164,7 @@ void sync(){
             connectn2 = (chance2>tri(twisting)) ? (std::floor(connectn2) + 1) : std::floor(connectn2);
             connectn =  (connectn<avc1) ? connectn:avc1;
             connectn2 =  (connectn2<avc2) ? connectn2:avc2;
-            std::normal_distribution<float> Xavier(0,std::sqrt(2.0 / ((W1i[y].size() + W2i[y].size() + connectn + connectn2) * std::sqrt(NN.size()))));
+            std::normal_distribution<float> Xavier(0,std::sqrt(2.0 / ((W1i[y].size() + W2i[y].size() + connectn + connectn2) * layerbalance)));
             for(unsigned long long int i = 0; i < connectn2;++i){
                 rrn = twisting() % avc2 + (y + 1);
                 it = true;
@@ -1266,48 +1267,8 @@ void act1(double app, double bpp,float regparam,int Lreg = 0){
     for(int j = 0 ; j < NN.size(); j++){
         Tnn[0][lasagne + fishaaa - 1 ][j] = NN[j];
     }
-    mario(6 * sig(app,3), 6 * sig(bpp,3),regparam,Lreg);
+    mario(6 /** sig(app,3)*/, 6 /** sig(bpp,3)*/,regparam,Lreg);
 }
-/*void prologue(double app, double bpp,float regparam,int Lreg = 0){
-    resetNN();
-
-    Tnn[0].resize(2);
-    Ttar[0].resize(2);
-    Ttari[0].resize(2);
-    
-    Ttari[0][0] = 0;
-    Ttari[0][1] = 1;
-
-    inputsr[1] = 1;
-    inputsr[0] = twisting() % 10;
-
-    Ttar[0][0].resize(1);
-    Ttar[0][0][0] = inputsr[0];
-    
-    Ttar[0][1].resize(1);
-    Ttar[0][1][0] = inputsr[0];
-
-    fire();
-
-    Tnn[0][0].resize(NN.size());
-    #pragma omp simd
-    for(int j = 0 ; j < NN.size(); j++){
-        Tnn[0][0][j] = NN[j];
-    }
-
-
-    inputsr[0] = 0;
-    inputsr[1] = 1;
-    fire();
-
-    Tnn[0][1].resize(NN.size());
-    #pragma omp simd
-    for(int j = 0 ; j < NN.size(); j++){
-        Tnn[0][1][j] = NN[j];
-    }
-
-    mario(6 * sig(app,3), 6 * sig(bpp,3),regparam,Lreg);
-}*/
 long double terror;
 int test(int times = 1){
     terror = 0;
@@ -1532,5 +1493,3 @@ int main(){
     std::cout<<"session complete ---------------------"<<std::endl;
     return 0;
 }
-
-
