@@ -124,7 +124,7 @@ void sync(){
     static std::vector<int> neuronindx;
     layertrack.resize(NN.size());
     neuronindx.resize(NN.size());
-    float layerbalance = std::sqrt(NN.size()) * log(NN.size()/3) * log(NN.size()/3) * log(NN.size()/3);
+    float layerbalance = NN.size();//std::sqrt(NN.size()) * log(NN.size()/3) * log(NN.size()/3) * log(NN.size()/3);
     #pragma omp parallel proc_bind(spread)
     {   
         double connectn;
@@ -1218,7 +1218,7 @@ void new_neuron(){
         }
     }
 }
-void act1(double app, double bpp,float regparam,int Lreg = 0){
+void iteration(double app, double bpp,float regparam,int Lreg = 0){
     resetNN();
     int fishaaa = twisting() % maxsteps + 1;
     int lasagne = twisting() % (maxsteps - 1) + 2;
@@ -1267,7 +1267,8 @@ void act1(double app, double bpp,float regparam,int Lreg = 0){
     for(int j = 0 ; j < NN.size(); j++){
         Tnn[0][lasagne + fishaaa - 1 ][j] = NN[j];
     }
-    mario(6 /** sig(app,3)*/, 6 /** sig(bpp,3)*/,regparam,Lreg);
+    mario(app, bpp ,regparam ,Lreg );
+    //mario(6 * sig(app,3), 6 * sig(bpp,3),regparam,Lreg);
 }
 long double terror;
 int test(int times = 1){
@@ -1430,17 +1431,11 @@ int main(){
         resetplacehold();
         lrateww = lratew;
         lratebb = lrateb;//.005; 
-        for(int i = 0 ; i < 10 ; i ++){
+        for(int i = 0 ; i < 100 ; i ++){
             for(int p = 0; p < cycling; p++){
                 lrateww *= deprate;
                 lratebb *= deprate;
-                /*if(maxsteps < 4){
-                    prologue(lrateww,lratebb,lambda,regu);
-                }
-                else{
-                    act1(lrateww,lratebb,lambda,regu);
-                }*/
-                act1(lrateww,lratebb,lambda,regu);
+                iteration(lrateww,lratebb,lambda,regu);
             } 
         }
         std::cout<<"\r"<<t + 1;
