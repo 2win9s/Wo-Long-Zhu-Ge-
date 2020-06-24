@@ -1429,9 +1429,9 @@ int main(){
         sync(); 
         prune(cut); 
         resetplacehold();
-        lrateww = lratew;
-        lratebb = lrateb;//.005; 
         for(int i = 0 ; i < 100 ; i ++){
+            lrateww = lratew;
+            lratebb = lrateb; 
             for(int p = 0; p < cycling; p++){
                 lrateww *= deprate;
                 lratebb *= deprate;
@@ -1488,3 +1488,5 @@ int main(){
     std::cout<<"session complete ---------------------"<<std::endl;
     return 0;
 }
+
+
