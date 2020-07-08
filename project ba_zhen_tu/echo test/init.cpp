@@ -5,11 +5,10 @@
 #include<ctime>
 #include<omp.h>
 #include<random>
-#include <stdlib.h>
-#include <boost/archive/binary_oarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/serialization/vector.hpp>
-
+#include<stdlib.h>
+#include<string>
+#include<limits>
+#include<iomanip>
 
 thread_local std::random_device rdev;                          
 thread_local std::mt19937 twisting(rdev());    
@@ -53,8 +52,6 @@ void notnum(nu num){
         exit (EXIT_FAILURE);
     }
 }
-
-
 void syncinit(){
     unsigned long long int list = NNs;
     int itr = 0;
@@ -307,7 +304,6 @@ void syncinit(){
     }
 }
 
-
 //reads the input indices
 inline void inputscan(){
     int length;
@@ -332,7 +328,6 @@ inline void inputscan(){
         }
     }
 }
-
 
 //reads the output indices
 inline void outputscan(){
@@ -360,88 +355,98 @@ inline void outputscan(){
     }
 }
 
-
-//creates the binary files
-void savebinf(){
-    std::ofstream layermapbin("layermapbin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  ilayermapbin(layermapbin); 
-    ilayermapbin & layermap; 
-    std::ofstream W2ibin("W2i.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  iW2bin(W2ibin); 
-    iW2bin & W2i; 
-    std::ofstream W1ibin("W1i.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  iW1bin(W1ibin); 
-    iW1bin & W1i;
-    std::ofstream rW2ibin("rW2i.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  riW2bin(rW2ibin); 
-    riW2bin & rW2i; 
-    std::ofstream rW1ibin("rW1i.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  riW1bin(rW1ibin); 
-    riW1bin & rW1i;
-    std::ofstream W1sbin("W1s.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  sW1bin(W1sbin); 
-    sW1bin & W1s; 
-    std::ofstream W2sbin("W2s.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  sW2bin(W2sbin); 
-    sW2bin & W2s;
-    std::ofstream rW1sbin("rW1s.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  rsW1bin(rW1sbin); 
-    rsW1bin & rW1s; 
-    std::ofstream rW2sbin("rW2s.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  rsW2bin(rW2sbin); 
-    rsW2bin & rW2s;
-    std::ofstream biasbin("bias.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  biasesbin(biasbin); 
-    biasesbin & bias;
-    std::ofstream inputibin("inputi.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  iinputbin(inputibin); 
-    iinputbin & inputi;  
-    std::ofstream outputibin("outputi.bin",std::ofstream::trunc); 
-    boost::archive::binary_oarchive  ioutputbin(outputibin); 
-    ioutputbin & outputi;  
+template <typename T> 
+void save_param(const T &var,std::ostream &file){ 
+    file << std::fixed << std::setprecision(std::numeric_limits<T>::max_digits10)  << var << "\n";
 }
 
-
-//creates the xml files
-void savexmlf(){ 
-    std::ofstream layermapxml("layermap.xml",std::ofstream::trunc);
-    boost::archive::xml_oarchive ilayermapxml(layermapxml);
-    ilayermapxml & BOOST_SERIALIZATION_NVP(layermap); 
-    std::ofstream W2ixml("W2i.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  iW2xml(W2ixml);  
-    iW2xml & BOOST_SERIALIZATION_NVP(W2i); 
-    std::ofstream W1ixml("W1i.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  iW1xml(W1ixml);  
-    iW1xml & BOOST_SERIALIZATION_NVP(W1i);   
-    std::ofstream W1sxml("W1s.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  sW1xml(W1sxml);  
-    sW1xml & BOOST_SERIALIZATION_NVP(W1s);  
-    std::ofstream W2sxml("W2s.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  sW2xml(W2sxml);  
-    sW2xml & BOOST_SERIALIZATION_NVP(W2s);  
-    std::ofstream rW2ixml("rW2i.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  riW2xml(rW2ixml);  
-    riW2xml & BOOST_SERIALIZATION_NVP(rW2i); 
-    std::ofstream rW1ixml("rW1i.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  riW1xml(rW1ixml);  
-    riW1xml & BOOST_SERIALIZATION_NVP(rW1i);   
-    std::ofstream rW1sxml("rW1s.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  rsW1xml(rW1sxml);  
-    rsW1xml & BOOST_SERIALIZATION_NVP(rW1s);  
-    std::ofstream rW2sxml("rW2s.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  rsW2xml(rW2sxml);  
-    rsW2xml & BOOST_SERIALIZATION_NVP(rW2s);
-    std::ofstream biasxml("bias.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  biasesxml(biasxml);  
-    biasesxml & BOOST_SERIALIZATION_NVP(bias);   
-    std::ofstream inputixml("inputi.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  iinputxml(inputixml);  
-    iinputxml & BOOST_SERIALIZATION_NVP(inputi); 
-    std::ofstream outputixml("outputi.xml",std::ofstream::trunc);  
-    boost::archive::xml_oarchive  ioutputxml(outputixml);  
-    ioutputxml & BOOST_SERIALIZATION_NVP(outputi);   
+template<typename s>            
+void save_param(const std::vector<s> &vec, std::ostream &file){
+    file << "{" << "\n";
+    for (unsigned long long int x = 0; x < vec.size(); ++x){
+        save_param(vec[x],file);
+    }
+    file << "}" << "\n";
 }
 
+template<typename T>            
+void read_vec(T &, std::istream &){
+    std::cout<<"an error has occured when reading the vector"<<std::endl;
+    exit(1);
+}
+
+template<typename s>            
+void read_vec(std::vector<s> &vec, std::istream &file){
+    std::string line;
+    while(true)
+    {
+        std::getline(file,line);
+        if(line == "{"){
+            long long i = vec.size();
+            vec.resize(i + 1);
+            read_vec(vec[i],file);
+        }
+        else if(line == "}"){
+            return;
+        }
+        else{
+            vec.emplace_back(std::stof(line));
+        }
+    }
+    
+}
+
+template<typename s>            
+void load_param(std::vector<s> &vec, std::istream &file){
+    std::string character;
+    while(true)
+    {
+        std::getline(file,character);
+        if(character == "{"){
+            read_vec(vec,file);
+            return;
+        }
+        else{
+            std::cout<<"an error has occured when reading the vector..."<<std::endl;
+            exit(1);
+        }
+    }
+    
+}
+
+void savetotxt(){
+    std::ofstream textfile("parameters.txt",std::fstream::trunc);
+    save_param(W1i,textfile);
+    save_param(W1s,textfile);
+    save_param(rW1i,textfile);
+    save_param(rW1s,textfile);
+    save_param(W2i,textfile);
+    save_param(W2s,textfile);
+    save_param(rW2i,textfile);
+    save_param(rW2s,textfile);
+    save_param(layermap,textfile);
+    save_param(bias,textfile);
+    save_param(inputi,textfile);
+    save_param(outputi,textfile);
+    textfile.close();
+}
+
+void loadfromtxt(){
+    std::ifstream textfile("parameters.txt");
+    load_param(W1i,textfile);
+    load_param(W1s,textfile);
+    load_param(rW1i,textfile);
+    load_param(rW1s,textfile);
+    load_param(W2i,textfile);
+    load_param(W2s,textfile);
+    load_param(rW2i,textfile);
+    load_param(rW2s,textfile);
+    load_param(layermap,textfile);
+    load_param(bias,textfile);
+    load_param(inputi,textfile);
+    load_param(outputi,textfile);
+    textfile.close();
+}
 
 int main(){
     clock_t r = clock();
@@ -487,36 +492,8 @@ int main(){
     t = clock() - t;
     double time_elapsed = ((double)t) / CLOCKS_PER_SEC;
     std::cout << time_elapsed << " seconds to complete initialisation" << std::endl;
-    while(true){
-        std::cout<<"type xml for xml file, bin for binary files or both for both xml and binary files"<<std::endl;
-        std::cin>>ttt;
-        if(ttt == "xml"){
-            clock_t r = clock();
-            std::cout<<"wait..."<<std::endl;
-            savexmlf();
-            t = t + (clock() - r);
-            break;
-        }
-        else if(ttt == "bin"){
-            clock_t r = clock();
-            std::cout<<"wait..."<<std::endl;
-            savebinf();
-            t = t + (clock() - r);
-            break;
-        }
-        else if(ttt == "both"){
-            clock_t r = clock();
-            std::cout<<"wait..."<<std::endl;
-            savexmlf();
-            savebinf();
-            t = t + (clock() - r);
-            break;
-        }
-        else{
-            std::cout<<"error: invalid input; enter xml for xml file, bin for binary files (omit the .), or both for copies of both file types"<<std::endl;
-        }
-    }
-    std::cout<<"files have been created"<<std::endl;
+    savetotxt();
+    std::cout<<"parameters have been saved to parameters.txt"<<std::endl;
     double time_taken = ((double)t) / CLOCKS_PER_SEC;
     std::cout << time_taken << " seconds to complete all tasks" << std::endl;
     r = clock() - r;
