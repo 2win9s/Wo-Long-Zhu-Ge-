@@ -1,7 +1,6 @@
 requires openMP and boost.
 
-parameters saved as XML files made with c++ boost serialisation
-coming soon...
+trained parameters and results coming soon...
 
 
 For this test the neural network receives a list of random integers between 0 and 9 inclusive as part of the input, it is trained to remember one number and then recall it as output some timesteps later.
