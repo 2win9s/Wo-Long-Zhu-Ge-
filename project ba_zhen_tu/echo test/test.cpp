@@ -6,7 +6,10 @@
 #include<omp.h>
 #include<random>
 #include<thread>
-
+#include<string>
+#include<limits>
+#include<iomanip>
+#include<stdlib.h>
 
 std::vector<float> NN;                                      
 std::vector<std::vector<int>> layermap;                           //map of fastlane into layers
