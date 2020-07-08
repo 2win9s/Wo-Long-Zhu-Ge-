@@ -7,9 +7,6 @@
 #include<random>
 #include<thread>
 
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/serialization/vector.hpp>
 
 std::vector<float> NN;                                      
 std::vector<std::vector<int>> layermap;                           //map of fastlane into layers
@@ -168,47 +165,101 @@ void notnum(nu num){
     }
 }
 
-void loadparam(){
-    std::ifstream layermapxml("layermap.xml");
-    boost::archive::xml_iarchive ilayermapxml(layermapxml);
-    ilayermapxml & BOOST_SERIALIZATION_NVP(layermap);   
-    std::ifstream W2ixml("W2i.xml");  
-    boost::archive::xml_iarchive  iW2xml(W2ixml);  
-    iW2xml & BOOST_SERIALIZATION_NVP(W2i); 
-    std::ifstream W1ixml("W1i.xml");  
-    boost::archive::xml_iarchive  iW1xml(W1ixml);  
-    iW1xml & BOOST_SERIALIZATION_NVP(W1i);   
-    std::ifstream W1sxml("W1s.xml");  
-    boost::archive::xml_iarchive  sW1xml(W1sxml);  
-    sW1xml & BOOST_SERIALIZATION_NVP(W1s);  
-    std::ifstream W2sxml("W2s.xml");  
-    boost::archive::xml_iarchive  sW2xml(W2sxml);  
-    sW2xml & BOOST_SERIALIZATION_NVP(W2s); 
-    std::ifstream rW2ixml("rW2i.xml");  
-    boost::archive::xml_iarchive  riW2xml(rW2ixml);  
-    riW2xml & BOOST_SERIALIZATION_NVP(rW2i); 
-    std::ifstream rW1ixml("rW1i.xml");  
-    boost::archive::xml_iarchive  riW1xml(rW1ixml);  
-    riW1xml & BOOST_SERIALIZATION_NVP(rW1i);   
-    std::ifstream rW1sxml("rW1s.xml");  
-    boost::archive::xml_iarchive  rsW1xml(rW1sxml);  
-    rsW1xml & BOOST_SERIALIZATION_NVP(rW1s);  
-    std::ifstream rW2sxml("rW2s.xml");  
-    boost::archive::xml_iarchive  rsW2xml(rW2sxml);  
-    rsW2xml & BOOST_SERIALIZATION_NVP(rW2s);
-    std::ifstream biasxml("bias.xml");  
-    boost::archive::xml_iarchive  biasesxml(biasxml);  
-    biasesxml & BOOST_SERIALIZATION_NVP(bias);  
-    std::ifstream inputixml("inputi.xml");  
-    boost::archive::xml_iarchive  iinputxml(inputixml);  
-    iinputxml & BOOST_SERIALIZATION_NVP(inputi);
-    std::ifstream outputixml("outputi.xml");  
-    boost::archive::xml_iarchive  ioutputxml(outputixml);  
-    ioutputxml & BOOST_SERIALIZATION_NVP(outputi);  
+template <typename T> 
+void save_param(const T &var,std::ostream &file){ 
+    file << std::fixed << std::setprecision(std::numeric_limits<T>::max_digits10)  << var << "\n";
+}
+
+template<typename s>            
+void save_param(const std::vector<s> &vec, std::ostream &file){
+    file << "{" << "\n";
+    for (unsigned long long int x = 0; x < vec.size(); ++x){
+        save_param(vec[x],file);
+    }
+    file << "}" << "\n";
+}
+
+template<typename T>            
+void read_vec(T &, std::istream &){
+    std::cout<<"an error has occured when reading the vector"<<std::endl;
+    exit(1);
+}
+
+template<typename s>            
+void read_vec(std::vector<s> &vec, std::istream &file){
+    std::string line;
+    while(true)
+    {
+        std::getline(file,line);
+        if(line == "{"){
+            long long i = vec.size();
+            vec.resize(i + 1);
+            read_vec(vec[i],file);
+        }
+        else if(line == "}"){
+            return;
+        }
+        else{
+            vec.emplace_back(std::stof(line));
+        }
+    }
+    
+}
+
+template<typename s>            
+void load_param(std::vector<s> &vec, std::istream &file){
+    std::string character;
+    while(true)
+    {
+        std::getline(file,character);
+        if(character == "{"){
+            read_vec(vec,file);
+            return;
+        }
+        else{
+            std::cout<<"an error has occured when reading the vector..."<<std::endl;
+            exit(1);
+        }
+    }
+    
+}
+
+void savetotxt(){
+    std::ofstream textfile("parameters.txt",std::fstream::trunc);
+    save_param(W1i,textfile);
+    save_param(W1s,textfile);
+    save_param(rW1i,textfile);
+    save_param(rW1s,textfile);
+    save_param(W2i,textfile);
+    save_param(W2s,textfile);
+    save_param(rW2i,textfile);
+    save_param(rW2s,textfile);
+    save_param(layermap,textfile);
+    save_param(bias,textfile);
+    save_param(inputi,textfile);
+    save_param(outputi,textfile);
+    textfile.close();
+}
+
+void loadfromtxt(){
+    std::ifstream textfile("parameters.txt");
+    load_param(W1i,textfile);
+    load_param(W1s,textfile);
+    load_param(rW1i,textfile);
+    load_param(rW1s,textfile);
+    load_param(W2i,textfile);
+    load_param(W2s,textfile);
+    load_param(rW2i,textfile);
+    load_param(rW2s,textfile);
+    load_param(layermap,textfile);
+    load_param(bias,textfile);
+    load_param(inputi,textfile);
+    load_param(outputi,textfile);
+    textfile.close();
 }
 
 int main(){
-    loadparam();
+    loadfromtxt();
     NN.resize(W1i.size());
     outputsr.resize(outputi.size());
     inputsr.resize(inputi.size());
