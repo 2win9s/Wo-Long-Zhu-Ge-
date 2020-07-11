@@ -37,7 +37,11 @@ std::vector<float> outputsr;                                    //output vector
 
 std::vector<double> ppz;                                        //variables for storing backpropgation results                         
 std::vector<std::vector<double>> pp1;           
-std::vector<std::vector<double>> pp2;            
+std::vector<std::vector<double>> pp2;       
+
+std::vector<float> dirppz;                                        //variables for storing backpropgation results                         
+std::vector<std::vector<float>> dirpp1;           
+std::vector<std::vector<float>> dirpp2;   
 
 std::vector<std::vector<std::vector<float>>> Tnn;                 //for storing all blocks of timesteps for tbptt
 std::vector<std::vector<float>> Tnnp;                             //container for backpropgation of one block of timesteps
@@ -701,6 +705,8 @@ void the_top(int indice){
         }
     }
 }
+
+
 inline void descent(float wlearn_cap,float blearn_cap){    
     static std::vector<int> itr(NN.size(),0);
     itr.resize(NN.size());
@@ -745,28 +751,128 @@ inline void descent(float wlearn_cap,float blearn_cap){
             bias[i] =  (bias[i]<bias_cap)?bias[i]:bias_cap;   //W2s[i][j] = min(W2s[i][j],weight_cap);
             bias[i] =  (bias[i]>(-1*bias_cap))?bias[i]:(-1*bias_cap);//W2s[i][j] = max(W2s[i][j],-1 * weight_cap);
         }
+
+
+
         #pragma omp for simd schedule(static,16)
         for(int i = 0 ; i < itr.size() ; i++){
             itr[i] = 0;
         }
+        #pragma omp for
         for(int i = 0 ; i < W2i.size() ; i++){
-            #pragma omp for simd
             for(int j = 0 ; j < W2i[i].size(); j++){
                 rW2s[W2i[i][j]][itr[W2i[i][j]]] = W2s[i][j];
-                ++itr[W2i[i][j]];
+                #pragma omp atomic
+                    ++itr[W2i[i][j]];
             }
         }
         #pragma omp for simd schedule(static,16)
         for(int i = 0 ; i < itr.size() ; i++){
             itr[i] = 0;
         }
+        #pragma omp for
         for(int i = 0 ; i < W1i.size() ; i++){
-            #pragma omp for simd
             for(int j = 0 ; j < W1i[i].size(); j++){
                 rW1s[W1i[i][j]][itr[W1i[i][j]]] = W1s[i][j];
-                ++itr[W1i[i][j]];
+                #pragma omp atomic
+                    ++itr[W1i[i][j]];
+            }
+        } 
+
+
+
+        #pragma omp for simd schedule(static,16)
+        for(int i = 0 ; i < inputi.size(); ++i){
+            bias[inputi[i]] = 0;
+        }
+    }
+}
+inline void otherdescent(float wlearn_cap,float blearn_cap){
+        static std::vector<int> itr(NN.size(),0);
+    itr.resize(NN.size());
+    #pragma omp parallel proc_bind(spread)
+    {
+        #pragma omp for schedule(nonmonotonic:dynamic)
+        for(unsigned long long int i = 0; i < W1i.size(); i++){
+            #pragma omp simd
+            for(unsigned long long int j = 0; j < W1i[i].size(); j++){
+                if(std::signbit(pp1[i][j]) && std::signbit(dirpp1[i][j])){
+                    dirpp1[i][j] *= -0.5;
+                }
+                else{
+                    dirpp1[i][j] *= wlearn_cap; 
+                }            
+            }
+            #pragma omp simd
+            for(unsigned long long int j = 0; j < W2i[i].size(); j++){
+                if(std::signbit(pp2[i][j]) && std::signbit(dirpp2[i][j])){
+                    dirpp2[i][j] *= -0.5;
+                }
+                else{
+                    dirpp2[i][j] *= wlearn_cap; 
+                }
+            }
+        } 
+        #pragma omp for simd schedule(nonmonotonic:dynamic,16)
+        for(unsigned long long int i = 0; i < bias.size(); i++){
+            if(std::signbit(ppz[i]) && std::signbit(ppz[i])){
+                dirppz[i] *= -0.5;
+            }
+            else{
+                dirppz[i] *= blearn_cap; 
             }
         }
+        #pragma omp for schedule(nonmonotonic:dynamic)
+        for(unsigned long long int i = 0; i < W1i.size(); i++){
+            #pragma omp simd
+            for(unsigned long long int j = 0; j < W1i[i].size(); j++){
+                W1s[i][j] += (dirpp1[i][j] * wlearn_cap);
+                W1s[i][j] =  (W1s[i][j]<weight_cap)?W1s[i][j]:weight_cap;   //W1s[i][j] = min(W1s[i][j],weight_cap);
+                W1s[i][j] =  (W1s[i][j]>(-1*weight_cap))?W1s[i][j]:(-1*weight_cap);//W2s[i][j] = max(W2s[i][j],-1 * weight_cap);
+            }
+            #pragma omp simd
+            for(unsigned long long int j = 0; j < W2i[i].size(); j++){
+                W2s[i][j] += (dirpp2[i][j] * wlearn_cap);
+                W2s[i][j] =  (W2s[i][j]<weight_cap)?W2s[i][j]:weight_cap;   //W2s[i][j] = min(W2s[i][j],weight_cap);
+                W2s[i][j] =  (W2s[i][j]>(-1*weight_cap))?W2s[i][j]:(-1*weight_cap);//W2s[i][j] = max(W2s[i][j],-1 * weight_cap);
+            }
+        } 
+        #pragma omp for simd schedule(nonmonotonic:dynamic,16)
+        for(unsigned long long int i = 0; i < bias.size(); i++){
+            bias[i] += (dirppz[i] * blearn_cap);
+            bias[i] =  (bias[i]<bias_cap)?bias[i]:bias_cap;   //W2s[i][j] = min(W2s[i][j],weight_cap);
+            bias[i] =  (bias[i]>(-1*bias_cap))?bias[i]:(-1*bias_cap);//W2s[i][j] = max(W2s[i][j],-1 * weight_cap);
+        }
+        
+
+
+        #pragma omp for simd schedule(static,16)
+        for(int i = 0 ; i < itr.size() ; i++){
+            itr[i] = 0;
+        }
+        #pragma omp for
+        for(int i = 0 ; i < W2i.size() ; i++){
+            for(int j = 0 ; j < W2i[i].size(); j++){
+                rW2s[W2i[i][j]][itr[W2i[i][j]]] = W2s[i][j];
+                #pragma omp atomic
+                    ++itr[W2i[i][j]];
+            }
+        }
+        #pragma omp for simd schedule(static,16)
+        for(int i = 0 ; i < itr.size() ; i++){
+            itr[i] = 0;
+        }
+        #pragma omp for
+        for(int i = 0 ; i < W1i.size() ; i++){
+            for(int j = 0 ; j < W1i[i].size(); j++){
+                rW1s[W1i[i][j]][itr[W1i[i][j]]] = W1s[i][j];
+                #pragma omp atomic
+                    ++itr[W1i[i][j]];
+            }
+        }   
+        
+
+
         #pragma omp for simd schedule(static,16)
         for(int i = 0 ; i < inputi.size(); ++i){
             bias[inputi[i]] = 0;
@@ -813,12 +919,16 @@ void mario(double wtlearning_rate,double bialearning_rate,float regparam,int Lre
     default:
         break;
     }
-    descent(wtlearning_rate,bialearning_rate);
+    //descent(wtlearning_rate,bialearning_rate);
+    otherdescent(wtlearning_rate,bialearning_rate);
 }
 void resetplacehold(){
     pp1.resize(W1i.size());
     pp2.resize(W2i.size());
     ppz.resize(bias.size());
+    dirpp1.resize(W1i.size());
+    dirpp2.resize(W2i.size());
+    dirppz.resize(bias.size());
     #pragma omp parallel proc_bind(spread)
     {
         #pragma omp for
@@ -840,6 +950,26 @@ void resetplacehold(){
         #pragma omp for simd
         for(unsigned long long int x = 0; x < bias.size(); x++){
             ppz[x] = 0;
+        }
+                #pragma omp for
+        for(unsigned long long int x = 0; x < W1i.size(); x++){
+            dirpp1[x].resize(W1i[x].size());
+            #pragma omp simd
+            for(unsigned long long int y = 0; y < W1i[x].size(); y++){
+                dirpp1[x][y] = 0.00000001;
+            }
+        }
+        #pragma omp for
+        for(unsigned long long int x = 0; x < W2i.size(); x++){
+            dirpp2[x].resize(W2i[x].size());
+            #pragma omp simd
+            for(unsigned long long int y = 0; y < W2i[x].size(); y++){
+                dirpp2[x][y] = 0.00000001;
+            }
+        }
+        #pragma omp for simd 
+        for(unsigned long long int x = 0; x < bias.size(); x++){
+            dirppz[x] = 0.00000001;
         }
     }
 }
@@ -1123,10 +1253,10 @@ int main(){
             std::cout<<"enter weights learning rate"<<std::endl;
             std::cin>>lratew;
             notnum(lratew);
-            std::cout<<"enter bias learning rate"<<std::endl;
+            std::cout<<"enter bias learning rate paramter"<<std::endl;
             std::cin>>lrateb;
             notnum(lrateb);
-            std::cout<<"enter learning 'decay' rate"<<std::endl;
+            std::cout<<"enter learning 'decay' rate parameter"<<std::endl;
             std::cin>>deprate;
             notnum(deprate);
             std::cout<<"enter 'reLUleak' "<<std::endl;
@@ -1260,7 +1390,7 @@ int main(){
     std::cout<<"final iteration target "<<tr<<std::endl;
     std::cout<<std::endl;
     std::cout<<std::endl;
-    while(true){
+    /*while(true){
         int eer;
         std::cout<<"save new parameters ? (0 or 1)"<<std::endl;
         std::cin>>eer;
@@ -1278,7 +1408,8 @@ int main(){
         std::cout<<"saving new parameters..."<<std::endl;
         std::cout<<"WARNING DO NOT STOP THE PROCESS, OR ELSE ALL PROGRESS WILL BE LOST!!!-------------"<<std::endl;
         savetotxt();
-    }
+    }*/
+    savetotxt();
     std::cout<<std::endl;
     std::cout<<"session complete ---------------------"<<std::endl;
     return 0;
